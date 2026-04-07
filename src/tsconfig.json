@@ -13,7 +13,7 @@
   "include": [
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "../App.tsx"  ],
   "exclude": [
     "node_modules"
   ]
