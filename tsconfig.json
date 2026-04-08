@@ -1,22 +1,9 @@
 {
   "extends": "expo/tsconfig.base",
-  "compilerOptions": 
-  {
-    "jsx": "react-jsx",
+  "compilerOptions": {
     "strict": true,
-    "moduleResolution": "bundler",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "noEmit": true
-  },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx"
-, "../App.tsx"  ],
-  "exclude": [
-    "node_modules"
-  ]
-
+    "module": "ESNext",
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  }
 }
