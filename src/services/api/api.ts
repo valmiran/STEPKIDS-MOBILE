@@ -2,11 +2,11 @@ import axios from 'axios';
 import { authStorage } from '../storage/authStorage';
 
 export const api = axios.create({
-  baseURL: 'exp://192.168.0.10:8081/api',
+  baseURL: 'http://192.168.0.13:8000/api',
   timeout: 10000,
 });
 
-api.interceptors.request.use(async config => {
+api.interceptors.request.use(async (config) => {
   const token = await authStorage.getAccessToken();
 
   if (token) {

@@ -35,8 +35,21 @@ export default function LoginScreen() {
 
     try {
       await signIn({ email, password });
-    } catch {
-      Alert.alert('Erro', 'E-mail ou senha inválidos.');
+    } catch (error: any) {
+      console.log('ERRO LOGIN:', {
+        message: error?.message,
+        status: error?.response?.status,
+        data: error?.response?.data,
+        url: error?.config?.url,
+        baseURL: error?.config?.baseURL,
+      });
+
+      Alert.alert(
+        'Erro no login',
+        error?.response?.data?.detail ||
+          error?.response?.data?.message ||
+          'Não foi possível fazer login. Verifique o terminal.'
+      );
     }
   }
 

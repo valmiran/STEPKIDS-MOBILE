@@ -21,6 +21,19 @@ export const AuthContext = createContext<AuthContextData>(
   {} as AuthContextData
 );
 
+/*
+  CONTROLE DE LOGIN
+
+  Para testes rápidos:
+  - deixe TEMP_LOGIN_BYPASS = true
+  - qualquer e-mail/senha entra no app
+
+  Para usar login real do backend:
+  - deixe TEMP_LOGIN_BYPASS = false
+  - o app usará Django + JWT
+*/
+const TEMP_LOGIN_BYPASS = true;
+
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -45,6 +58,35 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   async function signIn(payload: LoginPayload): Promise<void> {
+    /*
+      MODO TESTE:
+      Este bloco permite entrar no app com qualquer e-mail e senha.
+      Use enquanto estiver testando telas, navegação e design.
+    */
+    if (TEMP_LOGIN_BYPASS) {
+      const tempUser: User = {
+        id: 1,
+        full_name: 'Usuário StepKids',
+        email: payload.email || 'teste@stepkids.com',
+        cpf: '00000000000',
+        phone: '(82) 99999-9999',
+      };
+
+      await authStorage.saveTokens({
+        access: 'temp-access-token',
+        refresh: 'temp-refresh-token',
+      });
+
+      await authStorage.saveUser(tempUser);
+      setUser(tempUser);
+      return;
+    }
+
+    /*
+      MODO REAL:
+      Este bloco usa o backend Django + JWT.
+      Para usar login real, troque TEMP_LOGIN_BYPASS para false.
+    */
     const response = await authService.login(payload);
 
     await authStorage.saveTokens(response.tokens);
@@ -63,6 +105,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   async function refreshUser(): Promise<void> {
+    /*
+      Em modo teste, não busca usuário no backend.
+      Em modo real, atualiza os dados pelo endpoint /accounts/me/.
+    */
+    if (TEMP_LOGIN_BYPASS) {
+      return;
+    }
+
     const currentUser = await authService.me();
     await authStorage.saveUser(currentUser);
     setUser(currentUser);
