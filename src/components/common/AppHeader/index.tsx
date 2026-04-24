@@ -1,21 +1,50 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { colors } from '../../../theme';
+import { useAuth } from '../../../hooks/useAuth';
 
 type Props = {
   navigation: any;
 };
 
 export default function AppHeader({ navigation }: Props) {
+  const { signOut } = useAuth();
+
+  function handleLogout() {
+    Alert.alert(
+      'Sair',
+      'Deseja realmente sair da aplicação?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Sair',
+          style: 'destructive',
+          onPress: async () => {
+            await signOut();
+          },
+        },
+      ]
+    );
+  }
+
   return (
     <View style={styles.header}>
       <Text style={styles.title}>STEPKIDS</Text>
 
+      {/* PERFIL */}
       <TouchableOpacity
-        style={styles.profileButton}
+        style={[styles.profileButton, { right: 60 }]}
         onPress={() => navigation.navigate('Profile')}
       >
         <Text style={styles.profileIcon}>⚙</Text>
+      </TouchableOpacity>
+
+      {/* LOGOUT */}
+      <TouchableOpacity
+        style={[styles.profileButton, { right: 18 }]}
+        onPress={handleLogout}
+      >
+        <Text style={styles.profileIcon}>⎋</Text>
       </TouchableOpacity>
     </View>
   );
@@ -36,7 +65,6 @@ const styles = StyleSheet.create({
   },
   profileButton: {
     position: 'absolute',
-    right: 18,
     top: 38,
     width: 36,
     height: 36,
@@ -46,6 +74,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   profileIcon: {
-    fontSize: 18,
+    fontSize: 16,
   },
 });
