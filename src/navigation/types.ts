@@ -1,9 +1,12 @@
 import { Child } from '../types/child';
 
 export type AuthStackParamList = {
+  Splash: undefined;
   Login: undefined;
   Register: undefined;
+  AddressRegister: { form: any };
   ForgotPassword: undefined;
+  ConfirmEmail: undefined;
 };
 
 export type MainStackParamList = {

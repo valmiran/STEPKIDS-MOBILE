@@ -1,6 +1,6 @@
 export type User = {
   id: number;
-  name: string;
+  full_name: string;
   email: string;
   cpf?: string;
   phone?: string;
@@ -12,12 +12,12 @@ export type LoginPayload = {
 };
 
 export type RegisterPayload = {
-  name: string;
+  full_name: string;
   email: string;
   cpf: string;
   phone: string;
   password: string;
-  confirmPassword: string;
+  confirm_password: string;
 };
 
 export type AuthTokens = {

@@ -10,6 +10,7 @@ type AuthContextData = {
   signIn: (payload: LoginPayload) => Promise<void>;
   signUp: (payload: RegisterPayload) => Promise<void>;
   signOut: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 };
 
 type AuthProviderProps = {
@@ -24,22 +25,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    async function loadSession() {
-      try {
-        const storedUser = await authStorage.getUser();
-        const token = await authStorage.getAccessToken();
+  async function loadSession() {
+    try {
+      const storedUser = await authStorage.getUser();
+      const token = await authStorage.getAccessToken();
 
-        if (storedUser && token) {
-          setUser(storedUser);
-        }
-      } catch (error) {
-        console.log('Erro ao carregar sessão:', error);
-      } finally {
-        setLoading(false);
+      if (storedUser && token) {
+        setUser(storedUser);
       }
+    } catch (error) {
+      console.log('Erro ao carregar sessão:', error);
+    } finally {
+      setLoading(false);
     }
+  }
 
+  useEffect(() => {
     loadSession();
   }, []);
 
@@ -61,6 +62,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUser(null);
   }
 
+  async function refreshUser(): Promise<void> {
+    const currentUser = await authService.me();
+    await authStorage.saveUser(currentUser);
+    setUser(currentUser);
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -70,6 +77,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         signIn,
         signUp,
         signOut,
+        refreshUser,
       }}
     >
       {children}

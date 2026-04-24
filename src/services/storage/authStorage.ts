@@ -12,11 +12,11 @@ export const authStorage = {
   },
 
   async getAccessToken(): Promise<string | null> {
-    return await AsyncStorage.getItem(ACCESS_TOKEN_KEY);
+    return AsyncStorage.getItem(ACCESS_TOKEN_KEY);
   },
 
   async getRefreshToken(): Promise<string | null> {
-    return await AsyncStorage.getItem(REFRESH_TOKEN_KEY);
+    return AsyncStorage.getItem(REFRESH_TOKEN_KEY);
   },
 
   async saveUser(user: User): Promise<void> {
@@ -29,8 +29,10 @@ export const authStorage = {
   },
 
   async clear(): Promise<void> {
-    await AsyncStorage.removeItem(ACCESS_TOKEN_KEY);
-    await AsyncStorage.removeItem(REFRESH_TOKEN_KEY);
-    await AsyncStorage.removeItem(USER_KEY);
+    await AsyncStorage.multiRemove([
+      ACCESS_TOKEN_KEY,
+      REFRESH_TOKEN_KEY,
+      USER_KEY,
+    ]);
   },
 };

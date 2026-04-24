@@ -1,0 +1,16 @@
+export const colors = {
+  background: '#F7F1EA',
+  lilac: '#CFAFE1',
+  lilacDark: '#B793D3',
+  blue: '#A9DDF5',
+  blueDark: '#7EC9EE',
+  pink: '#F2C1D7',
+  text: '#1F1F1F',
+  textLight: '#6F6F6F',
+  white: '#FFFFFF',
+  border: '#E3D7EC',
+  input: '#F8F8F8',
+  danger: '#E25B5B',
+  success: '#53B56A',
+  yellow: '#F6E49A',
+};

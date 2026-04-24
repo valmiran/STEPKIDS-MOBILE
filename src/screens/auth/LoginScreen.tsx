@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
 import {
   Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { AuthStackParamList } from '../../navigation/types';
 import { useNavigation } from '@react-navigation/native';
+
+import Input from '../../components/common/Input';
+import Button from '../../components/common/Button';
+import { AuthStackParamList } from '../../navigation/types';
 import { useAuth } from '../../hooks/useAuth';
+import { colors } from '../../theme';
 
 type NavigationProps = NativeStackNavigationProp<AuthStackParamList, 'Login'>;
 
@@ -18,94 +24,123 @@ export default function LoginScreen() {
   const navigation = useNavigation<NavigationProps>();
   const { signIn } = useAuth();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('admin@gmail.com');
+  const [password, setPassword] = useState('admin123456');
 
   async function handleLogin() {
+    if (!email || !password) {
+      Alert.alert('Atenção', 'Informe e-mail e senha.');
+      return;
+    }
+
     try {
       await signIn({ email, password });
-    } catch (error) {
-      Alert.alert('Erro', 'Não foi possível fazer login.');
+    } catch {
+      Alert.alert('Erro', 'E-mail ou senha inválidos.');
     }
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>StepKids</Text>
-      <Text style={styles.subtitle}>Acesse sua conta</Text>
+    <KeyboardAvoidingView
+      style={styles.keyboard}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <ScrollView contentContainerStyle={styles.scroll}>
+        <Text style={styles.brand}>STEPKIDS</Text>
 
-      <TextInput
-        placeholder="E-mail"
-        value={email}
-        onChangeText={setEmail}
-        style={styles.input}
-        autoCapitalize="none"
-      />
+        <View style={styles.card}>
+          <Text style={styles.title}>Bem-Vindo</Text>
 
-      <TextInput
-        placeholder="Senha"
-        value={password}
-        onChangeText={setPassword}
-        style={styles.input}
-        secureTextEntry
-      />
+          <Text style={styles.description}>
+            Entre para acompanhar o tratamento, registrar o uso da órtese e visualizar a evolução da criança.
+          </Text>
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Entrar</Text>
-      </TouchableOpacity>
+          <Text style={styles.label}>Email:</Text>
+          <Input
+            placeholder="exemplo@dominio.com"
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            keyboardType="email-address"
+          />
 
-      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-        <Text style={styles.link}>Criar conta</Text>
-      </TouchableOpacity>
-    </View>
+          <Text style={styles.label}>Senha:</Text>
+          <Input
+            placeholder="Senha"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+
+          <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+            <Text style={styles.forgot}>◌ Esqueci minha senha</Text>
+          </TouchableOpacity>
+
+          <Button title="Entrar" onPress={handleLogin} />
+
+          <View style={styles.footer}>
+            <Text>Não tem conta? </Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+              <Text style={styles.link}>Cadastre-se</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  keyboard: {
     flex: 1,
-    padding: 24,
-    justifyContent: 'center',
-    backgroundColor: '#F7FAFC',
+    backgroundColor: colors.background,
+  },
+  scroll: {
+    flexGrow: 1,
+    paddingTop: 58,
+  },
+  brand: {
+    textAlign: 'center',
+    fontSize: 22,
+    fontWeight: '800',
+    marginBottom: 14,
+  },
+  card: {
+    flex: 1,
+    minHeight: 600,
+    backgroundColor: colors.lilac,
+    borderTopLeftRadius: 36,
+    borderTopRightRadius: 36,
+    padding: 22,
   },
   title: {
-    fontSize: 32,
+    fontSize: 26,
+    fontWeight: '800',
+    marginTop: 10,
+    marginBottom: 14,
+  },
+  description: {
+    fontSize: 14,
+    marginBottom: 20,
+    lineHeight: 19,
+  },
+  label: {
     fontWeight: '700',
-    textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: 6,
   },
-  subtitle: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 24,
-    color: '#4A5568',
+  forgot: {
+    fontSize: 12,
+    marginTop: 2,
+    marginBottom: 18,
   },
-  input: {
-    height: 50,
-    borderWidth: 1,
-    borderColor: '#CBD5E0',
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    marginBottom: 12,
-    backgroundColor: '#FFF',
-  },
-  button: {
-    height: 50,
-    backgroundColor: '#3182CE',
-    borderRadius: 10,
+  footer: {
+    marginTop: 28,
+    flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  buttonText: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: '600',
   },
   link: {
-    marginTop: 16,
-    textAlign: 'center',
-    color: '#3182CE',
-    fontWeight: '600',
+    color: '#FFE87A',
+    fontWeight: '800',
+    textDecorationLine: 'underline',
   },
 });

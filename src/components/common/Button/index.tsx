@@ -1,21 +1,56 @@
-import React, { ReactNode } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React from 'react';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableOpacityProps,
+} from 'react-native';
 
-type Props = {
-  children: ReactNode;
+type ButtonVariant = 'primary' | 'secondary';
+
+type ButtonProps = TouchableOpacityProps & {
+  title: string;
+  variant?: ButtonVariant;
 };
 
-export default function Card({ children }: Props) {
-  return <View style={styles.card}>{children}</View>;
+export default function Button({
+  title,
+  variant = 'primary',
+  style,
+  ...rest
+}: ButtonProps) {
+  return (
+    <TouchableOpacity
+      style={[
+        styles.button,
+        variant === 'primary' ? styles.primary : styles.secondary,
+        style,
+      ]}
+      activeOpacity={0.8}
+      {...rest}
+    >
+      <Text style={styles.text}>{title}</Text>
+    </TouchableOpacity>
+  );
 }
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: '#FFF',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    padding: 16,
-    marginBottom: 12,
+  button: {
+    height: 50,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  primary: {
+    backgroundColor: '#9FD4E6',
+  },
+  secondary: {
+    backgroundColor: '#E6F2F8',
+  },
+  text: {
+    color: '#000',
+    fontWeight: '700',
+    fontSize: 16,
   },
 });
