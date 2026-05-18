@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "902295505359",
+    "project_id": "stepkids-mobile",
+    "storage_bucket": "stepkids-mobile.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:902295505359:android:4edcce7eb8a2f17ec2aaba",
+        "android_client_info": {
+          "package_name": "com.stepkids.mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8s2CsCx7LCc7OBp8wiOxYyUjfP28jHKU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
