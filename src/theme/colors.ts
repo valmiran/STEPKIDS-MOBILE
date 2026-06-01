@@ -17,37 +17,45 @@
 // desing de cores do app antigo
 
 export const colors = {
-  background: '#F6F8FB',
+  background: '#F7F1FF',
+  backgroundSoft: '#FBF8FF',
+
   surface: '#FFFFFF',
-  surfaceSoft: '#F8FAFC',
+  surfaceSoft: '#F4EEFF',
 
-  primary: '#6D5DF6',
-  primaryDark: '#5146C8',
-  primarySoft: '#EEF2FF',
+  primary: '#7C3AED',
+  primaryDark: '#5B21B6',
+  primarySoft: '#EDE9FE',
 
-  secondary: '#0EA5E9',
+  secondary: '#38BDF8',
+  secondaryDark: '#0284C7',
   secondarySoft: '#E0F2FE',
 
   accent: '#F59E0B',
   accentSoft: '#FEF3C7',
 
-  success: '#16A34A',
+  lilac: '#D8B4FE',
+  lilacDark: '#9333EA',
+
+  pink: '#FBCFE8',
+  yellow: '#FDE68A',
+  blue: '#BAE6FD',
+  blueDark: '#0EA5E9',
+
+  success: '#22C55E',
   successSoft: '#DCFCE7',
 
-  danger: '#DC2626',
+  danger: '#EF4444',
   dangerSoft: '#FEE2E2',
 
-  text: '#0F172A',
+  warning: '#F97316',
+  warningSoft: '#FFEDD5',
+
+  text: '#111827',
   textLight: '#64748B',
   muted: '#94A3B8',
-  white: '#FFFFFF',
-  border: '#E2E8F0',
-  input: '#F8FAFC',
 
-  lilac: '#EEF2FF',
-  lilacDark: '#6D5DF6',
-  blue: '#E0F2FE',
-  blueDark: '#0EA5E9',
-  pink: '#FCE7F3',
-  yellow: '#FEF3C7',
+  white: '#FFFFFF',
+  border: '#E9D5FF',
+  input: '#FFFFFF',
 };

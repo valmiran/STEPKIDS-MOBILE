@@ -1,12 +1,24 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ClipboardList, Home, Settings, ShieldCheck, Sparkles } from 'lucide-react-native';
+import {
+  Baby,
+  ClipboardCheck,
+  Gamepad2,
+  Home,
+  Settings,
+  ShieldCheck,
+  Sparkles,
+  UserRound,
+} from 'lucide-react-native';
 
 import { colors } from '../../../theme';
 
+type Area = 'parent' | 'child';
+
 type Props = {
   navigation: any;
-  active?: 'home' | 'children' | 'add' | 'tasks' | 'settings';
+  area?: Area;
+  active?: string;
 };
 
 type NavItemProps = {
@@ -16,44 +28,120 @@ type NavItemProps = {
   onPress: () => void;
 };
 
-export default function BottomNav({ navigation, active = 'home' }: Props) {
+export default function BottomNav({
+  navigation,
+  area = 'parent',
+  active = 'home',
+}: Props) {
+  const isParent = area === 'parent';
+
   return (
     <View style={styles.container}>
       <NavItem
         label="Início"
         active={active === 'home'}
-        icon={<Home size={20} color={active === 'home' ? colors.primary : colors.muted} />}
-        onPress={() => navigation.navigate('Home')}
+        icon={
+          <Home
+            size={21}
+            color={active === 'home' ? colors.primary : colors.muted}
+          />
+        }
+        onPress={() => navigation.navigate(isParent ? 'ParentArea' : 'ChildArea')}
       />
 
-      <NavItem
-        label="Pais"
-        active={active === 'children'}
-        icon={<ShieldCheck size={20} color={active === 'children' ? colors.primary : colors.muted} />}
-        onPress={() => navigation.navigate('ParentArea')}
-      />
+      {isParent ? (
+        <>
+          <NavItem
+            label="Monitorar"
+            active={active === 'monitoring'}
+            icon={
+              <ClipboardCheck
+                size={21}
+                color={active === 'monitoring' ? colors.primary : colors.muted}
+              />
+            }
+            onPress={() => navigation.navigate('DailyChecklist')}
+          />
 
-      <TouchableOpacity
-        style={styles.heroButton}
-        onPress={() => navigation.navigate('ChildArea')}
-        activeOpacity={0.86}
-      >
-        <Sparkles size={24} color={colors.white} strokeWidth={2.4} />
-      </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.centerButton}
+            activeOpacity={0.86}
+            onPress={() => navigation.navigate('ChildList')}
+          >
+            <Baby size={26} color={colors.white} strokeWidth={2.5} />
+          </TouchableOpacity>
 
-      <NavItem
-        label="Missões"
-        active={active === 'tasks'}
-        icon={<ClipboardList size={20} color={active === 'tasks' ? colors.primary : colors.muted} />}
-        onPress={() => navigation.navigate('ActivityList')}
-      />
+          <NavItem
+            label="Crianças"
+            active={active === 'children'}
+            icon={
+              <ShieldCheck
+                size={21}
+                color={active === 'children' ? colors.primary : colors.muted}
+              />
+            }
+            onPress={() => navigation.navigate('ChildList')}
+          />
 
-      <NavItem
-        label="Ajustes"
-        active={active === 'settings'}
-        icon={<Settings size={20} color={active === 'settings' ? colors.primary : colors.muted} />}
-        onPress={() => navigation.navigate('Settings')}
-      />
+          <NavItem
+            label="Perfil"
+            active={active === 'profile'}
+            icon={
+              <Settings
+                size={21}
+                color={active === 'profile' ? colors.primary : colors.muted}
+              />
+            }
+            onPress={() => navigation.navigate('Profile')}
+          />
+        </>
+      ) : (
+        <>
+          <NavItem
+            label="Missões"
+            active={active === 'missions'}
+            icon={
+              <Sparkles
+                size={21}
+                color={active === 'missions' ? colors.primary : colors.muted}
+              />
+            }
+            onPress={() => navigation.navigate('ChildMissions')}
+          />
+
+          <TouchableOpacity
+            style={styles.centerButton}
+            activeOpacity={0.86}
+            onPress={() => navigation.navigate('GamePlaceholder')}
+          >
+            <Gamepad2 size={26} color={colors.white} strokeWidth={2.5} />
+          </TouchableOpacity>
+
+          <NavItem
+            label="Herói"
+            active={active === 'hero'}
+            icon={
+              <Gamepad2
+                size={21}
+                color={active === 'hero' ? colors.primary : colors.muted}
+              />
+            }
+            onPress={() => navigation.navigate('GamePlaceholder')}
+          />
+
+          <NavItem
+            label="Perfil"
+            active={active === 'profile'}
+            icon={
+              <UserRound
+                size={21}
+                color={active === 'profile' ? colors.primary : colors.muted}
+              />
+            }
+            onPress={() => navigation.navigate('Profile')}
+          />
+        </>
+      )}
     </View>
   );
 }
@@ -69,21 +157,25 @@ function NavItem({ label, active, icon, onPress }: NavItemProps) {
 
 const styles = StyleSheet.create({
   container: {
-    height: 72,
+    height: 76,
     backgroundColor: colors.surface,
     borderTopWidth: 1,
     borderTopColor: colors.border,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingBottom: 8,
+    paddingHorizontal: 8,
+    paddingBottom: 10,
+    shadowColor: colors.primaryDark,
+    shadowOpacity: 0.08,
+    shadowRadius: 18,
+    elevation: 10,
   },
   navItem: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 3,
+    gap: 4,
   },
   label: {
     fontSize: 10,
@@ -93,14 +185,14 @@ const styles = StyleSheet.create({
   labelActive: {
     color: colors.primary,
   },
-  heroButton: {
-    width: 54,
-    height: 54,
-    borderRadius: 27,
+  centerButton: {
+    width: 58,
+    height: 58,
+    borderRadius: 29,
     backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: -30,
+    marginTop: -34,
     borderWidth: 5,
     borderColor: colors.background,
   },
