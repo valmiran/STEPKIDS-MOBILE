@@ -50,7 +50,6 @@ export default function MainRoutes() {
 
       <Stack.Screen name="ParentArea" component={ParentAreaScreen} />
       <Stack.Screen name="ChildArea" component={ChildAreaScreen} />
-      <Stack.Screen name="GamePlaceholder" component={GamePlaceholderScreen} />
 
       <Stack.Screen name="ChildList" component={ChildListScreen} />
       <Stack.Screen name="CreateChild" component={CreateChildScreen} />
@@ -73,6 +72,8 @@ export default function MainRoutes() {
       <Stack.Screen name="Rewards" component={RewardsScreen} />
       <Stack.Screen name="RewardDetails" component={RewardDetailsScreen} />
       <Stack.Screen name="Shop" component={ShopScreen} />
+
+      <Stack.Screen name="GamePlaceholder" component={GamePlaceholderScreen} />
 
       <Stack.Screen name="ActivityList" component={ActivityListScreen} />
       <Stack.Screen name="CreateActivity" component={CreateActivityScreen} />

@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -8,292 +7,215 @@ import {
   View,
 } from 'react-native';
 
-import AppHeader from '../../components/common/AppHeader';
-import BottomNav from '../../components/common/BottomNav';
-import ChildSelect from '../../components/common/ChildSelect';
+import {
+  Award,
+  ChevronRight,
+  Gamepad2,
+  Gift,
+  Puzzle,
+  Rocket,
+  Shield,
+  Sparkles,
+  Star,
+  Trophy,
+} from 'lucide-react-native';
+
 import { colors } from '../../theme';
 
-export default function ChildAreaScreen({ navigation }: any) {
-  const [childId, setChildId] = useState('');
+type Props = {
+  navigation: any;
+};
 
-  function goToGame() {
-    if (!childId) {
-      Alert.alert('Atenção', 'Selecione uma criança antes de entrar no jogo.');
-      return;
-    }
+type ActionCardProps = {
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  onPress: () => void;
+};
 
-    navigation.navigate('GamePlaceholder', { childId });
-  }
-
+export default function ChildAreaScreen({ navigation }: Props) {
   return (
-    <View style={styles.container}>
-      <AppHeader navigation={navigation} />
-
-      <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.title}>Modo Criança</Text>
-
-        <Text style={styles.description}>
-          Área gamificada para jogar, cumprir missões, ganhar moedas e acompanhar conquistas.
-        </Text>
-
-        <View style={styles.selectCard}>
-          <Text style={styles.label}>Quem vai jogar?</Text>
-          <ChildSelect
-            selectedChildId={childId}
-            onSelect={(id) => setChildId(id)}
-          />
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.content}
+      showsVerticalScrollIndicator={false}
+    >
+      <View style={styles.heroCard}>
+        <View style={styles.heroIcon}>
+          <Sparkles size={32} color={colors.white} />
         </View>
 
-        <View style={styles.heroCard}>
-          <Text style={styles.heroIcon}>🦸</Text>
-          <Text style={styles.heroTitle}>Jornada do Herói</Text>
-          <Text style={styles.heroText}>
-            O jogo será desenvolvido aqui. A criança poderá coletar moedas,
-            peças e evoluir seu personagem.
+        <View style={styles.heroTextArea}>
+          <Text style={styles.title}>Modo Criança</Text>
+          <Text style={styles.subtitle}>
+            Complete missões, ganhe XP, junte moedas e evolua seu herói durante a jornada
+            com a órtese.
           </Text>
         </View>
+      </View>
 
-        <TouchableOpacity style={styles.gameButton} onPress={goToGame}>
-          <Text style={styles.gameButtonIcon}>🎮</Text>
+      <SectionTitle title="Jornada do herói" />
 
-          <View style={styles.gameButtonTextBox}>
-            <Text style={styles.gameButtonTitle}>Entrar no jogo</Text>
-            <Text style={styles.gameButtonText}>
-              Espaço reservado para o minigame.
-            </Text>
-          </View>
-        </TouchableOpacity>
+      <ActionCard
+        title="Missões do dia"
+        description="Veja desafios simples para cumprir hoje e ganhar recompensas."
+        icon={<Rocket size={24} color={colors.primaryDark} />}
+        onPress={() => navigation.navigate('ChildMissions')}
+      />
 
-        <View style={styles.row}>
-          <ChildCard
-            icon="🎁"
-            title="Recompensas"
-            text="Resgatar prêmios desbloqueados"
-            color={colors.white}
-            onPress={() => navigation.navigate('Rewards')}
-          />
+      <ActionCard
+        title="Atividades"
+        description="Complete atividades educativas e acompanhe sua evolução."
+        icon={<Star size={24} color={colors.primaryDark} />}
+        onPress={() => navigation.navigate('ActivityList')}
+      />
 
-          <ChildCard
-            icon="📈"
-            title="Nível"
-            text="Ver pontos e evolução"
-            color={colors.blue}
-            onPress={() => navigation.navigate('LevelBonus')}
-          />
-        </View>
+      <ActionCard
+        title="Meu progresso"
+        description="Acompanhe nível, XP, moedas, ranking e evolução do personagem."
+        icon={<Trophy size={24} color={colors.accent} />}
+        onPress={() => navigation.navigate('Progress')}
+      />
 
-        <View style={styles.row}>
-          <ChildCard
-            icon="🎯"
-            title="Missões"
-            text="Atividades criadas pelos pais"
-            color={colors.yellow}
-            onPress={() => navigation.navigate('ChildMissions')}
-          />
+      <SectionTitle title="Recompensas e diversão" />
 
-          <ChildCard
-            icon="🛒"
-            title="Loja"
-            text="Comprar itens com moedas"
-            color={colors.white}
-            onPress={() => navigation.navigate('Shop')}
-          />
-        </View>
+      <ActionCard
+        title="Recompensas"
+        description="Veja moedas, prêmios, itens liberados e conquistas alcançadas."
+        icon={<Gift size={24} color={colors.success} />}
+        onPress={() => navigation.navigate('Rewards')}
+      />
 
-        <View style={styles.row}>
-          <ChildCard
-            icon="📜"
-            title="Histórico"
-            text="Missões concluídas"
-            color={colors.white}
-            onPress={() => navigation.navigate('ActivityHistory')}
-          />
+      <ActionCard
+        title="Loja do herói"
+        description="Use moedas para desbloquear itens e melhorar sua jornada."
+        icon={<Shield size={24} color={colors.primaryDark} />}
+        onPress={() => navigation.navigate('Shop')}
+      />
 
-          <ChildCard
-            icon="🪙"
-            title="Moedas"
-            text="EXP, ouro e evolução"
-            color={colors.blue}
-            onPress={() => navigation.navigate('Points')}
-          />
-        </View>
+      <ActionCard
+        title="Jogo da órtese"
+        description="Aprenda brincando sobre a órtese e os cuidados do tratamento."
+        icon={<Puzzle size={24} color={colors.secondary} />}
+        onPress={() => navigation.navigate('GamePlaceholder')}
+      />
 
-        <View style={styles.row}>
-          <ChildCard
-            icon="🏆"
-            title="Ranking"
-            text="Conquistas e medalhas"
-            color={colors.white}
-            onPress={() => navigation.navigate('Ranking')}
-          />
+      <SectionTitle title="Extras" />
 
-          <ChildCard
-            icon="👤"
-            title="Personagem"
-            text="Avatar e status futuros"
-            color={colors.yellow}
-            onPress={() => navigation.navigate('GamePlaceholder', { childId })}
-          />
-        </View>
+      <ActionCard
+        title="Pontos"
+        description="Veja sua pontuação acumulada na jornada."
+        icon={<Award size={24} color={colors.accent} />}
+        onPress={() => navigation.navigate('Points')}
+      />
 
-        <View style={styles.infoBox}>
-          <Text style={styles.infoTitle}>Como será o jogo?</Text>
-          <Text style={styles.infoText}>
-            O personagem poderá correr, pular obstáculos, coletar moedas e peças
-            mecânicas. Essa tela já prepara o caminho para desenvolver o
-            minigame depois.
-          </Text>
-        </View>
-      </ScrollView>
-
-      <BottomNav navigation={navigation} active="tasks" />
-    </View>
+      <ActionCard
+        title="Ranking"
+        description="Compare seu progresso e acompanhe sua evolução."
+        icon={<Gamepad2 size={24} color={colors.secondary} />}
+        onPress={() => navigation.navigate('Ranking')}
+      />
+    </ScrollView>
   );
 }
 
-function ChildCard({
-  icon,
-  title,
-  text,
-  color,
-  onPress,
-}: {
-  icon: string;
-  title: string;
-  text: string;
-  color: string;
-  onPress: () => void;
-}) {
+function SectionTitle({ title }: { title: string }) {
+  return <Text style={styles.sectionTitle}>{title}</Text>;
+}
+
+function ActionCard({ title, description, icon, onPress }: ActionCardProps) {
   return (
-    <TouchableOpacity
-      style={[styles.childCard, { backgroundColor: color }]}
-      onPress={onPress}
-    >
-      <Text style={styles.childIcon}>{icon}</Text>
-      <Text style={styles.childTitle}>{title}</Text>
-      <Text style={styles.childText}>{text}</Text>
+    <TouchableOpacity style={styles.actionCard} activeOpacity={0.86} onPress={onPress}>
+      <View style={styles.actionIcon}>{icon}</View>
+
+      <View style={styles.actionContent}>
+        <Text style={styles.actionTitle}>{title}</Text>
+        <Text style={styles.actionDescription}>{description}</Text>
+      </View>
+
+      <ChevronRight size={20} color={colors.muted} />
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
   content: {
-    padding: 18,
-    paddingBottom: 90,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '900',
-    marginBottom: 8,
-  },
-  description: {
-    color: colors.textLight,
-    fontWeight: '600',
-    lineHeight: 20,
-    marginBottom: 14,
-  },
-  selectCard: {
-    backgroundColor: colors.lilac,
-    borderRadius: 20,
-    padding: 16,
-    marginBottom: 14,
-  },
-  label: {
-    fontWeight: '900',
-    marginBottom: 8,
+    padding: 20,
+    paddingBottom: 42,
   },
   heroCard: {
-    backgroundColor: colors.lilac,
-    borderRadius: 24,
+    backgroundColor: colors.primary,
+    borderRadius: 28,
     padding: 22,
+    marginBottom: 24,
+    flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 14,
   },
   heroIcon: {
-    fontSize: 48,
-    marginBottom: 8,
-  },
-  heroTitle: {
-    fontSize: 22,
-    fontWeight: '900',
-    marginBottom: 6,
-    textAlign: 'center',
-  },
-  heroText: {
-    color: colors.textLight,
-    fontWeight: '600',
-    textAlign: 'center',
-    lineHeight: 20,
-  },
-  gameButton: {
-    backgroundColor: colors.yellow,
-    borderRadius: 18,
-    padding: 16,
-    flexDirection: 'row',
+    width: 68,
+    height: 68,
+    borderRadius: 24,
+    backgroundColor: 'rgba(255,255,255,0.18)',
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: 12,
-    marginBottom: 14,
+    marginRight: 16,
   },
-  gameButtonIcon: {
-    fontSize: 38,
-  },
-  gameButtonTextBox: {
+  heroTextArea: {
     flex: 1,
   },
-  gameButtonTitle: {
-    fontSize: 18,
+  title: {
+    fontSize: 24,
     fontWeight: '900',
-    marginBottom: 4,
+    color: colors.white,
+    marginBottom: 8,
   },
-  gameButtonText: {
-    color: colors.textLight,
-    fontWeight: '600',
+  subtitle: {
+    fontSize: 14,
+    lineHeight: 21,
+    color: 'rgba(255,255,255,0.88)',
   },
-  row: {
-    flexDirection: 'row',
-    gap: 12,
+  sectionTitle: {
+    fontSize: 15,
+    fontWeight: '900',
+    color: colors.text,
+    marginTop: 10,
     marginBottom: 12,
   },
-  childCard: {
-    flex: 1,
-    minHeight: 124,
-    borderRadius: 16,
-    padding: 14,
+  actionCard: {
+    backgroundColor: colors.surface,
+    borderRadius: 22,
+    padding: 18,
+    marginBottom: 12,
     borderWidth: 1,
     borderColor: colors.border,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  childIcon: {
-    fontSize: 28,
-    marginBottom: 8,
-  },
-  childTitle: {
-    fontSize: 16,
-    fontWeight: '900',
-    marginBottom: 6,
-  },
-  childText: {
-    color: colors.textLight,
-    fontWeight: '600',
-    lineHeight: 18,
-    fontSize: 12,
-  },
-  infoBox: {
-    backgroundColor: colors.white,
+  actionIcon: {
+    width: 48,
+    height: 48,
     borderRadius: 18,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: colors.border,
-    marginTop: 2,
+    backgroundColor: colors.surfaceSoft,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 14,
   },
-  infoTitle: {
-    fontSize: 17,
+  actionContent: {
+    flex: 1,
+  },
+  actionTitle: {
+    fontSize: 15,
     fontWeight: '900',
-    marginBottom: 6,
+    color: colors.text,
+    marginBottom: 4,
   },
-  infoText: {
+  actionDescription: {
+    fontSize: 13,
+    lineHeight: 19,
     color: colors.textLight,
-    fontWeight: '600',
-    lineHeight: 20,
   },
 });

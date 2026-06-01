@@ -1,32 +1,22 @@
-import { Child } from '../types/child';
-
-export type AuthStackParamList = {
-  Splash: undefined;
-  Login: undefined;
-  Register: undefined;
-  AddressRegister: { form: any };
-  ForgotPassword: undefined;
-  ConfirmEmail: undefined;
-};
-
 export type MainStackParamList = {
   LoadingJourney: undefined;
   Home: undefined;
 
   ParentArea: undefined;
   ChildArea: undefined;
-  GamePlaceholder: { childId?: string } | undefined;
-
-  Shop: undefined;
 
   ChildList: undefined;
   CreateChild: undefined;
-  EditChild: { child: Child };
-  ChildDetails: { child: Child };
+  EditChild: {
+    childId: string;
+  };
+  ChildDetails: {
+    childId: string;
+  };
 
   RegisterOrthosisUsage: undefined;
   DailyChecklist: undefined;
-  Symptoms: { mood?: string } | undefined;
+  Symptoms: undefined;
   History: undefined;
 
   Progress: undefined;
@@ -35,7 +25,12 @@ export type MainStackParamList = {
   LevelBonus: undefined;
 
   Rewards: undefined;
-  RewardDetails: undefined;
+  RewardDetails: {
+    rewardId: string;
+  };
+  Shop: undefined;
+
+  GamePlaceholder: undefined;
 
   ActivityList: undefined;
   CreateActivity: undefined;
@@ -43,6 +38,7 @@ export type MainStackParamList = {
   ChildMissions: undefined;
 
   WeeklyReport: undefined;
+
   Profile: undefined;
   Settings: undefined;
   ChangePassword: undefined;
