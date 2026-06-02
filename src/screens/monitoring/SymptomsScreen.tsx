@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import AppHeader from '../../components/common/AppHeader';
-import BottomNav from '../../components/common/BottomNav';
+import KeyboardAwareScreen from '../../components/common/KeyboardAwareScreen';
 import Button from '../../components/common/Button';
 import ChildSelect from '../../components/common/ChildSelect';
 import { monitoringService } from '../../services/api/monitoringService';
@@ -30,6 +30,7 @@ export default function SymptomsScreen({ navigation, route }: any) {
   const [intensity, setIntensity] = useState('1');
   const [description, setDescription] = useState('');
   const [other, setOther] = useState('');
+  const [loading, setLoading] = useState(false);
 
   function toggleSymptom(option: string) {
     setSymptomType(option);
@@ -41,11 +42,20 @@ export default function SymptomsScreen({ navigation, route }: any) {
       return;
     }
 
+    const intensityNumber = Number(intensity);
+
+    if (Number.isNaN(intensityNumber) || intensityNumber < 1 || intensityNumber > 5) {
+      Alert.alert('Atenção', 'A intensidade deve ser um número de 1 a 5.');
+      return;
+    }
+
     try {
+      setLoading(true);
+
       await monitoringService.createSymptom({
         child,
         symptom_type: symptomType,
-        intensity: Number(intensity),
+        intensity: intensityNumber,
         mood: selectedMood,
         description: other ? `${description}\nOutros: ${other}` : description,
       });
@@ -53,7 +63,7 @@ export default function SymptomsScreen({ navigation, route }: any) {
       Alert.alert('Sucesso', 'Sintoma registrado com sucesso!');
       setDescription('');
       setOther('');
-      navigation.navigate('Home');
+      navigation.navigate('ParentArea');
     } catch (error: any) {
       const message = String(error?.message || '');
 
@@ -66,18 +76,21 @@ export default function SymptomsScreen({ navigation, route }: any) {
       }
 
       Alert.alert('Erro', message || 'Não foi possível registrar o sintoma.');
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
     <View style={styles.container}>
-      <AppHeader navigation={navigation} />
+      <AppHeader
+        navigation={navigation}
+        title="Sintomas"
+        subtitle="Registro de desconfortos"
+        fallbackRoute="ParentArea"
+      />
 
-      <View style={styles.content}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← Voltar</Text>
-        </TouchableOpacity>
-
+      <KeyboardAwareScreen contentStyle={styles.content}>
         <View style={styles.questionRow}>
           {selectedMood && (
             <View style={styles.moodBadge}>
@@ -93,66 +106,72 @@ export default function SymptomsScreen({ navigation, route }: any) {
           </View>
         </View>
 
-        <Text style={styles.label}>Selecione a criança</Text>
-        <ChildSelect selectedChildId={child} onSelect={(id) => setChild(id)} />
+        <View style={styles.card}>
+          <Text style={styles.label}>Selecione a criança</Text>
+          <ChildSelect selectedChildId={child} onSelect={(id) => setChild(id)} />
 
-        <Text style={styles.label}>Descrição</Text>
-        <TextInput
-          placeholder="Descreva o que aconteceu"
-          value={description}
-          onChangeText={setDescription}
-          style={styles.textArea}
-          multiline
-        />
+          <Text style={styles.label}>Descrição</Text>
+          <TextInput
+            placeholder="Descreva o que aconteceu"
+            value={description}
+            onChangeText={setDescription}
+            style={styles.textArea}
+            multiline
+          />
 
-        <Text style={styles.sectionText}>
-          Você está sentindo algum sintoma ou desconforto?
-        </Text>
+          <Text style={styles.sectionText}>
+            Você está sentindo algum sintoma ou desconforto?
+          </Text>
 
-        {symptomOptions.map((item) => {
-          const selected = symptomType === item;
+          {symptomOptions.map((item) => {
+            const selected = symptomType === item;
 
-          return (
-            <TouchableOpacity
-              key={item}
-              style={styles.checkboxRow}
-              onPress={() => toggleSymptom(item)}
-            >
-              <Text style={styles.checkbox}>{selected ? '☑' : '☐'}</Text>
-              <Text style={styles.checkboxText}>{item}</Text>
-            </TouchableOpacity>
-          );
-        })}
+            return (
+              <TouchableOpacity
+                key={item}
+                style={[styles.checkboxRow, selected && styles.checkboxRowSelected]}
+                onPress={() => toggleSymptom(item)}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.checkbox}>{selected ? '☑' : '☐'}</Text>
+                <Text style={styles.checkboxText}>{item}</Text>
+              </TouchableOpacity>
+            );
+          })}
 
-        <Text style={styles.label}>Intensidade de 1 a 5</Text>
-        <TextInput
-          style={styles.input}
-          value={intensity}
-          onChangeText={setIntensity}
-          keyboardType="numeric"
-          placeholder="Ex: 1"
-        />
+          <Text style={styles.label}>Intensidade de 1 a 5</Text>
+          <TextInput
+            style={styles.input}
+            value={intensity}
+            onChangeText={setIntensity}
+            keyboardType="numeric"
+            placeholder="Ex: 1"
+          />
 
-        <Text style={styles.sectionText}>Outros:</Text>
-        <TextInput
-          placeholder="Descreva outro sintoma, se houver"
-          value={other}
-          onChangeText={setOther}
-          style={styles.input}
-        />
+          <Text style={styles.sectionText}>Outros:</Text>
+          <TextInput
+            placeholder="Descreva outro sintoma, se houver"
+            value={other}
+            onChangeText={setOther}
+            style={styles.input}
+          />
 
-        <Button title="Enviar" onPress={handleSubmit} />
-      </View>
+          <Button title={loading ? 'Enviando...' : 'Enviar'} onPress={handleSubmit} />
 
-      <BottomNav navigation={navigation} active="add" />
+          <Button
+            title="Cancelar"
+            variant="secondary"
+            onPress={() => navigation.goBack()}
+          />
+        </View>
+      </KeyboardAwareScreen>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
-  content: { flex: 1, padding: 18 },
-  back: { fontWeight: '700', marginBottom: 14 },
+  content: { flexGrow: 1, padding: 18, paddingBottom: 120 },
   questionRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -169,11 +188,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   selectedMood: { fontSize: 32 },
-  title: { fontSize: 17, fontWeight: '900' },
-  subtitle: { fontSize: 12, marginTop: 4, color: colors.textLight },
-  label: { fontWeight: '700', marginBottom: 6 },
+  title: { fontSize: 20, fontWeight: '900', color: colors.text },
+  subtitle: {
+    fontSize: 13,
+    marginTop: 4,
+    color: colors.textLight,
+    fontWeight: '600',
+  },
+  card: {
+    backgroundColor: colors.lilac,
+    borderRadius: 24,
+    padding: 18,
+  },
+  label: { fontWeight: '800', marginBottom: 6, color: colors.text },
   input: {
-    height: 44,
+    height: 46,
     backgroundColor: colors.white,
     borderRadius: 10,
     borderWidth: 1,
@@ -182,7 +211,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   textArea: {
-    height: 110,
+    height: 120,
     backgroundColor: colors.white,
     borderRadius: 10,
     borderWidth: 1,
@@ -191,13 +220,26 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     marginBottom: 16,
   },
-  sectionText: { fontWeight: '700', marginBottom: 8 },
+  sectionText: {
+    fontWeight: '800',
+    marginBottom: 8,
+    color: colors.text,
+  },
   checkboxRow: {
+    backgroundColor: colors.white,
+    borderRadius: 12,
+    padding: 12,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginBottom: 6,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  checkboxRowSelected: {
+    borderColor: colors.primary,
+    backgroundColor: colors.primarySoft,
   },
   checkbox: { fontSize: 16 },
-  checkboxText: { fontSize: 14 },
+  checkboxText: { fontSize: 14, fontWeight: '700', color: colors.text },
 });

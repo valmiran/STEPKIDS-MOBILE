@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 
 import AppHeader from '../../components/common/AppHeader';
-import BottomNav from '../../components/common/BottomNav';
+import KeyboardAwareScreen from '../../components/common/KeyboardAwareScreen';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import { authService } from '../../services/api/authService';
@@ -45,9 +45,14 @@ export default function ChangePasswordScreen({ navigation }: any) {
 
   return (
     <View style={styles.container}>
-      <AppHeader navigation={navigation} />
+      <AppHeader
+        navigation={navigation}
+        title="Alterar senha"
+        subtitle="Segurança da conta"
+        fallbackRoute="Profile"
+      />
 
-      <ScrollView contentContainerStyle={styles.content}>
+      <KeyboardAwareScreen contentStyle={styles.content}>
         <Text style={styles.title}>Alterar Senha</Text>
 
         <Text style={styles.description}>
@@ -86,9 +91,7 @@ export default function ChangePasswordScreen({ navigation }: any) {
             onPress={() => navigation.goBack()}
           />
         </View>
-      </ScrollView>
-
-      <BottomNav navigation={navigation} active="settings" />
+      </KeyboardAwareScreen>
     </View>
   );
 }
@@ -101,12 +104,13 @@ const styles = StyleSheet.create({
   content: {
     flexGrow: 1,
     padding: 18,
-    paddingBottom: 90,
+    paddingBottom: 120,
   },
   title: {
     fontSize: 26,
     fontWeight: '900',
     marginBottom: 8,
+    color: colors.text,
   },
   description: {
     color: colors.textLight,
@@ -122,6 +126,7 @@ const styles = StyleSheet.create({
   label: {
     fontWeight: '800',
     marginBottom: 6,
+    color: colors.text,
   },
   infoBox: {
     backgroundColor: colors.yellow,
@@ -133,6 +138,7 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontWeight: '900',
     marginBottom: 4,
+    color: colors.text,
   },
   infoText: {
     color: colors.textLight,

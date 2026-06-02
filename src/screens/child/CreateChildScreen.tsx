@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
-import {
-  ActivityIndicator,
-  Alert,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import AppHeader from '../../components/common/AppHeader';
-import BottomNav from '../../components/common/BottomNav';
+import KeyboardAwareScreen from '../../components/common/KeyboardAwareScreen';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import { childService } from '../../services/api/childService';
@@ -58,9 +51,14 @@ export default function CreateChildScreen() {
 
   return (
     <View style={styles.container}>
-      <AppHeader navigation={navigation} />
+      <AppHeader
+        navigation={navigation}
+        title="Cadastrar criança"
+        subtitle="Novo perfil infantil"
+        fallbackRoute="ParentArea"
+      />
 
-      <ScrollView contentContainerStyle={styles.content}>
+      <KeyboardAwareScreen contentStyle={styles.content}>
         <Text style={styles.title}>Nova Criança</Text>
 
         <Text style={styles.description}>
@@ -113,9 +111,7 @@ export default function CreateChildScreen() {
             onPress={() => navigation.goBack()}
           />
         </View>
-      </ScrollView>
-
-      <BottomNav navigation={navigation} active="children" />
+      </KeyboardAwareScreen>
     </View>
   );
 }
@@ -128,12 +124,13 @@ const styles = StyleSheet.create({
   content: {
     flexGrow: 1,
     padding: 18,
-    paddingBottom: 90,
+    paddingBottom: 120,
   },
   title: {
     fontSize: 26,
     fontWeight: '900',
     marginBottom: 8,
+    color: colors.text,
   },
   description: {
     color: colors.textLight,
@@ -149,6 +146,7 @@ const styles = StyleSheet.create({
   label: {
     fontWeight: '800',
     marginBottom: 6,
+    color: colors.text,
   },
   infoBox: {
     backgroundColor: colors.yellow,
@@ -160,6 +158,7 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontWeight: '900',
     marginBottom: 4,
+    color: colors.text,
   },
   infoText: {
     fontWeight: '600',

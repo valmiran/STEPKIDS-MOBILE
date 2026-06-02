@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,14 +13,19 @@ import {
   ChevronRight,
   Gamepad2,
   Gift,
+  LogOut,
   Puzzle,
   Rocket,
+  Settings,
   Shield,
   Sparkles,
   Star,
   Trophy,
+  UserRound,
 } from 'lucide-react-native';
 
+import BottomNav from '../../components/common/BottomNav';
+import { useAuth } from '../../hooks/useAuth';
 import { colors } from '../../theme';
 
 type Props = {
@@ -34,88 +40,139 @@ type ActionCardProps = {
 };
 
 export default function ChildAreaScreen({ navigation }: Props) {
+  const { signOut } = useAuth();
+
+  function handleLogout() {
+    Alert.alert('Sair da conta', 'Deseja realmente sair?', [
+      { text: 'Cancelar', style: 'cancel' },
+      {
+        text: 'Sair',
+        style: 'destructive',
+        onPress: async () => {
+          await signOut();
+        },
+      },
+    ]);
+  }
+
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.content}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={styles.heroCard}>
-        <View style={styles.heroIcon}>
-          <Sparkles size={32} color={colors.white} />
+    <View style={styles.screen}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.topBar}>
+          <View>
+            <Text style={styles.appName}>Pé de Herói</Text>
+            <Text style={styles.topSubtitle}>Área da Criança</Text>
+          </View>
+
+          <View style={styles.topActions}>
+            <TouchableOpacity
+              style={styles.topButton}
+              activeOpacity={0.82}
+              onPress={() => navigation.navigate('Profile')}
+            >
+              <UserRound size={19} color={colors.primaryDark} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.topButton}
+              activeOpacity={0.82}
+              onPress={() => navigation.navigate('Settings')}
+            >
+              <Settings size={19} color={colors.primaryDark} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.topButton}
+              activeOpacity={0.82}
+              onPress={handleLogout}
+            >
+              <LogOut size={19} color={colors.danger} />
+            </TouchableOpacity>
+          </View>
         </View>
 
-        <View style={styles.heroTextArea}>
-          <Text style={styles.title}>Modo Criança</Text>
-          <Text style={styles.subtitle}>
-            Complete missões, ganhe XP, junte moedas e evolua seu herói durante a jornada
-            com a órtese.
-          </Text>
+        <View style={styles.heroCard}>
+          <View style={styles.heroIcon}>
+            <Sparkles size={32} color={colors.white} />
+          </View>
+
+          <View style={styles.heroTextArea}>
+            <Text style={styles.title}>Sua jornada de herói começou!</Text>
+            <Text style={styles.subtitle}>
+              Complete missões, ganhe XP, cuide da rotina e desbloqueie partes da órtese do herói.
+            </Text>
+          </View>
         </View>
-      </View>
 
-      <SectionTitle title="Jornada do herói" />
+        <SectionTitle title="Jornada do herói" />
 
-      <ActionCard
-        title="Missões do dia"
-        description="Veja desafios simples para cumprir hoje e ganhar recompensas."
-        icon={<Rocket size={24} color={colors.primaryDark} />}
-        onPress={() => navigation.navigate('ChildMissions')}
-      />
+        <ActionCard
+          title="Missões do dia"
+          description="Veja desafios simples para cumprir hoje e ganhar recompensas."
+          icon={<Rocket size={24} color={colors.primaryDark} />}
+          onPress={() => navigation.navigate('ChildMissions')}
+        />
 
-      <ActionCard
-        title="Atividades"
-        description="Complete atividades educativas e acompanhe sua evolução."
-        icon={<Star size={24} color={colors.primaryDark} />}
-        onPress={() => navigation.navigate('ActivityList')}
-      />
+        <ActionCard
+          title="Atividades educativas"
+          description="Complete atividades sobre cuidado, rotina e uso correto da órtese."
+          icon={<Star size={24} color={colors.primaryDark} />}
+          onPress={() => navigation.navigate('ActivityList')}
+        />
 
-      <ActionCard
-        title="Meu progresso"
-        description="Acompanhe nível, XP, moedas, ranking e evolução do personagem."
-        icon={<Trophy size={24} color={colors.accent} />}
-        onPress={() => navigation.navigate('Progress')}
-      />
+        <ActionCard
+          title="Meu progresso"
+          description="Acompanhe nível, XP, moedas, ranking e evolução do personagem."
+          icon={<Trophy size={24} color={colors.accent} />}
+          onPress={() => navigation.navigate('Progress')}
+        />
 
-      <SectionTitle title="Recompensas e diversão" />
+        <SectionTitle title="Recompensas e diversão" />
 
-      <ActionCard
-        title="Recompensas"
-        description="Veja moedas, prêmios, itens liberados e conquistas alcançadas."
-        icon={<Gift size={24} color={colors.success} />}
-        onPress={() => navigation.navigate('Rewards')}
-      />
+        <ActionCard
+          title="Recompensas"
+          description="Veja moedas, prêmios, itens liberados e conquistas alcançadas."
+          icon={<Gift size={24} color={colors.success} />}
+          onPress={() => navigation.navigate('Rewards')}
+        />
 
-      <ActionCard
-        title="Loja do herói"
-        description="Use moedas para desbloquear itens e melhorar sua jornada."
-        icon={<Shield size={24} color={colors.primaryDark} />}
-        onPress={() => navigation.navigate('Shop')}
-      />
+        <ActionCard
+          title="Loja do herói"
+          description="Use moedas para desbloquear itens e melhorar sua jornada."
+          icon={<Shield size={24} color={colors.primaryDark} />}
+          onPress={() => navigation.navigate('Shop')}
+        />
 
-      <ActionCard
-        title="Jogo da órtese"
-        description="Aprenda brincando sobre a órtese e os cuidados do tratamento."
-        icon={<Puzzle size={24} color={colors.secondary} />}
-        onPress={() => navigation.navigate('GamePlaceholder')}
-      />
+        <ActionCard
+          title="Monte a Órtese do Herói"
+          description="Escolha a criança, monte a órtese na ordem correta e direcione a recompensa para ela."
+          icon={<Puzzle size={24} color={colors.secondaryDark} />}
+          onPress={() => navigation.navigate('SelectChildForGame')}
+        />
 
-      <SectionTitle title="Extras" />
+        <SectionTitle title="Extras" />
 
-      <ActionCard
-        title="Pontos"
-        description="Veja sua pontuação acumulada na jornada."
-        icon={<Award size={24} color={colors.accent} />}
-        onPress={() => navigation.navigate('Points')}
-      />
+        <ActionCard
+          title="Pontos"
+          description="Veja sua pontuação acumulada na jornada."
+          icon={<Award size={24} color={colors.accent} />}
+          onPress={() => navigation.navigate('Points')}
+        />
 
-      <ActionCard
-        title="Ranking"
-        description="Compare seu progresso e acompanhe sua evolução."
-        icon={<Gamepad2 size={24} color={colors.secondary} />}
-        onPress={() => navigation.navigate('Ranking')}
-      />
-    </ScrollView>
+        <ActionCard
+          title="Ranking"
+          description="Compare seu progresso e acompanhe sua evolução."
+          icon={<Gamepad2 size={24} color={colors.secondaryDark} />}
+          onPress={() => navigation.navigate('Ranking')}
+        />
+      </ScrollView>
+
+      <BottomNav navigation={navigation} area="child" active="home" visible />
+    </View>
   );
 }
 
@@ -125,7 +182,11 @@ function SectionTitle({ title }: { title: string }) {
 
 function ActionCard({ title, description, icon, onPress }: ActionCardProps) {
   return (
-    <TouchableOpacity style={styles.actionCard} activeOpacity={0.86} onPress={onPress}>
+    <TouchableOpacity
+      style={styles.actionCard}
+      activeOpacity={0.86}
+      onPress={onPress}
+    >
       <View style={styles.actionIcon}>{icon}</View>
 
       <View style={styles.actionContent}>
@@ -139,21 +200,57 @@ function ActionCard({ title, description, icon, onPress }: ActionCardProps) {
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: colors.primaryDark,
+  },
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.primaryDark,
   },
   content: {
     padding: 20,
-    paddingBottom: 42,
+    paddingTop: 50,
+    paddingBottom: 28,
+  },
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 18,
+  },
+  appName: {
+    color: colors.white,
+    fontSize: 20,
+    fontWeight: '900',
+  },
+  topSubtitle: {
+    color: 'rgba(255,255,255,0.78)',
+    fontSize: 12,
+    fontWeight: '800',
+    marginTop: 2,
+  },
+  topActions: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  topButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   heroCard: {
-    backgroundColor: colors.primary,
+    backgroundColor: 'rgba(255,255,255,0.14)',
     borderRadius: 28,
     padding: 22,
     marginBottom: 24,
     flexDirection: 'row',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.22)',
   },
   heroIcon: {
     width: 68,
@@ -168,7 +265,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '900',
     color: colors.white,
     marginBottom: 8,
@@ -177,11 +274,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 21,
     color: 'rgba(255,255,255,0.88)',
+    fontWeight: '600',
   },
   sectionTitle: {
     fontSize: 15,
     fontWeight: '900',
-    color: colors.text,
+    color: colors.white,
     marginTop: 10,
     marginBottom: 12,
   },
@@ -217,5 +315,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 19,
     color: colors.textLight,
+    fontWeight: '600',
   },
 });

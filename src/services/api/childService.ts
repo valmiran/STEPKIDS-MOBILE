@@ -57,20 +57,21 @@ export const childService = {
     }
 
     const childData = {
-  name: payload.name.trim(),
-  age: payload.age,
-  diagnosis: payload.diagnosis?.trim() || '',
-  avatar: payload.avatar || '',
-  parentUid: uid,
-  doctorUid: '',
-  level: 1,
-  totalPoints: 0,
-  totalExp: 0,
-  goldCoins: 0,
-  totalOrthosisHours: 0,
-  completedMissions: 0,
-  completedActivities: 0,
-};
+      name: payload.name.trim(),
+      age: payload.age,
+      diagnosis: payload.diagnosis?.trim() || '',
+      avatar: payload.avatar || '',
+      parentUid: uid,
+      doctorUid: '',
+      level: 1,
+      totalPoints: 0,
+      totalExp: 0,
+      goldCoins: 0,
+      totalOrthosisHours: 0,
+      completedMissions: 0,
+      completedActivities: 0,
+    };
+
     const id = await userPush('children', childData);
 
     return {
@@ -79,10 +80,7 @@ export const childService = {
     };
   },
 
-  async updateChild(
-    id: string,
-    payload: UpdateChildPayload
-  ): Promise<Child> {
+  async updateChild(id: string, payload: UpdateChildPayload): Promise<Child> {
     if (!id) {
       throw new Error('ID da criança não informado.');
     }
@@ -134,5 +132,45 @@ export const childService = {
     }
 
     await userRemove(`children/${id}`);
+  },
+
+  async completeOrthosisHeroGame(childId: string): Promise<Child> {
+    if (!childId) {
+      throw new Error('Selecione uma criança antes de concluir o jogo.');
+    }
+
+    const child = await this.getChildById(childId);
+
+    if (!child) {
+      throw new Error('Criança não encontrada.');
+    }
+
+    const reward = {
+      exp: 100,
+      coins: 25,
+      points: 100,
+      medal: 'Medalha cuidado',
+      game: 'Monte a Órtese do Herói',
+      completedAt: new Date().toISOString(),
+    };
+
+    const updatedChildData = {
+      totalExp: (child.totalExp || 0) + reward.exp,
+      goldCoins: (child.goldCoins || 0) + reward.coins,
+      totalPoints: (child.totalPoints || 0) + reward.points,
+      completedActivities: (child.completedActivities || 0) + 1,
+    };
+
+    await userUpdate(`children/${childId}`, updatedChildData);
+
+    await userPush(`children/${childId}/gameRewards`, reward);
+
+    const updatedChild = await this.getChildById(childId);
+
+    if (!updatedChild) {
+      throw new Error('Não foi possível atualizar a criança.');
+    }
+
+    return updatedChild;
   },
 };

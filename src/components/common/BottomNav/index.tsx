@@ -5,20 +5,19 @@ import {
   ClipboardCheck,
   Gamepad2,
   Home,
-  Settings,
-  ShieldCheck,
   Sparkles,
   UserRound,
 } from 'lucide-react-native';
 
 import { colors } from '../../../theme';
 
-type Area = 'parent' | 'child';
+type AreaType = 'parent' | 'child';
 
-type Props = {
+type BottomNavProps = {
   navigation: any;
-  area?: Area;
+  area?: AreaType;
   active?: string;
+  visible?: boolean;
 };
 
 type NavItemProps = {
@@ -32,8 +31,13 @@ export default function BottomNav({
   navigation,
   area = 'parent',
   active = 'home',
-}: Props) {
-  const isParent = area === 'parent';
+  visible = true,
+}: BottomNavProps) {
+  if (!visible) {
+    return null;
+  }
+
+  const isParentArea = area === 'parent';
 
   return (
     <View style={styles.container}>
@@ -46,10 +50,12 @@ export default function BottomNav({
             color={active === 'home' ? colors.primary : colors.muted}
           />
         }
-        onPress={() => navigation.navigate(isParent ? 'ParentArea' : 'ChildArea')}
+        onPress={() =>
+          navigation.navigate(isParentArea ? 'ParentArea' : 'ChildArea')
+        }
       />
 
-      {isParent ? (
+      {isParentArea ? (
         <>
           <NavItem
             label="Monitorar"
@@ -75,7 +81,7 @@ export default function BottomNav({
             label="Crianças"
             active={active === 'children'}
             icon={
-              <ShieldCheck
+              <Baby
                 size={21}
                 color={active === 'children' ? colors.primary : colors.muted}
               />
@@ -87,7 +93,7 @@ export default function BottomNav({
             label="Perfil"
             active={active === 'profile'}
             icon={
-              <Settings
+              <UserRound
                 size={21}
                 color={active === 'profile' ? colors.primary : colors.muted}
               />
@@ -112,7 +118,7 @@ export default function BottomNav({
           <TouchableOpacity
             style={styles.centerButton}
             activeOpacity={0.86}
-            onPress={() => navigation.navigate('GamePlaceholder')}
+            onPress={() => navigation.navigate('SelectChildForGame')}
           >
             <Gamepad2 size={26} color={colors.white} strokeWidth={2.5} />
           </TouchableOpacity>
@@ -126,7 +132,7 @@ export default function BottomNav({
                 color={active === 'hero' ? colors.primary : colors.muted}
               />
             }
-            onPress={() => navigation.navigate('GamePlaceholder')}
+            onPress={() => navigation.navigate('SelectChildForGame')}
           />
 
           <NavItem
@@ -148,7 +154,11 @@ export default function BottomNav({
 
 function NavItem({ label, active, icon, onPress }: NavItemProps) {
   return (
-    <TouchableOpacity style={styles.navItem} onPress={onPress} activeOpacity={0.78}>
+    <TouchableOpacity
+      style={styles.navItem}
+      onPress={onPress}
+      activeOpacity={0.78}
+    >
       {icon}
       <Text style={[styles.label, active && styles.labelActive]}>{label}</Text>
     </TouchableOpacity>

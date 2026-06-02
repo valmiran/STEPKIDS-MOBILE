@@ -30,7 +30,11 @@ export type MainStackParamList = {
   };
   Shop: undefined;
 
-  GamePlaceholder: undefined;
+  SelectChildForGame: undefined;
+  GamePlaceholder: {
+    childId: string;
+    childName?: string;
+  };
 
   ActivityList: undefined;
   CreateActivity: undefined;

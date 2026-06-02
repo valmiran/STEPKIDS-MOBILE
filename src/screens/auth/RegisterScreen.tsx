@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import {
   Alert,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -11,6 +8,8 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+import AppHeader from '../../components/common/AppHeader';
+import KeyboardAwareScreen from '../../components/common/KeyboardAwareScreen';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import { useAuth } from '../../hooks/useAuth';
@@ -26,9 +25,10 @@ export default function RegisterScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   async function handleRegister() {
-    if (!name || !email || !password || !confirmPassword) {
+    if (!name.trim() || !email.trim() || !password || !confirmPassword) {
       Alert.alert('Atenção', 'Informe nome, e-mail, senha e confirmação de senha.');
       return;
     }
@@ -38,32 +38,46 @@ export default function RegisterScreen() {
       return;
     }
 
+    if (password.length < 6) {
+      Alert.alert('Atenção', 'A senha deve ter pelo menos 6 caracteres.');
+      return;
+    }
+
     try {
+      setLoading(true);
+
       await signUp({
         full_name: name.trim(),
         cpf: cpf.trim(),
         phone: phone.trim(),
-        email: email.trim(),
+        email: email.trim().toLowerCase(),
         password,
         confirm_password: confirmPassword,
         role: 'parent',
       });
 
       Alert.alert('Sucesso', 'Cadastro realizado com sucesso.');
+      navigation.navigate('Login');
     } catch (error: any) {
       Alert.alert('Erro', error?.message || 'Não foi possível cadastrar.');
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <KeyboardAvoidingView
-      style={styles.keyboard}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
-      <ScrollView contentContainerStyle={styles.scroll}>
-        <Text style={styles.brand}>PÉ DE HERÓI</Text>
+    <View style={styles.container}>
+      <AppHeader
+        navigation={navigation}
+        title="Criar conta"
+        subtitle="Cadastro de usuário"
+        fallbackRoute="Login"
+      />
 
+      <KeyboardAwareScreen contentStyle={styles.content}>
         <View style={styles.card}>
+          <Text style={styles.brand}>PÉ DE HERÓI</Text>
+
           <Text style={styles.title}>Criar conta</Text>
 
           <Text style={styles.description}>
@@ -119,66 +133,76 @@ export default function RegisterScreen() {
             secureTextEntry
           />
 
-          <Button title="Cadastrar" onPress={handleRegister} />
+          <Button
+            title={loading ? 'Cadastrando...' : 'Cadastrar'}
+            onPress={handleRegister}
+          />
 
           <View style={styles.footer}>
-            <Text>Já tem conta? </Text>
+            <Text style={styles.footerText}>Já tem conta? </Text>
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Text style={styles.link}>Entrar</Text>
             </TouchableOpacity>
           </View>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </KeyboardAwareScreen>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  keyboard: {
+  container: {
     flex: 1,
     backgroundColor: colors.background,
   },
-  scroll: {
+  content: {
     flexGrow: 1,
-    paddingTop: 58,
+    padding: 18,
+    paddingBottom: 120,
+  },
+  card: {
+    backgroundColor: colors.lilac,
+    borderRadius: 24,
+    padding: 22,
   },
   brand: {
     textAlign: 'center',
     fontSize: 22,
-    fontWeight: '800',
+    fontWeight: '900',
     marginBottom: 14,
-  },
-  card: {
-    flex: 1,
-    minHeight: 680,
-    backgroundColor: colors.lilac,
-    borderTopLeftRadius: 36,
-    borderTopRightRadius: 36,
-    padding: 22,
+    color: colors.primaryDark,
   },
   title: {
     fontSize: 26,
-    fontWeight: '800',
+    fontWeight: '900',
     marginTop: 10,
     marginBottom: 14,
+    color: colors.text,
   },
   description: {
     fontSize: 14,
     marginBottom: 20,
-    lineHeight: 19,
+    lineHeight: 20,
+    color: colors.textLight,
+    fontWeight: '600',
   },
   label: {
-    fontWeight: '700',
+    fontWeight: '800',
     marginBottom: 6,
+    color: colors.text,
   },
   footer: {
     marginTop: 28,
     flexDirection: 'row',
     justifyContent: 'center',
   },
+  footerText: {
+    color: colors.text,
+    fontWeight: '600',
+  },
   link: {
-    color: '#FFE87A',
-    fontWeight: '800',
+    color: colors.primaryDark,
+    fontWeight: '900',
     textDecorationLine: 'underline',
   },
 });

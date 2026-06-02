@@ -9,6 +9,7 @@ import HomeScreen from '../screens/home/HomeScreen';
 import ParentAreaScreen from '../screens/home/ParentAreaScreen';
 import ChildAreaScreen from '../screens/home/ChildAreaScreen';
 
+import SelectChildForGameScreen from '../screens/game/SelectChildForGameScreen';
 import GamePlaceholderScreen from '../screens/game/GamePlaceholderScreen';
 
 import ChildListScreen from '../screens/child/ChildListScreen';
@@ -73,6 +74,10 @@ export default function MainRoutes() {
       <Stack.Screen name="RewardDetails" component={RewardDetailsScreen} />
       <Stack.Screen name="Shop" component={ShopScreen} />
 
+      <Stack.Screen
+        name="SelectChildForGame"
+        component={SelectChildForGameScreen}
+      />
       <Stack.Screen name="GamePlaceholder" component={GamePlaceholderScreen} />
 
       <Stack.Screen name="ActivityList" component={ActivityListScreen} />

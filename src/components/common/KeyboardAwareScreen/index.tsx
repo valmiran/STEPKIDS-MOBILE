@@ -11,13 +11,18 @@ import { colors } from '../../../theme';
 
 type Props = {
   children: React.ReactNode;
-  contentStyle?: ViewStyle;
+  contentStyle?: ViewStyle | ViewStyle[];
+  backgroundColor?: string;
 };
 
-export default function KeyboardAwareScreen({ children, contentStyle }: Props) {
+export default function KeyboardAwareScreen({
+  children,
+  contentStyle,
+  backgroundColor = colors.background,
+}: Props) {
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
     >
@@ -35,10 +40,10 @@ export default function KeyboardAwareScreen({ children, contentStyle }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
   },
   content: {
+    flexGrow: 1,
     padding: 20,
-    paddingBottom: 120,
+    paddingBottom: 128,
   },
 });

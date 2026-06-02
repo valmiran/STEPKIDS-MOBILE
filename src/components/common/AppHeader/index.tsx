@@ -1,53 +1,51 @@
 import React from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { LogOut, Settings } from 'lucide-react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ArrowLeft } from 'lucide-react-native';
 
 import { colors } from '../../../theme';
-import { useAuth } from '../../../hooks/useAuth';
 
 type Props = {
   navigation: any;
+  title?: string;
+  subtitle?: string;
+  fallbackRoute?: string;
 };
 
-export default function AppHeader({ navigation }: Props) {
-  const { signOut } = useAuth();
+export default function AppHeader({
+  navigation,
+  title = 'Voltar',
+  subtitle,
+  fallbackRoute = 'Home',
+}: Props) {
+  function handleBack() {
+    if (navigation?.canGoBack?.()) {
+      navigation.goBack();
+      return;
+    }
 
-  function handleLogout() {
-    Alert.alert('Sair', 'Deseja realmente sair da aplicação?', [
-      { text: 'Cancelar', style: 'cancel' },
-      {
-        text: 'Sair',
-        style: 'destructive',
-        onPress: async () => {
-          await signOut();
-        },
-      },
-    ]);
+    navigation.navigate(fallbackRoute);
   }
 
   return (
     <View style={styles.header}>
-      <View>
-        <Text style={styles.title}>Pé de Herói</Text>
-        <Text style={styles.subtitle}>Acompanhamento e jornada gamificada</Text>
-      </View>
+      <TouchableOpacity
+        style={styles.backButton}
+        activeOpacity={0.82}
+        onPress={handleBack}
+      >
+        <ArrowLeft size={22} color={colors.primaryDark} strokeWidth={2.5} />
+      </TouchableOpacity>
 
-      <View style={styles.actions}>
-        <TouchableOpacity
-          style={styles.iconButton}
-          onPress={() => navigation.navigate('Profile')}
-          activeOpacity={0.82}
-        >
-          <Settings size={19} color={colors.primaryDark} strokeWidth={2.2} />
-        </TouchableOpacity>
+      <View style={styles.textArea}>
+        <Text style={styles.title} numberOfLines={1}>
+          {title}
+        </Text>
 
-        <TouchableOpacity
-          style={styles.iconButton}
-          onPress={handleLogout}
-          activeOpacity={0.82}
-        >
-          <LogOut size={19} color={colors.danger} strokeWidth={2.2} />
-        </TouchableOpacity>
+        {!!subtitle && (
+          <Text style={styles.subtitle} numberOfLines={1}>
+            {subtitle}
+          </Text>
+        )}
       </View>
     </View>
   );
@@ -57,38 +55,36 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: colors.surface,
     paddingTop: 46,
-    paddingBottom: 16,
-    paddingHorizontal: 20,
+    paddingBottom: 14,
+    paddingHorizontal: 18,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
   },
-  title: {
-    fontWeight: '900',
-    fontSize: 20,
-    color: colors.text,
-    letterSpacing: -0.3,
-  },
-  subtitle: {
-    color: colors.textLight,
-    fontSize: 12,
-    fontWeight: '700',
-    marginTop: 2,
-  },
-  actions: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  iconButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+  backButton: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
     backgroundColor: colors.surfaceSoft,
     borderWidth: 1,
     borderColor: colors.border,
     justifyContent: 'center',
     alignItems: 'center',
+    marginRight: 12,
+  },
+  textArea: {
+    flex: 1,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '900',
+    color: colors.text,
+  },
+  subtitle: {
+    marginTop: 2,
+    color: colors.textLight,
+    fontSize: 12,
+    fontWeight: '700',
   },
 });

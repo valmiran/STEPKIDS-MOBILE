@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -11,7 +10,7 @@ import {
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import AppHeader from '../../components/common/AppHeader';
-import BottomNav from '../../components/common/BottomNav';
+import KeyboardAwareScreen from '../../components/common/KeyboardAwareScreen';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import { childService } from '../../services/api/childService';
@@ -88,9 +87,14 @@ export default function EditChildScreen() {
 
   return (
     <View style={styles.container}>
-      <AppHeader navigation={navigation} />
+      <AppHeader
+        navigation={navigation}
+        title="Editar criança"
+        subtitle="Atualizar informações"
+        fallbackRoute="ChildList"
+      />
 
-      <ScrollView contentContainerStyle={styles.content}>
+      <KeyboardAwareScreen contentStyle={styles.content}>
         <Text style={styles.title}>Editar Criança</Text>
 
         <Text style={styles.description}>
@@ -164,9 +168,7 @@ export default function EditChildScreen() {
             onPress={() => navigation.goBack()}
           />
         </View>
-      </ScrollView>
-
-      <BottomNav navigation={navigation} active="children" />
+      </KeyboardAwareScreen>
     </View>
   );
 }
@@ -179,12 +181,13 @@ const styles = StyleSheet.create({
   content: {
     flexGrow: 1,
     padding: 18,
-    paddingBottom: 90,
+    paddingBottom: 120,
   },
   title: {
     fontSize: 26,
     fontWeight: '900',
     marginBottom: 8,
+    color: colors.text,
   },
   description: {
     color: colors.textLight,
@@ -215,6 +218,7 @@ const styles = StyleSheet.create({
   label: {
     fontWeight: '800',
     marginBottom: 6,
+    color: colors.text,
   },
   statsBox: {
     flexDirection: 'row',
@@ -232,6 +236,7 @@ const styles = StyleSheet.create({
   statNumber: {
     fontSize: 20,
     fontWeight: '900',
+    color: colors.text,
   },
   statLabel: {
     fontSize: 11,
@@ -248,14 +253,14 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   deleteButton: {
-    backgroundColor: '#FFE1E1',
+    backgroundColor: colors.dangerSoft,
     padding: 14,
     borderRadius: 14,
     marginTop: 10,
     marginBottom: 10,
   },
   deleteText: {
-    color: '#B42318',
+    color: colors.danger,
     textAlign: 'center',
     fontWeight: '900',
   },

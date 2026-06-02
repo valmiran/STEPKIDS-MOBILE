@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   Alert,
   Image,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -12,7 +11,7 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 
 import AppHeader from '../../components/common/AppHeader';
-import BottomNav from '../../components/common/BottomNav';
+import KeyboardAwareScreen from '../../components/common/KeyboardAwareScreen';
 import Button from '../../components/common/Button';
 import { colors } from '../../theme';
 import { useAuth } from '../../hooks/useAuth';
@@ -87,9 +86,14 @@ export default function ProfileScreen({ navigation }: any) {
 
   return (
     <View style={styles.container}>
-      <AppHeader navigation={navigation} />
+      <AppHeader
+        navigation={navigation}
+        title="Perfil"
+        subtitle="Dados da conta"
+        fallbackRoute="ParentArea"
+      />
 
-      <ScrollView contentContainerStyle={styles.content}>
+      <KeyboardAwareScreen contentStyle={styles.content}>
         <Text style={styles.title}>Meu Perfil</Text>
 
         <TouchableOpacity style={styles.avatarArea} onPress={handlePickImage}>
@@ -125,6 +129,7 @@ export default function ProfileScreen({ navigation }: any) {
           onChangeText={setCpf}
           style={styles.input}
           placeholder="CPF"
+          keyboardType="numeric"
         />
 
         <Text style={styles.label}>Telefone</Text>
@@ -141,9 +146,7 @@ export default function ProfileScreen({ navigation }: any) {
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Text style={styles.logoutText}>Sair da conta</Text>
         </TouchableOpacity>
-      </ScrollView>
-
-      <BottomNav navigation={navigation} active="settings" />
+      </KeyboardAwareScreen>
     </View>
   );
 }
@@ -154,13 +157,15 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   content: {
+    flexGrow: 1,
     padding: 18,
-    paddingBottom: 90,
+    paddingBottom: 120,
   },
   title: {
     fontSize: 24,
     fontWeight: '900',
     marginBottom: 18,
+    color: colors.text,
   },
   avatarArea: {
     alignItems: 'center',
@@ -193,6 +198,7 @@ const styles = StyleSheet.create({
   label: {
     fontWeight: '800',
     marginBottom: 6,
+    color: colors.text,
   },
   input: {
     backgroundColor: colors.white,
@@ -211,10 +217,10 @@ const styles = StyleSheet.create({
     marginTop: 18,
     padding: 14,
     borderRadius: 10,
-    backgroundColor: '#E53E3E',
+    backgroundColor: colors.danger,
   },
   logoutText: {
-    color: '#FFF',
+    color: colors.white,
     textAlign: 'center',
     fontWeight: '900',
   },

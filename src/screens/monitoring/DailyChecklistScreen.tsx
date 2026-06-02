@@ -1,15 +1,8 @@
 import React, { useState } from 'react';
-import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  Switch,
-  Text,
-  View,
-} from 'react-native';
+import { Alert, StyleSheet, Switch, Text, View } from 'react-native';
 
 import AppHeader from '../../components/common/AppHeader';
-import BottomNav from '../../components/common/BottomNav';
+import KeyboardAwareScreen from '../../components/common/KeyboardAwareScreen';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import ChildSelect from '../../components/common/ChildSelect';
@@ -54,9 +47,14 @@ export default function DailyChecklistScreen({ navigation }: any) {
 
   return (
     <View style={styles.container}>
-      <AppHeader navigation={navigation} />
+      <AppHeader
+        navigation={navigation}
+        title="Checklist diário"
+        subtitle="Registro de rotina"
+        fallbackRoute="ParentArea"
+      />
 
-      <ScrollView contentContainerStyle={styles.content}>
+      <KeyboardAwareScreen contentStyle={styles.content}>
         <Text style={styles.title}>Checklist Diário</Text>
 
         <Text style={styles.description}>
@@ -90,7 +88,9 @@ export default function DailyChecklistScreen({ navigation }: any) {
           <View style={styles.switchCard}>
             <View style={styles.switchTextBox}>
               <Text style={styles.switchTitle}>Dormiu com a órtese?</Text>
-              <Text style={styles.switchDescription}>Informação importante para a rotina noturna.</Text>
+              <Text style={styles.switchDescription}>
+                Informação importante para a rotina noturna.
+              </Text>
             </View>
             <Switch value={sleptWithOrthosis} onValueChange={setSleptWithOrthosis} />
           </View>
@@ -123,19 +123,21 @@ export default function DailyChecklistScreen({ navigation }: any) {
             onPress={handleSubmit}
           />
 
-          <Button title="Voltar" variant="secondary" onPress={() => navigation.goBack()} />
+          <Button
+            title="Cancelar"
+            variant="secondary"
+            onPress={() => navigation.goBack()}
+          />
         </View>
-      </ScrollView>
-
-      <BottomNav navigation={navigation} active="add" />
+      </KeyboardAwareScreen>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
-  content: { flexGrow: 1, padding: 18, paddingBottom: 90 },
-  title: { fontSize: 26, fontWeight: '900', marginBottom: 8 },
+  content: { flexGrow: 1, padding: 18, paddingBottom: 120 },
+  title: { fontSize: 26, fontWeight: '900', marginBottom: 8, color: colors.text },
   description: {
     color: colors.textLight,
     fontWeight: '600',
@@ -154,7 +156,7 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
   icon: { fontSize: 34 },
-  label: { fontWeight: '800', marginBottom: 6 },
+  label: { fontWeight: '800', marginBottom: 6, color: colors.text },
   switchCard: {
     backgroundColor: colors.white,
     borderRadius: 14,
@@ -165,7 +167,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   switchTextBox: { flex: 1, paddingRight: 12 },
-  switchTitle: { fontWeight: '900', marginBottom: 4 },
+  switchTitle: { fontWeight: '900', marginBottom: 4, color: colors.text },
   switchDescription: {
     color: colors.textLight,
     fontSize: 12,
@@ -178,6 +180,6 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 16,
   },
-  infoTitle: { fontWeight: '900', marginBottom: 4 },
+  infoTitle: { fontWeight: '900', marginBottom: 4, color: colors.text },
   infoText: { color: colors.textLight, fontWeight: '600', lineHeight: 19 },
 });
