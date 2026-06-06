@@ -1,5 +1,6 @@
 export type OrthosisUsagePayload = {
   child: string;
+  childId?: string;
   used_today: boolean;
   usage_hours: number;
   notes?: string;
@@ -8,6 +9,7 @@ export type OrthosisUsagePayload = {
 
 export type DailyChecklistPayload = {
   child: string;
+  childId?: string;
   used_today: boolean;
   felt_pain: boolean;
   slept_with_orthosis: boolean;
@@ -18,6 +20,8 @@ export type DailyChecklistPayload = {
 
 export type SymptomPayload = {
   child: string;
+  childId?: string;
+  childName?: string;
   symptom_type: string;
   intensity: number;
   description?: string;
@@ -28,17 +32,22 @@ export type SymptomPayload = {
 export type OrthosisUsage = OrthosisUsagePayload & {
   id: string;
   createdAt?: string;
+  updatedAt?: string;
 };
 
 export type DailyChecklist = DailyChecklistPayload & {
   id: string;
   pointsEarned?: number;
   createdAt?: string;
+  updatedAt?: string;
 };
 
 export type Symptom = SymptomPayload & {
   id: string;
+  childId?: string;
+  childName?: string;
   createdAt?: string;
+  updatedAt?: string;
 };
 
 export type ProgressData = {

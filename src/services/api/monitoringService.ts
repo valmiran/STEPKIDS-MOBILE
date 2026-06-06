@@ -60,12 +60,11 @@ async function addOrthosisHoursToChild(childId: string, hours: number) {
 
 async function hasSymptomRegisteredToday(childId: string, date: string) {
   const data = await userGet<Record<string, Symptom>>('symptoms');
-
   const symptoms = mapFirebaseObjectToList(data);
 
   return symptoms.some(
     (item) =>
-      String(item.child) === String(childId) &&
+      String(item.child || item.childId) === String(childId) &&
       String(item.date) === String(date)
   );
 }
@@ -81,6 +80,7 @@ export const monitoringService = {
     const usage = {
       ...payload,
       child: String(payload.child),
+      childId: String(payload.child),
       usage_hours: Number(payload.usage_hours || 0),
       date: payload.date || todayISO(),
     };
@@ -118,6 +118,7 @@ export const monitoringService = {
     const checklist = {
       ...payload,
       child: String(payload.child),
+      childId: String(payload.child),
       date: payload.date || todayISO(),
       pointsEarned,
     };
@@ -135,14 +136,32 @@ export const monitoringService = {
   },
 
   async createSymptom(payload: SymptomPayload): Promise<Symptom> {
-    if (!payload.child) {
-      throw new Error('Informe o ID da criança.');
+    const childId = String(payload.child || payload.childId || '');
+
+    if (!childId) {
+      throw new Error('Selecione uma criança antes de registrar o sintoma.');
+    }
+
+    const child = await userGet<Child>(`children/${childId}`);
+
+    if (!child) {
+      throw new Error('Criança não encontrada. Selecione novamente.');
+    }
+
+    if (!payload.symptom_type) {
+      throw new Error('Selecione o tipo de sintoma.');
+    }
+
+    const intensity = Number(payload.intensity || 1);
+
+    if (Number.isNaN(intensity) || intensity < 1 || intensity > 5) {
+      throw new Error('A intensidade deve ser um número de 1 a 5.');
     }
 
     const symptomDate = payload.date || todayISO();
 
     const alreadyRegistered = await hasSymptomRegisteredToday(
-      String(payload.child),
+      childId,
       symptomDate
     );
 
@@ -153,13 +172,34 @@ export const monitoringService = {
     }
 
     const symptom = {
-      ...payload,
-      child: String(payload.child),
-      intensity: Number(payload.intensity || 1),
+      child: childId,
+      childId,
+      childName: child.name,
+      symptom_type: payload.symptom_type,
+      intensity,
+      mood: payload.mood || '',
+      description: payload.description || '',
       date: symptomDate,
     };
 
     const id = await userPush('symptoms', symptom);
+
+    await userUpdate(`symptoms/${id}`, {
+      id,
+    });
+
+    await userSet(`children/${childId}/symptoms/${id}`, {
+      id,
+      ...symptom,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+
+    await userUpdate(`children/${childId}`, {
+      lastSymptomDate: symptomDate,
+      lastSymptomType: symptom.symptom_type,
+      lastSymptomIntensity: intensity,
+    });
 
     return {
       id,
@@ -171,7 +211,7 @@ export const monitoringService = {
     const data = await userGet<Record<string, OrthosisUsage>>('orthosisUsage');
 
     return mapFirebaseObjectToList(data).filter(
-      (item) => String(item.child) === String(childId)
+      (item) => String(item.child || item.childId) === String(childId)
     );
   },
 
@@ -179,15 +219,23 @@ export const monitoringService = {
     const data = await userGet<Record<string, DailyChecklist>>('checklists');
 
     return mapFirebaseObjectToList(data).filter(
-      (item) => String(item.child) === String(childId)
+      (item) => String(item.child || item.childId) === String(childId)
     );
   },
 
   async getSymptomsByChild(childId: string): Promise<Symptom[]> {
+    const childSymptoms = await userGet<Record<string, Symptom>>(
+      `children/${childId}/symptoms`
+    );
+
+    if (childSymptoms) {
+      return mapFirebaseObjectToList(childSymptoms);
+    }
+
     const data = await userGet<Record<string, Symptom>>('symptoms');
 
     return mapFirebaseObjectToList(data).filter(
-      (item) => String(item.child) === String(childId)
+      (item) => String(item.child || item.childId) === String(childId)
     );
   },
 
@@ -204,21 +252,21 @@ export const monitoringService = {
 
     return {
       child_id: childId,
-    child_name: child?.name || 'Criança',
+      child_name: child?.name || 'Criança',
 
-    total_points: child?.totalPoints || 0,
-    total_exp: child?.totalExp || child?.totalPoints || 0,
-    gold_coins: child?.goldCoins || 0,
-    level: child?.level || 1,
+      total_points: child?.totalPoints || 0,
+      total_exp: child?.totalExp || child?.totalPoints || 0,
+      gold_coins: child?.goldCoins || 0,
+      level: child?.level || 1,
 
-    completed_checklists: checklists.length,
-    orthosis_usage_days: usages.length,
-    total_orthosis_hours: totalHours,
-    completed_missions: child?.completedMissions || 0,
-    completed_activities: child?.completedActivities || 0,
+      completed_checklists: checklists.length,
+      orthosis_usage_days: usages.length,
+      total_orthosis_hours: totalHours,
+      completed_missions: child?.completedMissions || 0,
+      completed_activities: child?.completedActivities || 0,
 
-    streak_days: 0,
-    reward_target: 100,
+      streak_days: 0,
+      reward_target: 100,
     };
   },
 

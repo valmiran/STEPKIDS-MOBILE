@@ -74,7 +74,7 @@ export default function BottomNav({
             activeOpacity={0.86}
             onPress={() => navigation.navigate('ChildList')}
           >
-            <Baby size={26} color={colors.white} strokeWidth={2.5} />
+            <Baby size={27} color={colors.white} strokeWidth={2.5} />
           </TouchableOpacity>
 
           <NavItem
@@ -120,7 +120,7 @@ export default function BottomNav({
             activeOpacity={0.86}
             onPress={() => navigation.navigate('SelectChildForGame')}
           >
-            <Gamepad2 size={26} color={colors.white} strokeWidth={2.5} />
+            <Gamepad2 size={27} color={colors.white} strokeWidth={2.5} />
           </TouchableOpacity>
 
           <NavItem
@@ -160,7 +160,9 @@ function NavItem({ label, active, icon, onPress }: NavItemProps) {
       activeOpacity={0.78}
     >
       {icon}
-      <Text style={[styles.label, active && styles.labelActive]}>{label}</Text>
+      <Text style={[styles.label, active && styles.labelActive]}>
+        {label}
+      </Text>
     </TouchableOpacity>
   );
 }

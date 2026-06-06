@@ -158,7 +158,7 @@ export default function ParentAreaScreen({ navigation }: Props) {
 
         <ActionCard
           title="Crianças cadastradas"
-          description="Veja perfis, dados principais e detalhes da criança."
+          description="Consulte, visualize, edite e acompanhe as crianças cadastradas."
           icon={<Baby size={24} color={colors.primaryDark} />}
           onPress={() => navigation.navigate('ChildList')}
         />

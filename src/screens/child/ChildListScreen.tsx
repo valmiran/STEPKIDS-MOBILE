@@ -9,10 +9,17 @@ import {
   View,
 } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import {
+  Baby,
+  ChevronRight,
+  Eye,
+  Pencil,
+  Plus,
+  Trash2,
+} from 'lucide-react-native';
 
 import AppHeader from '../../components/common/AppHeader';
 import BottomNav from '../../components/common/BottomNav';
-import Button from '../../components/common/Button';
 import { childService } from '../../services/api/childService';
 import { Child } from '../../types/child';
 import { colors } from '../../theme';
@@ -84,23 +91,31 @@ export default function ChildListScreen() {
 
   return (
     <View style={styles.container}>
-      <AppHeader navigation={navigation} />
+      <AppHeader
+        navigation={navigation}
+        title="Minhas Crianças"
+        subtitle="Crianças cadastradas"
+        fallbackRoute="ParentArea"
+      />
 
       <View style={styles.content}>
-        <View style={styles.headerRow}>
-          <View>
-            <Text style={styles.title}>Crianças</Text>
+        <View style={styles.heroCard}>
+          <View style={styles.heroIcon}>
+            <Baby size={34} color={colors.white} />
+          </View>
+
+          <View style={styles.heroTextBox}>
+            <Text style={styles.title}>Crianças cadastradas</Text>
             <Text style={styles.subtitle}>
-              Gerencie os perfis cadastrados.
+              Consulte os perfis infantis, acompanhe dados principais e acesse
+              detalhes de cada criança.
             </Text>
           </View>
         </View>
 
-        <Button title="Cadastrar criança" onPress={handleCreateChild} />
-
         {loading ? (
           <View style={styles.loadingBox}>
-            <ActivityIndicator size="large" color={colors.lilacDark} />
+            <ActivityIndicator size="large" color={colors.primary} />
             <Text style={styles.loadingText}>Carregando crianças...</Text>
           </View>
         ) : (
@@ -114,72 +129,93 @@ export default function ChildListScreen() {
                 : styles.listContent
             }
             renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.card}
-                onPress={() => handleViewChild(item)}
-                onLongPress={() => handleDeleteChild(item)}
-              >
-                <View style={styles.avatar}>
-                  <Text style={styles.avatarText}>
-                    {item.name?.charAt(0)?.toUpperCase() || 'C'}
-                  </Text>
-                </View>
-
-                <View style={styles.cardContent}>
-                  <Text style={styles.name}>{item.name}</Text>
-
-                  <Text style={styles.info}>
-                    Idade: {item.age} anos
-                  </Text>
-
-                  <Text style={styles.info}>
-                    Diagnóstico: {item.diagnosis || 'Não informado'}
-                  </Text>
-
-                  <View style={styles.badgeRow}>
-                    <View style={styles.badgeBlue}>
-                      <Text style={styles.badgeText}>
-                        Nível {item.level || 1}
-                      </Text>
-                    </View>
-
-                    <View style={styles.badgeYellow}>
-                      <Text style={styles.badgeText}>
-                        {item.totalPoints || 0} pts
-                      </Text>
-                    </View>
+              <View style={styles.card}>
+                <TouchableOpacity
+                  style={styles.cardMainArea}
+                  activeOpacity={0.86}
+                  onPress={() => handleViewChild(item)}
+                >
+                  <View style={styles.avatar}>
+                    <Text style={styles.avatarText}>
+                      {item.name?.charAt(0)?.toUpperCase() || 'C'}
+                    </Text>
                   </View>
 
-                  <Text style={styles.hoursText}>
-                    {item.totalOrthosisHours || 0}h totais de órtese
-                  </Text>
+                  <View style={styles.cardContent}>
+                    <Text style={styles.name}>{item.name}</Text>
 
-                  <View style={styles.actions}>
-                    <TouchableOpacity
-                      style={styles.editButton}
-                      onPress={() => handleEditChild(item)}
-                    >
-                      <Text style={styles.actionText}>Editar</Text>
-                    </TouchableOpacity>
+                    <Text style={styles.info}>
+                      {item.age} anos • {item.diagnosis || 'Diagnóstico não informado'}
+                    </Text>
 
-                    <TouchableOpacity
-                      style={styles.deleteButton}
-                      onPress={() => handleDeleteChild(item)}
-                    >
-                      <Text style={styles.deleteActionText}>Excluir</Text>
-                    </TouchableOpacity>
+                    <View style={styles.badgeRow}>
+                      <View style={styles.badgePrimary}>
+                        <Text style={styles.badgeText}>Nível {item.level || 1}</Text>
+                      </View>
+
+                      <View style={styles.badgeAccent}>
+                        <Text style={styles.badgeText}>
+                          {item.totalPoints || 0} pts
+                        </Text>
+                      </View>
+
+                      <View style={styles.badgeSoft}>
+                        <Text style={styles.badgeSoftText}>
+                          {item.goldCoins || 0} moedas
+                        </Text>
+                      </View>
+                    </View>
+
+                    <Text style={styles.hoursText}>
+                      {item.totalOrthosisHours || 0}h totais de uso da órtese
+                    </Text>
                   </View>
+
+                  <ChevronRight size={20} color={colors.muted} />
+                </TouchableOpacity>
+
+                <View style={styles.actions}>
+                  <TouchableOpacity
+                    style={styles.viewButton}
+                    activeOpacity={0.84}
+                    onPress={() => handleViewChild(item)}
+                  >
+                    <Eye size={16} color={colors.primaryDark} />
+                    <Text style={styles.viewText}>Visualizar</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.editButton}
+                    activeOpacity={0.84}
+                    onPress={() => handleEditChild(item)}
+                  >
+                    <Pencil size={16} color={colors.secondaryDark} />
+                    <Text style={styles.editText}>Editar</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.deleteButton}
+                    activeOpacity={0.84}
+                    onPress={() => handleDeleteChild(item)}
+                  >
+                    <Trash2 size={16} color={colors.danger} />
+                  </TouchableOpacity>
                 </View>
-              </TouchableOpacity>
+              </View>
             )}
             ListEmptyComponent={
               <View style={styles.emptyBox}>
-                <Text style={styles.emptyIcon}>👶</Text>
+                <View style={styles.emptyIconBox}>
+                  <Baby size={38} color={colors.primaryDark} />
+                </View>
+
                 <Text style={styles.emptyTitle}>
                   Nenhuma criança cadastrada
                 </Text>
+
                 <Text style={styles.emptyText}>
-                  Cadastre uma criança para iniciar o acompanhamento.
+                  Use o botão + para cadastrar a primeira criança e iniciar o
+                  acompanhamento no Pé de Herói.
                 </Text>
               </View>
             }
@@ -187,7 +223,15 @@ export default function ChildListScreen() {
         )}
       </View>
 
-      <BottomNav navigation={navigation} active="children" />
+      <TouchableOpacity
+        style={styles.fab}
+        activeOpacity={0.86}
+        onPress={handleCreateChild}
+      >
+        <Plus size={34} color={colors.white} strokeWidth={3} />
+      </TouchableOpacity>
+
+      <BottomNav navigation={navigation} area="parent" active="children" visible />
     </View>
   );
 }
@@ -202,18 +246,37 @@ const styles = StyleSheet.create({
     padding: 18,
     paddingBottom: 90,
   },
-  headerRow: {
-    marginBottom: 14,
+  heroCard: {
+    backgroundColor: colors.primary,
+    borderRadius: 26,
+    padding: 18,
+    marginBottom: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  heroIcon: {
+    width: 66,
+    height: 66,
+    borderRadius: 24,
+    backgroundColor: 'rgba(255,255,255,0.18)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 14,
+  },
+  heroTextBox: {
+    flex: 1,
   },
   title: {
-    fontSize: 26,
+    fontSize: 22,
     fontWeight: '900',
+    color: colors.white,
+    marginBottom: 6,
   },
   subtitle: {
-    fontSize: 14,
-    color: colors.textLight,
-    marginTop: 4,
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.88)',
     fontWeight: '600',
+    lineHeight: 19,
   },
   loadingBox: {
     flex: 1,
@@ -226,118 +289,180 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   listContent: {
-    paddingTop: 14,
-    paddingBottom: 20,
+    paddingBottom: 110,
+  },
+  emptyContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    paddingBottom: 110,
   },
   card: {
-    backgroundColor: colors.white,
-    borderRadius: 16,
+    backgroundColor: colors.surface,
+    borderRadius: 22,
     padding: 14,
     marginBottom: 14,
     borderWidth: 1,
     borderColor: colors.border,
-    flexDirection: 'row',
-    gap: 12,
   },
-  avatar: {
-    width: 54,
-    height: 54,
-    borderRadius: 27,
-    backgroundColor: colors.lilac,
-    justifyContent: 'center',
+  cardMainArea: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
+  avatar: {
+    width: 58,
+    height: 58,
+    borderRadius: 22,
+    backgroundColor: colors.primarySoft,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
   avatarText: {
-    color: colors.white,
-    fontSize: 22,
+    color: colors.primaryDark,
+    fontSize: 24,
     fontWeight: '900',
   },
   cardContent: {
     flex: 1,
   },
   name: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: '900',
+    color: colors.text,
     marginBottom: 4,
   },
   info: {
-    fontSize: 13,
     color: colors.textLight,
-    marginBottom: 3,
-    fontWeight: '600',
+    fontSize: 12,
+    fontWeight: '700',
+    marginBottom: 8,
   },
   badgeRow: {
     flexDirection: 'row',
-    gap: 8,
-    marginTop: 8,
+    flexWrap: 'wrap',
+    gap: 6,
     marginBottom: 8,
   },
-  badgeBlue: {
-    backgroundColor: colors.blue,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+  badgePrimary: {
+    backgroundColor: colors.primarySoft,
     borderRadius: 999,
+    paddingHorizontal: 9,
+    paddingVertical: 5,
   },
-  badgeYellow: {
-    backgroundColor: colors.yellow,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+  badgeAccent: {
+    backgroundColor: colors.accentSoft,
     borderRadius: 999,
+    paddingHorizontal: 9,
+    paddingVertical: 5,
+  },
+  badgeSoft: {
+    backgroundColor: colors.secondarySoft,
+    borderRadius: 999,
+    paddingHorizontal: 9,
+    paddingVertical: 5,
   },
   badgeText: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '900',
+    color: colors.text,
+  },
+  badgeSoftText: {
+    fontSize: 11,
+    fontWeight: '900',
+    color: colors.secondaryDark,
   },
   hoursText: {
-    fontSize: 13,
     color: colors.textLight,
+    fontSize: 12,
     fontWeight: '700',
-    marginBottom: 10,
   },
   actions: {
     flexDirection: 'row',
-    gap: 10,
+    gap: 8,
+    marginTop: 14,
+  },
+  viewButton: {
+    flex: 1,
+    backgroundColor: colors.primarySoft,
+    borderRadius: 14,
+    paddingVertical: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    gap: 6,
+  },
+  viewText: {
+    color: colors.primaryDark,
+    fontWeight: '900',
+    fontSize: 12,
   },
   editButton: {
-    backgroundColor: colors.blue,
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    borderRadius: 10,
+    flex: 1,
+    backgroundColor: colors.secondarySoft,
+    borderRadius: 14,
+    paddingVertical: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    gap: 6,
+  },
+  editText: {
+    color: colors.secondaryDark,
+    fontWeight: '900',
+    fontSize: 12,
   },
   deleteButton: {
-    backgroundColor: '#FFE1E1',
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    borderRadius: 10,
-  },
-  actionText: {
-    fontWeight: '900',
-  },
-  deleteActionText: {
-    fontWeight: '900',
-    color: '#B42318',
-  },
-  emptyContainer: {
-    flexGrow: 1,
+    width: 48,
+    backgroundColor: colors.dangerSoft,
+    borderRadius: 14,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   emptyBox: {
+    backgroundColor: colors.surface,
+    borderRadius: 24,
+    padding: 24,
     alignItems: 'center',
-    paddingHorizontal: 20,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
-  emptyIcon: {
-    fontSize: 42,
-    marginBottom: 10,
+  emptyIconBox: {
+    width: 78,
+    height: 78,
+    borderRadius: 28,
+    backgroundColor: colors.primarySoft,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 14,
   },
   emptyTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '900',
-    marginBottom: 6,
+    color: colors.text,
+    marginBottom: 8,
+    textAlign: 'center',
   },
   emptyText: {
-    textAlign: 'center',
     color: colors.textLight,
     fontWeight: '600',
     lineHeight: 20,
+    textAlign: 'center',
+  },
+  fab: {
+    position: 'absolute',
+    right: 22,
+    bottom: 94,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: colors.primaryDark,
+    shadowOpacity: 0.24,
+    shadowRadius: 14,
+    elevation: 10,
+    borderWidth: 4,
+    borderColor: colors.background,
   },
 });

@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Plus } from 'lucide-react-native';
 
 import AppHeader from '../../components/common/AppHeader';
 import KeyboardAwareScreen from '../../components/common/KeyboardAwareScreen';
@@ -38,7 +45,7 @@ export default function CreateChildScreen() {
       });
 
       Alert.alert('Sucesso', 'Criança cadastrada com sucesso!');
-      navigation.goBack();
+      navigation.navigate('ChildList');
     } catch (error: any) {
       Alert.alert(
         'Erro',
@@ -53,18 +60,24 @@ export default function CreateChildScreen() {
     <View style={styles.container}>
       <AppHeader
         navigation={navigation}
-        title="Cadastrar criança"
-        subtitle="Novo perfil infantil"
-        fallbackRoute="ParentArea"
+        title="Cadastrar Criança"
+        subtitle="Novo cadastro"
+        fallbackRoute="ChildList"
       />
 
       <KeyboardAwareScreen contentStyle={styles.content}>
-        <Text style={styles.title}>Nova Criança</Text>
+        <View style={styles.heroCard}>
+          <View style={styles.plusCircle}>
+            <Plus size={38} color={colors.white} strokeWidth={3} />
+          </View>
 
-        <Text style={styles.description}>
-          Cadastre os dados básicos da criança para iniciar o acompanhamento
-          diário do tratamento.
-        </Text>
+          <Text style={styles.title}>Nova Criança</Text>
+
+          <Text style={styles.description}>
+            Preencha os dados básicos da criança. Esta tela é exclusiva para
+            cadastro, mantendo a organização do módulo Minhas Crianças.
+          </Text>
+        </View>
 
         <View style={styles.card}>
           <Text style={styles.label}>Nome da criança</Text>
@@ -72,6 +85,7 @@ export default function CreateChildScreen() {
             placeholder="Ex: Ana Clara"
             value={name}
             onChangeText={setName}
+            editable={!loading}
           />
 
           <Text style={styles.label}>Idade</Text>
@@ -80,6 +94,7 @@ export default function CreateChildScreen() {
             value={age}
             onChangeText={setAge}
             keyboardType="numeric"
+            editable={!loading}
           />
 
           <Text style={styles.label}>Diagnóstico</Text>
@@ -87,19 +102,21 @@ export default function CreateChildScreen() {
             placeholder="Ex: Pé torto congênito"
             value={diagnosis}
             onChangeText={setDiagnosis}
+            editable={!loading}
           />
 
           <View style={styles.infoBox}>
             <Text style={styles.infoTitle}>Importante</Text>
             <Text style={styles.infoText}>
-              Esses dados serão usados para registrar órtese, sintomas,
-              checklists, pontos, níveis e relatórios futuros.
+              Após salvar, a criança aparecerá em Minhas Crianças. Por lá será
+              possível visualizar, editar e acompanhar a evolução.
             </Text>
           </View>
 
           {loading ? (
             <View style={styles.loadingButton}>
               <ActivityIndicator color={colors.white} />
+              <Text style={styles.loadingButtonText}>Salvando...</Text>
             </View>
           ) : (
             <Button title="Salvar criança" onPress={handleCreate} />
@@ -126,22 +143,43 @@ const styles = StyleSheet.create({
     padding: 18,
     paddingBottom: 120,
   },
+  heroCard: {
+    backgroundColor: colors.primary,
+    borderRadius: 28,
+    padding: 22,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  plusCircle: {
+    width: 76,
+    height: 76,
+    borderRadius: 28,
+    backgroundColor: 'rgba(255,255,255,0.18)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.24)',
+  },
   title: {
     fontSize: 26,
     fontWeight: '900',
     marginBottom: 8,
-    color: colors.text,
+    color: colors.white,
+    textAlign: 'center',
   },
   description: {
-    color: colors.textLight,
+    color: 'rgba(255,255,255,0.88)',
     fontWeight: '600',
     lineHeight: 20,
-    marginBottom: 16,
+    textAlign: 'center',
   },
   card: {
-    backgroundColor: colors.lilac,
+    backgroundColor: colors.surface,
     borderRadius: 24,
     padding: 18,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   label: {
     fontWeight: '800',
@@ -149,11 +187,13 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   infoBox: {
-    backgroundColor: colors.yellow,
+    backgroundColor: colors.accentSoft,
     borderRadius: 14,
     padding: 14,
     marginTop: 8,
     marginBottom: 16,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   infoTitle: {
     fontWeight: '900',
@@ -168,9 +208,15 @@ const styles = StyleSheet.create({
   loadingButton: {
     height: 48,
     borderRadius: 14,
-    backgroundColor: colors.lilacDark,
+    backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
+    flexDirection: 'row',
+    gap: 10,
+  },
+  loadingButtonText: {
+    color: colors.white,
+    fontWeight: '900',
   },
 });
