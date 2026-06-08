@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -15,6 +16,8 @@ import { useNavigation } from '@react-navigation/native';
 import Input from '../../components/common/Input';
 import { useAuth } from '../../hooks/useAuth';
 import { colors } from '../../theme';
+
+const logoPedeHeroi = require('../../assets/images/logo-pede-heroi-login.png');
 
 export default function LoginScreen() {
   const navigation = useNavigation<any>();
@@ -60,8 +63,12 @@ export default function LoginScreen() {
         contentContainerStyle={styles.scrollContent}
       >
         <View style={styles.heroArea}>
-          <View style={styles.logoCircle}>
-            <Text style={styles.logoIcon}>🦶</Text>
+          <View style={styles.logoContainer}>
+            <Image
+              source={logoPedeHeroi}
+              style={styles.logoImage}
+              resizeMode="contain"
+            />
           </View>
 
           <Text style={styles.brand}>PÉ DE HERÓI</Text>
@@ -145,26 +152,23 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingTop: 54,
+    paddingTop: 38,
   },
   heroArea: {
     alignItems: 'center',
     paddingHorizontal: 24,
-    paddingBottom: 26,
+    paddingBottom: 22,
   },
-  logoCircle: {
-    width: 86,
-    height: 86,
-    borderRadius: 43,
-    backgroundColor: 'rgba(255,255,255,0.18)',
+  logoContainer: {
+    width: 150,
+    height: 150,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 14,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.26)',
+    marginBottom: 8,
   },
-  logoIcon: {
-    fontSize: 42,
+  logoImage: {
+    width: '100%',
+    height: '100%',
   },
   brand: {
     color: colors.white,

@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Alert,
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -31,6 +32,8 @@ import {
 import BottomNav from '../../components/common/BottomNav';
 import { useAuth } from '../../hooks/useAuth';
 import { colors } from '../../theme';
+
+const profileLogo = require('../../assets/images/foto dos perfis.png');
 
 type Props = {
   navigation: any;
@@ -67,8 +70,6 @@ export default function ParentAreaScreen({ navigation }: Props) {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.topNavigation}>
-          <Text style={styles.appNameTop}>Pé de Herói</Text>
-
           <TouchableOpacity
             style={styles.backAreasButton}
             activeOpacity={0.82}
@@ -77,6 +78,12 @@ export default function ParentAreaScreen({ navigation }: Props) {
             <ChevronLeft size={18} color={colors.white} strokeWidth={2.6} />
             <Text style={styles.backAreasText}>Áreas</Text>
           </TouchableOpacity>
+
+          <Image
+            source={profileLogo}
+            style={styles.profileLogo}
+            resizeMode="contain"
+          />
         </View>
 
         <View style={styles.topBar}>
@@ -119,7 +126,6 @@ export default function ParentAreaScreen({ navigation }: Props) {
 
           <View style={styles.headerTextArea}>
             <Text style={styles.title}>Acompanhe a jornada da criança</Text>
-
             <Text style={styles.subtitle}>
               Registre cuidados, monitore sintomas, acompanhe o uso da órtese e veja a evolução de forma simples.
             </Text>
@@ -242,13 +248,15 @@ const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.primaryDark },
   container: { flex: 1, backgroundColor: colors.primaryDark },
   content: { padding: 20, paddingTop: 46, paddingBottom: 28 },
-  topNavigation: { marginBottom: 18 },
-  appNameTop: {
-    color: colors.white,
-    fontSize: 24,
-    fontWeight: '900',
-    letterSpacing: 0.5,
-    marginBottom: 10,
+  topNavigation: {
+    marginBottom: 18,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  profileLogo: {
+    width: 76,
+    height: 54,
   },
   backAreasButton: {
     alignSelf: 'flex-start',

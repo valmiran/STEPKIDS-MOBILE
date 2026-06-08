@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   Alert,
+  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -14,6 +15,8 @@ import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import { useAuth } from '../../hooks/useAuth';
 import { colors } from '../../theme';
+
+const profileLogo = require('../../assets/images/foto dos perfis.png');
 
 export default function RegisterScreen() {
   const { signUp } = useAuth();
@@ -76,6 +79,12 @@ export default function RegisterScreen() {
 
       <KeyboardAwareScreen contentStyle={styles.content}>
         <View style={styles.card}>
+          <Image
+            source={profileLogo}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+
           <Text style={styles.brand}>PÉ DE HERÓI</Text>
 
           <Text style={styles.title}>Criar conta</Text>
@@ -90,6 +99,7 @@ export default function RegisterScreen() {
             placeholder="Digite seu nome completo"
             value={name}
             onChangeText={setName}
+            editable={!loading}
           />
 
           <Text style={styles.label}>CPF:</Text>
@@ -98,6 +108,7 @@ export default function RegisterScreen() {
             value={cpf}
             onChangeText={setCpf}
             keyboardType="numeric"
+            editable={!loading}
           />
 
           <Text style={styles.label}>Telefone:</Text>
@@ -106,6 +117,7 @@ export default function RegisterScreen() {
             value={phone}
             onChangeText={setPhone}
             keyboardType="phone-pad"
+            editable={!loading}
           />
 
           <Text style={styles.label}>Email:</Text>
@@ -115,6 +127,7 @@ export default function RegisterScreen() {
             onChangeText={setEmail}
             autoCapitalize="none"
             keyboardType="email-address"
+            editable={!loading}
           />
 
           <Text style={styles.label}>Senha:</Text>
@@ -123,6 +136,7 @@ export default function RegisterScreen() {
             value={password}
             onChangeText={setPassword}
             secureTextEntry
+            editable={!loading}
           />
 
           <Text style={styles.label}>Confirmar senha:</Text>
@@ -131,6 +145,7 @@ export default function RegisterScreen() {
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             secureTextEntry
+            editable={!loading}
           />
 
           <Button
@@ -140,7 +155,10 @@ export default function RegisterScreen() {
 
           <View style={styles.footer}>
             <Text style={styles.footerText}>Já tem conta? </Text>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity
+              disabled={loading}
+              onPress={() => navigation.goBack()}
+            >
               <Text style={styles.link}>Entrar</Text>
             </TouchableOpacity>
           </View>
@@ -164,6 +182,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lilac,
     borderRadius: 24,
     padding: 22,
+  },
+  logo: {
+    width: 112,
+    height: 82,
+    alignSelf: 'center',
+    marginBottom: 10,
   },
   brand: {
     textAlign: 'center',

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { Alert, Image, StyleSheet, Text, View } from 'react-native';
 
 import AppHeader from '../../components/common/AppHeader';
 import KeyboardAwareScreen from '../../components/common/KeyboardAwareScreen';
@@ -7,6 +7,8 @@ import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import { colors } from '../../theme';
 import { useAuth } from '../../hooks/useAuth';
+
+const profileLogo = require('../../assets/images/foto dos perfis.png');
 
 export default function ForgotPasswordScreen({ navigation }: any) {
   const { recoverPassword } = useAuth();
@@ -52,6 +54,12 @@ export default function ForgotPasswordScreen({ navigation }: any) {
 
       <KeyboardAwareScreen contentStyle={styles.content}>
         <View style={styles.card}>
+          <Image
+            source={profileLogo}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+
           <Text style={styles.brand}>PÉ DE HERÓI</Text>
 
           <Text style={styles.title}>Esqueceu a senha?</Text>
@@ -68,6 +76,7 @@ export default function ForgotPasswordScreen({ navigation }: any) {
             onChangeText={setEmail}
             autoCapitalize="none"
             keyboardType="email-address"
+            editable={!loading}
           />
 
           <Button
@@ -100,6 +109,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lilac,
     borderRadius: 24,
     padding: 22,
+  },
+  logo: {
+    width: 96,
+    height: 72,
+    alignSelf: 'center',
+    marginBottom: 10,
   },
   brand: {
     textAlign: 'center',
