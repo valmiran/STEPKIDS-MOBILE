@@ -9,9 +9,8 @@ import {
 } from 'react-native';
 
 import {
-  Award,
+  ChevronLeft,
   ChevronRight,
-  Gamepad2,
   Gift,
   LogOut,
   Puzzle,
@@ -19,7 +18,6 @@ import {
   Settings,
   Shield,
   Sparkles,
-  Star,
   Trophy,
   UserRound,
 } from 'lucide-react-native';
@@ -62,10 +60,23 @@ export default function ChildAreaScreen({ navigation }: Props) {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
+        <View style={styles.topNavigation}>
+          <Text style={styles.appNameTop}>Pé de Herói</Text>
+
+          <TouchableOpacity
+            style={styles.backAreasButton}
+            activeOpacity={0.82}
+            onPress={() => navigation.navigate('Home')}
+          >
+            <ChevronLeft size={18} color={colors.white} strokeWidth={2.6} />
+            <Text style={styles.backAreasText}>Áreas</Text>
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.topBar}>
           <View>
-            <Text style={styles.appName}>Pé de Herói</Text>
-            <Text style={styles.topSubtitle}>Área da Criança</Text>
+            <Text style={styles.appName}>Área da Criança</Text>
+            <Text style={styles.topSubtitle}>Minha jornada de herói</Text>
           </View>
 
           <View style={styles.topActions}>
@@ -101,9 +112,9 @@ export default function ChildAreaScreen({ navigation }: Props) {
           </View>
 
           <View style={styles.heroTextArea}>
-            <Text style={styles.title}>Sua jornada de herói começou!</Text>
+            <Text style={styles.title}>Minha jornada de herói começou!</Text>
             <Text style={styles.subtitle}>
-              Complete missões, ganhe XP, cuide da rotina e desbloqueie partes da órtese do herói.
+              Eu posso completar missões, ganhar XP, cuidar da minha rotina e desbloquear partes da órtese do herói.
             </Text>
           </View>
         </View>
@@ -112,63 +123,42 @@ export default function ChildAreaScreen({ navigation }: Props) {
 
         <ActionCard
           title="Missões do dia"
-          description="Veja desafios simples para cumprir hoje e ganhar recompensas."
+          description="Veja as minhas missões de hoje e ganhe recompensas ao concluir cada desafio."
           icon={<Rocket size={24} color={colors.primaryDark} />}
           onPress={() => navigation.navigate('ChildMissions')}
         />
 
         <ActionCard
-          title="Atividades educativas"
-          description="Complete atividades sobre cuidado, rotina e uso correto da órtese."
-          icon={<Star size={24} color={colors.primaryDark} />}
-          onPress={() => navigation.navigate('ActivityList')}
-        />
-
-        <ActionCard
-          title="Meu progresso"
-          description="Acompanhe nível, XP, moedas, ranking e evolução do personagem."
-          icon={<Trophy size={24} color={colors.accent} />}
-          onPress={() => navigation.navigate('Progress')}
-        />
-
-        <SectionTitle title="Recompensas e diversão" />
-
-        <ActionCard
           title="Recompensas"
-          description="Veja moedas, prêmios, itens liberados e conquistas alcançadas."
+          description="Colete minhas recompensas diárias e acompanhe minhas conquistas."
           icon={<Gift size={24} color={colors.success} />}
           onPress={() => navigation.navigate('Rewards')}
         />
 
         <ActionCard
           title="Loja do herói"
-          description="Use moedas para desbloquear itens e melhorar sua jornada."
+          description="Veja os itens que eu posso desbloquear usando XP e moedas."
           icon={<Shield size={24} color={colors.primaryDark} />}
           onPress={() => navigation.navigate('Shop')}
         />
 
         <ActionCard
           title="Monte a Órtese do Herói"
-          description="Escolha a criança, monte a órtese na ordem correta e direcione a recompensa para ela."
+          description="Monte minha órtese na ordem correta e fortaleça minha jornada."
           icon={<Puzzle size={24} color={colors.secondaryDark} />}
           onPress={() => navigation.navigate('SelectChildForGame')}
         />
 
-        <SectionTitle title="Extras" />
+        <SectionTitle title="Meu Progresso" />
 
         <ActionCard
-          title="Pontos"
-          description="Veja sua pontuação acumulada na jornada."
-          icon={<Award size={24} color={colors.accent} />}
-          onPress={() => navigation.navigate('Points')}
+          title="Meu progresso"
+          description="Acompanhe o meu nível, XP, moedas e ranking."
+          icon={<Trophy size={24} color={colors.accent} />}
+          onPress={() => navigation.navigate('Progress')}
         />
 
-        <ActionCard
-          title="Ranking"
-          description="Compare seu progresso e acompanhe sua evolução."
-          icon={<Gamepad2 size={24} color={colors.secondaryDark} />}
-          onPress={() => navigation.navigate('Ranking')}
-        />
+        <View style={styles.bottomSpacer} />
       </ScrollView>
 
       <BottomNav navigation={navigation} area="child" active="home" visible />
@@ -182,11 +172,7 @@ function SectionTitle({ title }: { title: string }) {
 
 function ActionCard({ title, description, icon, onPress }: ActionCardProps) {
   return (
-    <TouchableOpacity
-      style={styles.actionCard}
-      activeOpacity={0.86}
-      onPress={onPress}
-    >
+    <TouchableOpacity style={styles.actionCard} activeOpacity={0.86} onPress={onPress}>
       <View style={styles.actionIcon}>{icon}</View>
 
       <View style={styles.actionContent}>
@@ -200,18 +186,33 @@ function ActionCard({ title, description, icon, onPress }: ActionCardProps) {
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: colors.primaryDark,
+  screen: { flex: 1, backgroundColor: colors.primaryDark },
+  container: { flex: 1, backgroundColor: colors.primaryDark },
+  content: { padding: 20, paddingTop: 46, paddingBottom: 28 },
+  topNavigation: { marginBottom: 18 },
+  appNameTop: {
+    color: colors.white,
+    fontSize: 24,
+    fontWeight: '900',
+    letterSpacing: 0.5,
+    marginBottom: 10,
   },
-  container: {
-    flex: 1,
-    backgroundColor: colors.primaryDark,
+  backAreasButton: {
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.14)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.22)',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 999,
   },
-  content: {
-    padding: 20,
-    paddingTop: 50,
-    paddingBottom: 28,
+  backAreasText: {
+    color: colors.white,
+    fontWeight: '900',
+    fontSize: 13,
+    marginLeft: 4,
   },
   topBar: {
     flexDirection: 'row',
@@ -219,21 +220,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 18,
   },
-  appName: {
-    color: colors.white,
-    fontSize: 20,
-    fontWeight: '900',
-  },
+  appName: { color: colors.white, fontSize: 20, fontWeight: '900' },
   topSubtitle: {
     color: 'rgba(255,255,255,0.78)',
     fontSize: 12,
     fontWeight: '800',
     marginTop: 2,
   },
-  topActions: {
-    flexDirection: 'row',
-    gap: 8,
-  },
+  topActions: { flexDirection: 'row', gap: 8 },
   topButton: {
     width: 40,
     height: 40,
@@ -261,15 +255,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 16,
   },
-  heroTextArea: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: '900',
-    color: colors.white,
-    marginBottom: 8,
-  },
+  heroTextArea: { flex: 1 },
+  title: { fontSize: 22, fontWeight: '900', color: colors.white, marginBottom: 8 },
   subtitle: {
     fontSize: 14,
     lineHeight: 21,
@@ -302,9 +289,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 14,
   },
-  actionContent: {
-    flex: 1,
-  },
+  actionContent: { flex: 1 },
   actionTitle: {
     fontSize: 15,
     fontWeight: '900',
@@ -317,4 +302,5 @@ const styles = StyleSheet.create({
     color: colors.textLight,
     fontWeight: '600',
   },
+  bottomSpacer: { height: 96 },
 });

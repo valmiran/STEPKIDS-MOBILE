@@ -10,16 +10,21 @@ import {
 
 import {
   Activity,
+  Award,
   Baby,
   CalendarCheck,
+  ChevronLeft,
   ChevronRight,
   ClipboardCheck,
   FileText,
   HeartPulse,
   History,
   LogOut,
+  Medal,
   Settings,
   ShieldCheck,
+  Star,
+  Target,
   UserRound,
 } from 'lucide-react-native';
 
@@ -61,10 +66,23 @@ export default function ParentAreaScreen({ navigation }: Props) {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
+        <View style={styles.topNavigation}>
+          <Text style={styles.appNameTop}>Pé de Herói</Text>
+
+          <TouchableOpacity
+            style={styles.backAreasButton}
+            activeOpacity={0.82}
+            onPress={() => navigation.navigate('Home')}
+          >
+            <ChevronLeft size={18} color={colors.white} strokeWidth={2.6} />
+            <Text style={styles.backAreasText}>Áreas</Text>
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.topBar}>
           <View>
-            <Text style={styles.appName}>Pé de Herói</Text>
-            <Text style={styles.topSubtitle}>Área dos Pais</Text>
+            <Text style={styles.appName}>Área dos Pais</Text>
+            <Text style={styles.topSubtitle}>Monitoramento e gestão familiar</Text>
           </View>
 
           <View style={styles.topActions}>
@@ -108,17 +126,17 @@ export default function ParentAreaScreen({ navigation }: Props) {
           </View>
         </View>
 
-        <SectionTitle title="Monitoramento diário" />
+        <SectionTitle title="Monitoramento Diário" />
 
         <ActionCard
-          title="Checklist diário"
+          title="Checklist Diário"
           description="Registre rotina, dor, sono, uso da órtese e observações importantes."
           icon={<ClipboardCheck size={24} color={colors.primaryDark} />}
           onPress={() => navigation.navigate('DailyChecklist')}
         />
 
         <ActionCard
-          title="Uso da órtese"
+          title="Uso da Órtese"
           description="Informe o tempo de uso e acompanhe a adesão ao tratamento."
           icon={<CalendarCheck size={24} color={colors.secondaryDark} />}
           onPress={() => navigation.navigate('RegisterOrthosisUsage')}
@@ -147,21 +165,53 @@ export default function ParentAreaScreen({ navigation }: Props) {
           onPress={() => navigation.navigate('History')}
         />
 
-        <ActionCard
-          title="Relatório semanal"
-          description="Veja informações organizadas para acompanhamento clínico."
-          icon={<FileText size={24} color={colors.secondaryDark} />}
-          onPress={() => navigation.navigate('WeeklyReport')}
-        />
-
-        <SectionTitle title="Gestão familiar" />
+        <SectionTitle title="Gestão Familiar" />
 
         <ActionCard
-          title="Crianças cadastradas"
+          title="Crianças Cadastradas"
           description="Consulte, visualize, edite e acompanhe as crianças cadastradas."
           icon={<Baby size={24} color={colors.primaryDark} />}
           onPress={() => navigation.navigate('ChildList')}
         />
+
+        <ActionCard
+          title="Atividades Educativas"
+          description="Gerencie atividades educativas, missões personalizadas e conteúdos vinculados às crianças."
+          icon={<Star size={24} color={colors.accent} />}
+          onPress={() => navigation.navigate('ActivityList')}
+        />
+
+        <ActionCard
+          title="Gerenciamento de Missões"
+          description="Crie, personalize e acompanhe missões do Pé de Herói para cada criança."
+          icon={<Target size={24} color={colors.secondaryDark} />}
+          onPress={() => navigation.navigate('ChildMissions')}
+        />
+
+        <ActionCard
+          title="Ranking dos Heróis"
+          description="Acompanhe a evolução, pontuação, níveis e patentes das crianças."
+          icon={<Medal size={24} color={colors.secondaryDark} />}
+          onPress={() => navigation.navigate('Ranking')}
+        />
+
+        <ActionCard
+          title="Relatório Semanal"
+          description="Veja gráficos, adesão, uso da órtese, XP, moedas e evolução semanal."
+          icon={<FileText size={24} color={colors.secondaryDark} />}
+          onPress={() => navigation.navigate('WeeklyReport')}
+        />
+
+        <SectionTitle title="Informações adicionais" />
+
+        <ActionCard
+          title="Pontos, Lógica de pontos"
+          description="Veja mais sobre a pontuação da jornada do seu filho(a), lógica de pontos, recursos e evolução."
+          icon={<Award size={24} color={colors.accent} />}
+          onPress={() => navigation.navigate('Points')}
+        />
+
+        <View style={styles.bottomSpacer} />
       </ScrollView>
 
       <BottomNav navigation={navigation} area="parent" active="home" visible />
@@ -175,11 +225,7 @@ function SectionTitle({ title }: { title: string }) {
 
 function ActionCard({ title, description, icon, onPress }: ActionCardProps) {
   return (
-    <TouchableOpacity
-      style={styles.actionCard}
-      activeOpacity={0.86}
-      onPress={onPress}
-    >
+    <TouchableOpacity style={styles.actionCard} activeOpacity={0.86} onPress={onPress}>
       <View style={styles.actionIcon}>{icon}</View>
 
       <View style={styles.actionContent}>
@@ -193,18 +239,33 @@ function ActionCard({ title, description, icon, onPress }: ActionCardProps) {
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: colors.primaryDark,
+  screen: { flex: 1, backgroundColor: colors.primaryDark },
+  container: { flex: 1, backgroundColor: colors.primaryDark },
+  content: { padding: 20, paddingTop: 46, paddingBottom: 28 },
+  topNavigation: { marginBottom: 18 },
+  appNameTop: {
+    color: colors.white,
+    fontSize: 24,
+    fontWeight: '900',
+    letterSpacing: 0.5,
+    marginBottom: 10,
   },
-  container: {
-    flex: 1,
-    backgroundColor: colors.primaryDark,
+  backAreasButton: {
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.14)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.22)',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 999,
   },
-  content: {
-    padding: 20,
-    paddingTop: 50,
-    paddingBottom: 28,
+  backAreasText: {
+    color: colors.white,
+    fontWeight: '900',
+    fontSize: 13,
+    marginLeft: 4,
   },
   topBar: {
     flexDirection: 'row',
@@ -212,21 +273,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 18,
   },
-  appName: {
-    color: colors.white,
-    fontSize: 20,
-    fontWeight: '900',
-  },
+  appName: { color: colors.white, fontSize: 20, fontWeight: '900' },
   topSubtitle: {
     color: 'rgba(255,255,255,0.78)',
     fontSize: 12,
     fontWeight: '800',
     marginTop: 2,
   },
-  topActions: {
-    flexDirection: 'row',
-    gap: 8,
-  },
+  topActions: { flexDirection: 'row', gap: 8 },
   topButton: {
     width: 40,
     height: 40,
@@ -254,15 +308,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 16,
   },
-  headerTextArea: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: '900',
-    color: colors.white,
-    marginBottom: 8,
-  },
+  headerTextArea: { flex: 1 },
+  title: { fontSize: 22, fontWeight: '900', color: colors.white, marginBottom: 8 },
   subtitle: {
     fontSize: 14,
     lineHeight: 21,
@@ -295,9 +342,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 14,
   },
-  actionContent: {
-    flex: 1,
-  },
+  actionContent: { flex: 1 },
   actionTitle: {
     fontSize: 15,
     fontWeight: '900',
@@ -310,4 +355,5 @@ const styles = StyleSheet.create({
     color: colors.textLight,
     fontWeight: '600',
   },
+  bottomSpacer: { height: 96 },
 });
