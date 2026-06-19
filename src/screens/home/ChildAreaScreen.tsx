@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Alert,
   Image,
@@ -42,8 +42,11 @@ type HeroCardProps = {
   onPress: () => void;
 };
 
+type InfoType = 'missions' | 'coins' | 'achievements' | null;
+
 export default function ChildAreaScreen({ navigation }: Props) {
   const { signOut } = useAuth();
+  const [selectedInfo, setSelectedInfo] = useState<InfoType>(null);
 
   function handleLogout() {
     Alert.alert('Sair da conta', 'Deseja realmente sair?', [
@@ -57,6 +60,37 @@ export default function ChildAreaScreen({ navigation }: Props) {
       },
     ]);
   }
+
+  function toggleInfo(type: InfoType) {
+    setSelectedInfo((current) => (current === type ? null : type));
+  }
+
+  function getInfoText() {
+    if (selectedInfo === 'missions') {
+      return {
+        title: 'Missões',
+        text: 'As missões são desafios da jornada. Ao concluir cada uma, o herói ou heroína ganha XP, moedas e avança na rotina de cuidados.',
+      };
+    }
+
+    if (selectedInfo === 'coins') {
+      return {
+        title: 'Moedas',
+        text: 'As moedas são recompensas ganhas nas missões e no check-in. Elas podem ser usadas para desbloquear itens na Loja da Jornada.',
+      };
+    }
+
+    if (selectedInfo === 'achievements') {
+      return {
+        title: 'Conquistas',
+        text: 'As conquistas representam os níveis alcançados pela criança durante a jornada, mostrando sua evolução, dedicação e progresso.',
+      };
+    }
+
+    return null;
+  }
+
+  const infoContent = getInfoText();
 
   return (
     <View style={styles.screen}>
@@ -120,21 +154,75 @@ export default function ChildAreaScreen({ navigation }: Props) {
         </View>
 
         <View style={styles.quickRewards}>
-          <View style={styles.rewardPill}>
+          <TouchableOpacity
+            style={[
+              styles.rewardPill,
+              selectedInfo === 'missions' && styles.rewardPillActive,
+            ]}
+            activeOpacity={0.84}
+            onPress={() => toggleInfo('missions')}
+          >
             <Text style={styles.rewardEmoji}>⭐</Text>
-            <Text style={styles.rewardText}>Missões</Text>
-          </View>
+            <Text
+              style={[
+                styles.rewardText,
+                selectedInfo === 'missions' && styles.rewardTextActive,
+              ]}
+            >
+              Missões
+            </Text>
+          </TouchableOpacity>
 
-          <View style={styles.rewardPill}>
+          <TouchableOpacity
+            style={[
+              styles.rewardPill,
+              selectedInfo === 'coins' && styles.rewardPillActive,
+            ]}
+            activeOpacity={0.84}
+            onPress={() => toggleInfo('coins')}
+          >
             <Text style={styles.rewardEmoji}>🪙</Text>
-            <Text style={styles.rewardText}>Moedas</Text>
-          </View>
+            <Text
+              style={[
+                styles.rewardText,
+                selectedInfo === 'coins' && styles.rewardTextActive,
+              ]}
+            >
+              Moedas
+            </Text>
+          </TouchableOpacity>
 
-          <View style={styles.rewardPill}>
+          <TouchableOpacity
+            style={[
+              styles.rewardPill,
+              selectedInfo === 'achievements' && styles.rewardPillActive,
+            ]}
+            activeOpacity={0.84}
+            onPress={() => toggleInfo('achievements')}
+          >
             <Text style={styles.rewardEmoji}>🏆</Text>
-            <Text style={styles.rewardText}>Conquistas</Text>
-          </View>
+            <Text
+              style={[
+                styles.rewardText,
+                selectedInfo === 'achievements' && styles.rewardTextActive,
+              ]}
+            >
+              Conquistas
+            </Text>
+          </TouchableOpacity>
         </View>
+
+        {infoContent && (
+          <View style={styles.infoExplanationCard}>
+            <Text style={styles.infoExplanationTitle}>
+              {infoContent.title}
+            </Text>
+
+            <Text style={styles.infoExplanationText}>
+              {infoContent.text}
+            </Text>
+          </View>
+        )}
 
         <Text style={styles.sectionTitle}>Minha Jornada</Text>
 
@@ -398,7 +486,7 @@ const styles = StyleSheet.create({
   quickRewards: {
     flexDirection: 'row',
     gap: 10,
-    marginBottom: 20,
+    marginBottom: 12,
   },
   rewardPill: {
     flex: 1,
@@ -409,6 +497,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
+  rewardPillActive: {
+    backgroundColor: '#FACC15',
+    borderColor: colors.white,
+  },
   rewardEmoji: {
     fontSize: 24,
     marginBottom: 3,
@@ -417,6 +509,29 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontSize: 12,
     fontWeight: '900',
+  },
+  rewardTextActive: {
+    color: colors.primaryDark,
+  },
+  infoExplanationCard: {
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    padding: 15,
+    marginBottom: 18,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.35)',
+  },
+  infoExplanationTitle: {
+    color: colors.primaryDark,
+    fontSize: 17,
+    fontWeight: '900',
+    marginBottom: 5,
+  },
+  infoExplanationText: {
+    color: colors.textLight,
+    fontSize: 13,
+    lineHeight: 19,
+    fontWeight: '700',
   },
   sectionTitle: {
     fontSize: 22,
