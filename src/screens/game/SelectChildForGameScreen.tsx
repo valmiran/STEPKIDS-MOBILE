@@ -6,7 +6,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Baby, CheckCircle2, Gamepad2, Plus } from 'lucide-react-native';
+import {
+  CheckCircle2,
+  Gamepad2,
+  Plus,
+  ShieldCheck,
+} from 'lucide-react-native';
 
 import AppHeader from '../../components/common/AppHeader';
 import KeyboardAwareScreen from '../../components/common/KeyboardAwareScreen';
@@ -28,12 +33,16 @@ export default function SelectChildForGameScreen({ navigation }: any) {
     });
   }
 
+  function handleSelectHero(child: Child) {
+    setSelectedChild((current) => (current?.id === child.id ? null : child));
+  }
+
   return (
     <View style={styles.container}>
       <AppHeader
         navigation={navigation}
-        title="Quem vai jogar?"
-        subtitle="Selecionar criança"
+        title="Escolha o Herói"
+        subtitle="Monte a Órtese do Herói"
         fallbackRoute="ChildArea"
       />
 
@@ -43,23 +52,23 @@ export default function SelectChildForGameScreen({ navigation }: any) {
             <Gamepad2 size={36} color={colors.white} />
           </View>
 
-          <Text style={styles.title}>Escolha a criança</Text>
+          <Text style={styles.title}>Quem vai iniciar a aventura?</Text>
 
           <Text style={styles.description}>
-            Antes de iniciar o jogo, selecione qual criança vai jogar. Assim, a recompensa será direcionada para o perfil correto.
+            Escolha o herói ou heroína que vai jogar agora. Assim, XP, moedas e medalhas serão enviados para o perfil correto.
           </Text>
         </View>
 
         {loading ? (
           <View style={styles.loadingBox}>
             <ActivityIndicator color={colors.primary} />
-            <Text style={styles.loadingText}>Carregando crianças...</Text>
+            <Text style={styles.loadingText}>Carregando heróis...</Text>
           </View>
         ) : children.length === 0 ? (
           <View style={styles.emptyCard}>
             <Plus size={34} color={colors.primaryDark} />
 
-            <Text style={styles.emptyTitle}>Nenhuma criança cadastrada</Text>
+            <Text style={styles.emptyTitle}>Nenhum herói cadastrado</Text>
 
             <Text style={styles.emptyText}>
               Cadastre uma criança antes de iniciar o jogo Monte a Órtese do Herói.
@@ -72,7 +81,11 @@ export default function SelectChildForGameScreen({ navigation }: any) {
           </View>
         ) : (
           <>
-            <Text style={styles.sectionTitle}>Crianças cadastradas</Text>
+            <Text style={styles.sectionTitle}>Heróis cadastrados</Text>
+
+            <Text style={styles.sectionDescription}>
+              Toque no herói ou heroína para selecionar. Toque novamente no mesmo perfil para remover a seleção.
+            </Text>
 
             {children.map((child) => {
               const isSelected = selectedChild?.id === child.id;
@@ -85,11 +98,11 @@ export default function SelectChildForGameScreen({ navigation }: any) {
                     isSelected && styles.childCardSelected,
                   ]}
                   activeOpacity={0.84}
-                  onPress={() => setSelectedChild(child)}
+                  onPress={() => handleSelectHero(child)}
                 >
                   <View style={styles.avatarBox}>
                     <Text style={styles.avatarText}>
-                      {child.name?.charAt(0)?.toUpperCase() || 'C'}
+                      {child.name?.charAt(0)?.toUpperCase() || 'H'}
                     </Text>
                   </View>
 
@@ -108,7 +121,7 @@ export default function SelectChildForGameScreen({ navigation }: any) {
                   {isSelected ? (
                     <CheckCircle2 size={26} color={colors.success} />
                   ) : (
-                    <Baby size={24} color={colors.muted} />
+                    <ShieldCheck size={24} color={colors.muted} />
                   )}
                 </TouchableOpacity>
               );
@@ -116,7 +129,7 @@ export default function SelectChildForGameScreen({ navigation }: any) {
 
             {selectedChild && (
               <View style={styles.selectedBox}>
-                <Text style={styles.selectedTitle}>Criança selecionada</Text>
+                <Text style={styles.selectedTitle}>Herói selecionado</Text>
                 <Text style={styles.selectedText}>
                   As recompensas do jogo serão enviadas para {selectedChild.name}.
                 </Text>
@@ -124,7 +137,7 @@ export default function SelectChildForGameScreen({ navigation }: any) {
             )}
 
             <Button
-              title="Começar jogo"
+              title="Começar aventura"
               onPress={handleStartGame}
               disabled={!selectedChild}
               style={!selectedChild ? styles.disabledButton : undefined}
@@ -215,6 +228,12 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '900',
     color: colors.text,
+    marginBottom: 6,
+  },
+  sectionDescription: {
+    color: colors.textLight,
+    fontWeight: '600',
+    lineHeight: 19,
     marginBottom: 12,
   },
   childCard: {

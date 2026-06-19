@@ -86,7 +86,10 @@ export default function RewardsScreen({ navigation }: any) {
 
   async function handleCollectDailyCheckIn() {
     if (!childId) {
-      Alert.alert('Selecione uma criança', 'Escolha uma criança para coletar.');
+      Alert.alert(
+        'Escolha o herói ou heroína',
+        'Escolha o herói ou heroína que vai receber a recompensa.'
+      );
       return;
     }
 
@@ -97,20 +100,22 @@ export default function RewardsScreen({ navigation }: any) {
 
       Alert.alert(
         'Check-in coletado!',
-        `${selectedChild?.name || 'A criança'} recebeu a recompensa diária da jornada.`
+        `${selectedChild?.name || 'O herói'} recebeu a recompensa diária da jornada.`
       );
     } catch (error: any) {
       Alert.alert(
         'Atenção',
-        error?.message ||
-          'Não foi possível coletar o check-in diário.'
+        error?.message || 'Não foi possível coletar o check-in diário.'
       );
     }
   }
 
   async function handleRedeem(rewardId: string) {
     if (!childId) {
-      Alert.alert('Selecione uma criança', 'Escolha uma criança para coletar.');
+      Alert.alert(
+        'Escolha o herói ou heroína',
+        'Escolha o herói ou heroína que vai receber a recompensa.'
+      );
       return;
     }
 
@@ -119,7 +124,7 @@ export default function RewardsScreen({ navigation }: any) {
 
       Alert.alert(
         'Recompensa coletada!',
-        'A recompensa semanal foi adicionada à jornada da criança.'
+        'A recompensa semanal foi adicionada à jornada do herói ou heroína.'
       );
 
       await reload();
@@ -134,6 +139,9 @@ export default function RewardsScreen({ navigation }: any) {
   useEffect(() => {
     if (childId) {
       loadDailyCheckIn(childId);
+    } else {
+      setDailyCheckIn(null);
+      setDailyRewards([]);
     }
   }, [childId]);
 
@@ -141,8 +149,8 @@ export default function RewardsScreen({ navigation }: any) {
     <View style={styles.container}>
       <AppHeader
         navigation={navigation}
-        title="Recompensas"
-        subtitle="Check-in e prêmios"
+        title="Recompensas da Jornada"
+        subtitle="Prêmios do herói"
         fallbackRoute="ChildArea"
       />
 
@@ -156,25 +164,25 @@ export default function RewardsScreen({ navigation }: any) {
           </View>
 
           <View style={styles.heroTextBox}>
-            <Text style={styles.title}>Recompensas do Herói</Text>
+            <Text style={styles.title}>Recompensas da Jornada</Text>
 
             <Text style={styles.description}>
-              Selecione uma criança, faça o check-in diário e colete recompensas
-              semanais para fortalecer a jornada da órtese.
+              Escolha o herói ou heroína que vai receber o check-in diário, XP,
+              moedas e recompensas da jornada.
             </Text>
           </View>
         </View>
 
-        <Text style={styles.sectionTitle}>Escolha a criança</Text>
+        <Text style={styles.sectionTitle}>Escolha o herói ou heroína</Text>
 
         <Text style={styles.sectionDescription}>
-          Role para o lado para ver outras crianças cadastradas.
+          Role para o lado para escolher quem vai receber as recompensas. Toque novamente no mesmo perfil para remover a seleção.
         </Text>
 
         {loadingChildren ? (
           <View style={styles.loadingChildrenBox}>
             <ActivityIndicator color={colors.primary} />
-            <Text style={styles.loadingText}>Carregando crianças...</Text>
+            <Text style={styles.loadingText}>Carregando heróis...</Text>
           </View>
         ) : (
           <FlatList
@@ -193,7 +201,11 @@ export default function RewardsScreen({ navigation }: any) {
                     selected && styles.childSelectorCardActive,
                   ]}
                   activeOpacity={0.86}
-                  onPress={() => setChildId(item.id)}
+                  onPress={() =>
+                    setChildId((current) =>
+                      current === item.id ? '' : item.id
+                    )
+                  }
                 >
                   <View
                     style={[
@@ -207,7 +219,7 @@ export default function RewardsScreen({ navigation }: any) {
                         selected && styles.childAvatarTextActive,
                       ]}
                     >
-                      {item.name?.charAt(0)?.toUpperCase() || 'C'}
+                      {item.name?.charAt(0)?.toUpperCase() || 'H'}
                     </Text>
                   </View>
 
@@ -241,7 +253,7 @@ export default function RewardsScreen({ navigation }: any) {
             ListEmptyComponent={
               <View style={styles.emptyChildrenBox}>
                 <Text style={styles.emptyChildrenText}>
-                  Nenhuma criança cadastrada.
+                  Nenhum herói cadastrado.
                 </Text>
               </View>
             }
@@ -251,7 +263,7 @@ export default function RewardsScreen({ navigation }: any) {
         <View style={styles.checkInCard}>
           <View style={styles.checkInHeader}>
             <View>
-              <Text style={styles.checkInTitle}>Check-in Diário do Herói</Text>
+              <Text style={styles.checkInTitle}>Check-in da Jornada</Text>
               <Text style={styles.checkInSubtitle}>Ciclo de 28 dias</Text>
             </View>
 
@@ -263,9 +275,7 @@ export default function RewardsScreen({ navigation }: any) {
           </View>
 
           <Text style={styles.checkInText}>
-            Volte todos os dias para fortalecer a jornada do herói. Cada
-            check-in representa um passo de cuidado, rotina e coragem no uso da
-            órtese.
+            Cada acesso diário fortalece a jornada, incentiva o uso da órtese e ajuda na evolução do herói ou heroína.
           </Text>
 
           {loadingCheckIn ? (
@@ -294,7 +304,7 @@ export default function RewardsScreen({ navigation }: any) {
           ) : (
             <View style={styles.todayRewardBox}>
               <Text style={styles.todayRewardText}>
-                Selecione uma criança para carregar o check-in.
+                Escolha o herói ou heroína para carregar o check-in.
               </Text>
             </View>
           )}
@@ -325,8 +335,7 @@ export default function RewardsScreen({ navigation }: any) {
             {dailyRewards.map((reward) => {
               const currentDay = dailyCheckIn?.currentDay || 1;
               const isCurrent = reward.day === currentDay;
-              const isCollectedToday =
-                isCurrent && alreadyCollectedToday;
+              const isCollectedToday = isCurrent && alreadyCollectedToday;
 
               return (
                 <View
@@ -355,7 +364,7 @@ export default function RewardsScreen({ navigation }: any) {
 
         <Text style={styles.sectionDescription}>
           As recompensas abaixo podem ser coletadas a cada 7 dias, conforme a
-          pontuação da criança.
+          pontuação do herói ou heroína.
         </Text>
 
         {loading ? (
@@ -461,7 +470,7 @@ export default function RewardsScreen({ navigation }: any) {
                   Nenhuma recompensa carregada
                 </Text>
                 <Text style={styles.emptyText}>
-                  Selecione uma criança para visualizar as recompensas.
+                  Escolha o herói ou heroína para visualizar as recompensas.
                 </Text>
               </View>
             )}

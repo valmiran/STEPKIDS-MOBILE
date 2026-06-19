@@ -21,6 +21,7 @@ import {
   Sparkles,
   Trophy,
   UserRound,
+  Zap,
 } from 'lucide-react-native';
 
 import BottomNav from '../../components/common/BottomNav';
@@ -33,10 +34,12 @@ type Props = {
   navigation: any;
 };
 
-type ActionCardProps = {
+type HeroCardProps = {
   title: string;
   description: string;
   icon: React.ReactNode;
+  points: string;
+  backgroundColor: string;
   onPress: () => void;
 };
 
@@ -80,90 +83,121 @@ export default function ChildAreaScreen({ navigation }: Props) {
           />
         </View>
 
-        <View style={styles.topBar}>
-          <View>
-            <Text style={styles.appName}>Área da Criança</Text>
-            <Text style={styles.topSubtitle}>Minha jornada de herói</Text>
+        <View style={styles.heroPanel}>
+          <View style={styles.heroPanelTop}>
+            <View style={styles.heroAvatar}>
+              <Sparkles size={36} color={colors.white} />
+            </View>
+
+            <View style={styles.heroPanelTextBox}>
+              <Text style={styles.welcomeTitle}>Olá, herói!</Text>
+              <Text style={styles.welcomeText}>
+                Complete missões, ganhe XP e fortaleça sua jornada.
+              </Text>
+            </View>
           </View>
 
-          <View style={styles.topActions}>
-            <TouchableOpacity
-              style={styles.topButton}
-              activeOpacity={0.82}
-              onPress={() => navigation.navigate('Profile')}
-            >
-              <UserRound size={19} color={colors.primaryDark} />
-            </TouchableOpacity>
+          <View style={styles.levelCard}>
+            <View>
+              <Text style={styles.levelLabel}>Meu progresso</Text>
+              <Text style={styles.levelTitle}>Nível de Herói</Text>
+            </View>
 
-            <TouchableOpacity
-              style={styles.topButton}
-              activeOpacity={0.82}
-              onPress={() => navigation.navigate('Settings')}
-            >
-              <Settings size={19} color={colors.primaryDark} />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.topButton}
-              activeOpacity={0.82}
-              onPress={handleLogout}
-            >
-              <LogOut size={19} color={colors.danger} />
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={styles.heroCard}>
-          <View style={styles.heroIcon}>
-            <Sparkles size={32} color={colors.white} />
+            <View style={styles.levelBadge}>
+              <Text style={styles.levelBadgeText}>Nv. 1</Text>
+            </View>
           </View>
 
-          <View style={styles.heroTextArea}>
-            <Text style={styles.title}>Minha jornada de herói começou!</Text>
-            <Text style={styles.subtitle}>
-              Eu posso completar missões, ganhar XP, cuidar da minha rotina e desbloquear partes da órtese do herói.
-            </Text>
+          <View style={styles.progressArea}>
+            <View style={styles.progressHeader}>
+              <Text style={styles.progressLabel}>XP da jornada</Text>
+              <Text style={styles.progressValue}>0 / 100 XP</Text>
+            </View>
+
+            <View style={styles.progressTrack}>
+              <View style={styles.progressFill} />
+            </View>
           </View>
         </View>
 
-        <SectionTitle title="Jornada do herói" />
+        <View style={styles.quickRewards}>
+          <View style={styles.rewardPill}>
+            <Text style={styles.rewardEmoji}>⭐</Text>
+            <Text style={styles.rewardText}>Missões</Text>
+          </View>
 
-        <ActionCard
+          <View style={styles.rewardPill}>
+            <Text style={styles.rewardEmoji}>🪙</Text>
+            <Text style={styles.rewardText}>Moedas</Text>
+          </View>
+
+          <View style={styles.rewardPill}>
+            <Text style={styles.rewardEmoji}>🏆</Text>
+            <Text style={styles.rewardText}>Conquistas</Text>
+          </View>
+        </View>
+
+        <Text style={styles.sectionTitle}>Minha Jornada</Text>
+
+        <HeroCard
           title="Missões do dia"
-          description="Veja as minhas missões de hoje e ganhe recompensas ao concluir cada desafio."
-          icon={<Rocket size={24} color={colors.primaryDark} />}
+          description="Veja os desafios de hoje e ganhe recompensas ao concluir cada um."
+          icon={<Rocket size={30} color={colors.white} />}
+          points="+ XP"
+          backgroundColor="#8B5CF6"
           onPress={() => navigation.navigate('ChildMissions')}
         />
 
-        <ActionCard
+        <HeroCard
           title="Recompensas"
-          description="Colete minhas recompensas diárias e acompanhe minhas conquistas."
-          icon={<Gift size={24} color={colors.success} />}
+          description="Colete seu check-in diário e desbloqueie prêmios da jornada."
+          icon={<Gift size={30} color={colors.white} />}
+          points="🎁"
+          backgroundColor="#FACC15"
           onPress={() => navigation.navigate('Rewards')}
         />
 
-        <ActionCard
+        <HeroCard
           title="Loja do herói"
-          description="Veja os itens que eu posso desbloquear usando XP e moedas."
-          icon={<Shield size={24} color={colors.primaryDark} />}
+          description="Use suas moedas e XP para desbloquear itens especiais."
+          icon={<Shield size={30} color={colors.white} />}
+          points="🛡️"
+          backgroundColor="#38BDF8"
           onPress={() => navigation.navigate('Shop')}
         />
 
-        <ActionCard
-          title="Monte a Órtese do Herói"
-          description="Monte minha órtese na ordem correta e fortaleça minha jornada."
-          icon={<Puzzle size={24} color={colors.secondaryDark} />}
+        <HeroCard
+          title="Monte a Órtese"
+          description="Monte a órtese na ordem correta e fortaleça seu herói."
+          icon={<Puzzle size={30} color={colors.white} />}
+          points="+100 XP"
+          backgroundColor="#22C55E"
           onPress={() => navigation.navigate('SelectChildForGame')}
         />
 
-        <SectionTitle title="Meu Progresso" />
+        <Text style={styles.sectionTitle}>Minha Evolução</Text>
 
-        <ActionCard
+        <HeroCard
           title="Meu progresso"
-          description="Acompanhe o meu nível, XP, moedas e ranking."
-          icon={<Trophy size={24} color={colors.accent} />}
+          description="Acompanhe seu nível, XP, moedas e ranking na jornada."
+          icon={<Trophy size={30} color={colors.white} />}
+          points="🏆"
+          backgroundColor="#EC4899"
           onPress={() => navigation.navigate('Progress')}
         />
+
+        <View style={styles.motivationCard}>
+          <View style={styles.motivationIcon}>
+            <Zap size={26} color={colors.primaryDark} />
+          </View>
+
+          <View style={styles.motivationTextBox}>
+            <Text style={styles.motivationTitle}>Continue sua jornada!</Text>
+            <Text style={styles.motivationText}>
+              Usar a órtese todos os dias ajuda seu herói a ficar cada vez mais forte.
+            </Text>
+          </View>
+        </View>
 
         <View style={styles.bottomSpacer} />
       </ScrollView>
@@ -173,13 +207,20 @@ export default function ChildAreaScreen({ navigation }: Props) {
   );
 }
 
-function SectionTitle({ title }: { title: string }) {
-  return <Text style={styles.sectionTitle}>{title}</Text>;
-}
-
-function ActionCard({ title, description, icon, onPress }: ActionCardProps) {
+function HeroCard({
+  title,
+  description,
+  icon,
+  points,
+  backgroundColor,
+  onPress,
+}: HeroCardProps) {
   return (
-    <TouchableOpacity style={styles.actionCard} activeOpacity={0.86} onPress={onPress}>
+    <TouchableOpacity
+      style={[styles.actionCard, { backgroundColor }]}
+      activeOpacity={0.88}
+      onPress={onPress}
+    >
       <View style={styles.actionIcon}>{icon}</View>
 
       <View style={styles.actionContent}>
@@ -187,15 +228,29 @@ function ActionCard({ title, description, icon, onPress }: ActionCardProps) {
         <Text style={styles.actionDescription}>{description}</Text>
       </View>
 
-      <ChevronRight size={20} color={colors.muted} />
+      <View style={styles.pointsBadge}>
+        <Text style={styles.pointsText}>{points}</Text>
+      </View>
+
+      <ChevronRight size={22} color={colors.white} />
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.primaryDark },
-  container: { flex: 1, backgroundColor: colors.primaryDark },
-  content: { padding: 20, paddingTop: 46, paddingBottom: 28 },
+  screen: {
+    flex: 1,
+    backgroundColor: colors.primaryDark,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: colors.primaryDark,
+  },
+  content: {
+    padding: 20,
+    paddingTop: 46,
+    paddingBottom: 28,
+  },
   topNavigation: {
     marginBottom: 18,
     flexDirection: 'row',
@@ -203,8 +258,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   profileLogo: {
-    width: 76,
-    height: 54,
+    width: 78,
+    height: 56,
   },
   backAreasButton: {
     alignSelf: 'flex-start',
@@ -212,104 +267,234 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(255,255,255,0.14)',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.22)',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    borderColor: 'rgba(255,255,255,0.24)',
+    paddingHorizontal: 13,
+    paddingVertical: 9,
     borderRadius: 999,
   },
   backAreasText: {
     color: colors.white,
     fontWeight: '900',
-    fontSize: 13,
+    fontSize: 14,
     marginLeft: 4,
   },
-  topBar: {
+  heroPanel: {
+    backgroundColor: 'rgba(255,255,255,0.16)',
+    borderRadius: 32,
+    padding: 20,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.24)',
+  },
+  heroPanelTop: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 18,
   },
-  appName: { color: colors.white, fontSize: 20, fontWeight: '900' },
-  topSubtitle: {
-    color: 'rgba(255,255,255,0.78)',
-    fontSize: 12,
-    fontWeight: '800',
-    marginTop: 2,
-  },
-  topActions: { flexDirection: 'row', gap: 8 },
-  topButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.white,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  heroCard: {
-    backgroundColor: 'rgba(255,255,255,0.14)',
+  heroAvatar: {
+    width: 76,
+    height: 76,
     borderRadius: 28,
-    padding: 22,
-    marginBottom: 24,
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.22)',
-  },
-  heroIcon: {
-    width: 68,
-    height: 68,
-    borderRadius: 24,
     backgroundColor: 'rgba(255,255,255,0.18)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 16,
+    marginRight: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.22)',
   },
-  heroTextArea: { flex: 1 },
-  title: { fontSize: 22, fontWeight: '900', color: colors.white, marginBottom: 8 },
-  subtitle: {
-    fontSize: 14,
-    lineHeight: 21,
-    color: 'rgba(255,255,255,0.88)',
-    fontWeight: '600',
+  heroPanelTextBox: {
+    flex: 1,
   },
-  sectionTitle: {
-    fontSize: 15,
-    fontWeight: '900',
+  welcomeTitle: {
     color: colors.white,
-    marginTop: 10,
-    marginBottom: 12,
+    fontSize: 28,
+    fontWeight: '900',
+    marginBottom: 4,
   },
-  actionCard: {
-    backgroundColor: colors.surface,
+  welcomeText: {
+    color: 'rgba(255,255,255,0.88)',
+    fontSize: 15,
+    lineHeight: 21,
+    fontWeight: '700',
+  },
+  levelCard: {
+    backgroundColor: colors.white,
     borderRadius: 22,
-    padding: 18,
-    marginBottom: 12,
+    padding: 16,
+    marginBottom: 14,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  levelLabel: {
+    color: colors.textLight,
+    fontSize: 13,
+    fontWeight: '800',
+    marginBottom: 3,
+  },
+  levelTitle: {
+    color: colors.text,
+    fontSize: 20,
+    fontWeight: '900',
+  },
+  levelBadge: {
+    backgroundColor: colors.primary,
+    borderRadius: 999,
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+  },
+  levelBadgeText: {
+    color: colors.white,
+    fontSize: 14,
+    fontWeight: '900',
+  },
+  progressArea: {
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderRadius: 18,
+    padding: 13,
+  },
+  progressHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 9,
+  },
+  progressLabel: {
+    color: colors.white,
+    fontWeight: '900',
+    fontSize: 13,
+  },
+  progressValue: {
+    color: '#FACC15',
+    fontWeight: '900',
+    fontSize: 13,
+  },
+  progressTrack: {
+    height: 15,
+    borderRadius: 999,
+    backgroundColor: 'rgba(255,255,255,0.22)',
+    overflow: 'hidden',
+  },
+  progressFill: {
+    width: '28%',
+    height: '100%',
+    borderRadius: 999,
+    backgroundColor: '#FACC15',
+  },
+  quickRewards: {
+    flexDirection: 'row',
+    gap: 10,
+    marginBottom: 20,
+  },
+  rewardPill: {
+    flex: 1,
+    backgroundColor: colors.white,
+    borderRadius: 18,
+    paddingVertical: 12,
+    alignItems: 'center',
     borderWidth: 1,
     borderColor: colors.border,
+  },
+  rewardEmoji: {
+    fontSize: 24,
+    marginBottom: 3,
+  },
+  rewardText: {
+    color: colors.text,
+    fontSize: 12,
+    fontWeight: '900',
+  },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: '900',
+    color: colors.white,
+    marginTop: 8,
+    marginBottom: 14,
+  },
+  actionCard: {
+    borderRadius: 26,
+    padding: 17,
+    marginBottom: 14,
     flexDirection: 'row',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.14,
+    shadowRadius: 10,
+    elevation: 5,
   },
   actionIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 18,
-    backgroundColor: colors.surfaceSoft,
+    width: 58,
+    height: 58,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255,255,255,0.22)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 14,
+    marginRight: 13,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.22)',
   },
-  actionContent: { flex: 1 },
+  actionContent: {
+    flex: 1,
+  },
   actionTitle: {
-    fontSize: 15,
+    fontSize: 20,
     fontWeight: '900',
-    color: colors.text,
+    color: colors.white,
     marginBottom: 4,
   },
   actionDescription: {
-    fontSize: 13,
+    fontSize: 14,
     lineHeight: 19,
-    color: colors.textLight,
-    fontWeight: '600',
+    color: 'rgba(255,255,255,0.92)',
+    fontWeight: '700',
   },
-  bottomSpacer: { height: 96 },
+  pointsBadge: {
+    backgroundColor: 'rgba(255,255,255,0.92)',
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+    marginLeft: 8,
+    marginRight: 5,
+  },
+  pointsText: {
+    color: colors.primaryDark,
+    fontSize: 12,
+    fontWeight: '900',
+  },
+  motivationCard: {
+    backgroundColor: colors.white,
+    borderRadius: 24,
+    padding: 17,
+    marginTop: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  motivationIcon: {
+    width: 54,
+    height: 54,
+    borderRadius: 20,
+    backgroundColor: '#FACC15',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 13,
+  },
+  motivationTextBox: {
+    flex: 1,
+  },
+  motivationTitle: {
+    color: colors.text,
+    fontSize: 17,
+    fontWeight: '900',
+    marginBottom: 4,
+  },
+  motivationText: {
+    color: colors.textLight,
+    fontSize: 13,
+    lineHeight: 18,
+    fontWeight: '700',
+  },
+  bottomSpacer: {
+    height: 96,
+  },
 });

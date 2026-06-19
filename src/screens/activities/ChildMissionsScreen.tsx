@@ -45,44 +45,52 @@ const DEFAULT_MISSIONS: Mission[] = [
   {
     id: 'default_use_orthosis',
     title: 'Usar a órtese hoje',
-    description: 'Complete essa missão quando cumprir sua rotina de uso da órtese.',
+    description:
+      'Missão concluída quando o herói ou heroína cumprir a rotina de uso da órtese.',
     icon: '🦶',
     expReward: 20,
     goldReward: 10,
-    realLifeReward: 'Seu herói fica mais forte com cuidado diário.',
+    realLifeReward:
+      'A jornada fica mais forte quando a órtese faz parte da rotina.',
     criterion: 'Registrar ou cumprir o uso da órtese no dia.',
     isCustom: false,
   },
   {
     id: 'default_checklist',
     title: 'Registrar checklist',
-    description: 'Complete essa missão quando o checklist diário da sua jornada for registrado.',
+    description:
+      'Missão concluída quando o checklist diário da jornada for registrado.',
     icon: '✅',
     expReward: 15,
     goldReward: 5,
-    realLifeReward: 'Cada cuidado registrado ajuda sua evolução.',
+    realLifeReward:
+      'Cada cuidado registrado ajuda o herói ou heroína a evoluir.',
     criterion: 'Ter checklist do dia registrado.',
     isCustom: false,
   },
   {
     id: 'default_activity',
     title: 'Completar atividade educativa',
-    description: 'Complete essa missão ao finalizar qualquer missão ou atividade educativa do Pé de Herói.',
+    description:
+      'Missão concluída ao finalizar uma atividade educativa do Pé de Herói.',
     icon: '📚',
     expReward: 25,
     goldReward: 10,
-    realLifeReward: 'Aprender também faz parte da jornada.',
+    realLifeReward:
+      'Aprender também faz parte da jornada de cuidado e evolução.',
     criterion: 'Concluir uma missão ou atividade.',
     isCustom: false,
   },
   {
     id: 'default_game',
-    title: 'Abrir o jogo Monte a Órtese do Herói',
-    description: 'Complete essa missão quando jogar e montar a órtese do herói na ordem correta.',
+    title: 'Jogar Monte a Órtese do Herói',
+    description:
+      'Missão concluída quando o herói ou heroína montar a órtese na ordem correta.',
     icon: '🧩',
     expReward: 30,
     goldReward: 15,
-    realLifeReward: 'A armadura do cuidado cresce com você.',
+    realLifeReward:
+      'A armadura do cuidado fica mais forte a cada etapa concluída.',
     criterion: 'Jogar Monte a Órtese do Herói.',
     isCustom: false,
   },
@@ -97,7 +105,8 @@ export default function ChildMissionsScreen({ navigation }: any) {
   const { children, loading: loadingChildren } = useChildren();
 
   const [selectedChildId, setSelectedChildId] = useState('');
-  const [completedMissions, setCompletedMissions] = useState<MissionCompletion>({});
+  const [completedMissions, setCompletedMissions] =
+    useState<MissionCompletion>({});
   const [animatedMissionId, setAnimatedMissionId] = useState('');
 
   const scaleAnim = useRef(new Animated.Value(1)).current;
@@ -115,7 +124,7 @@ export default function ChildMissionsScreen({ navigation }: any) {
       expReward: activity.expReward || 10,
       goldReward: activity.goldReward || 5,
       realLifeReward: activity.realLifeReward,
-      criterion: 'Missão personalizada criada pelo responsável.',
+      criterion: 'Missão personalizada criada para a jornada do herói.',
       isCustom: true,
     }));
   }, [activities]);
@@ -156,14 +165,17 @@ export default function ChildMissionsScreen({ navigation }: any) {
 
   async function handleCompleteMission(mission: Mission) {
     if (!selectedChildId) {
-      Alert.alert('Escolha meu perfil', 'Toque no meu perfil para eu concluir essa missão.');
+      Alert.alert(
+        'Escolha o herói ou heroína',
+        'Toque no herói ou heroína que vai concluir essa missão.'
+      );
       return;
     }
 
     if (isMissionCompletedToday(mission.id)) {
       Alert.alert(
         'Missão já concluída',
-        'Eu já recolhi essa missão hoje. Amanhã posso continuar minha jornada.'
+        'Essa missão já foi recolhida hoje. Amanhã a jornada pode continuar.'
       );
       return;
     }
@@ -185,10 +197,13 @@ export default function ChildMissionsScreen({ navigation }: any) {
 
       Alert.alert(
         'Missão concluída!',
-        `${selectedChild?.name || 'Eu'} ganhei +${mission.expReward} XP e +${mission.goldReward} moedas.`
+        `${selectedChild?.name || 'O herói'} recebeu +${mission.expReward} XP e +${mission.goldReward} moedas.`
       );
     } catch (error: any) {
-      Alert.alert('Erro', error?.message || 'Não foi possível concluir a missão.');
+      Alert.alert(
+        'Erro',
+        error?.message || 'Não foi possível concluir a missão.'
+      );
     }
   }
 
@@ -197,7 +212,7 @@ export default function ChildMissionsScreen({ navigation }: any) {
       <AppHeader
         navigation={navigation}
         title="Missões do Herói"
-        subtitle="Minhas missões do dia"
+        subtitle="Desafios da jornada"
         fallbackRoute="ChildArea"
       />
 
@@ -212,22 +227,26 @@ export default function ChildMissionsScreen({ navigation }: any) {
           </View>
 
           <View style={styles.heroTextBox}>
-            <Text style={styles.title}>Minhas missões do dia</Text>
+            <Text style={styles.title}>Missões do dia</Text>
+
             <Text style={styles.description}>
-              Eu posso concluir desafios, ganhar XP, moedas e avançar na minha jornada do Pé de Herói.
+              Complete desafios, ganhe XP, receba moedas e avance na jornada do
+              Pé de Herói.
             </Text>
           </View>
         </View>
 
-        <Text style={styles.sectionTitle}>Meu perfil</Text>
+        <Text style={styles.sectionTitle}>Escolha o herói ou heroína</Text>
+
         <Text style={styles.sectionDescription}>
-          Toque no meu perfil para selecionar. Se tocar de novo, o perfil será desmarcado.
+          Toque no herói ou heroína que vai concluir as missões. Ao tocar
+          novamente no mesmo perfil, a seleção será removida.
         </Text>
 
         {loadingChildren ? (
           <View style={styles.loadingChildrenBox}>
             <ActivityIndicator color={colors.primary} />
-            <Text style={styles.loadingText}>Carregando perfis...</Text>
+            <Text style={styles.loadingText}>Carregando heróis...</Text>
           </View>
         ) : (
           <FlatList
@@ -241,25 +260,46 @@ export default function ChildMissionsScreen({ navigation }: any) {
 
               return (
                 <TouchableOpacity
-                  style={[styles.childSelectorCard, selected && styles.childSelectorCardActive]}
+                  style={[
+                    styles.childSelectorCard,
+                    selected && styles.childSelectorCardActive,
+                  ]}
                   activeOpacity={0.86}
                   onPress={() => toggleChildSelection(item.id)}
                 >
-                  <View style={[styles.childAvatar, selected && styles.childAvatarActive]}>
-                    <Text style={[styles.childAvatarText, selected && styles.childAvatarTextActive]}>
-                      {item.name?.charAt(0)?.toUpperCase() || 'C'}
+                  <View
+                    style={[
+                      styles.childAvatar,
+                      selected && styles.childAvatarActive,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.childAvatarText,
+                        selected && styles.childAvatarTextActive,
+                      ]}
+                    >
+                      {item.name?.charAt(0)?.toUpperCase() || 'H'}
                     </Text>
                   </View>
 
                   <View style={styles.childInfo}>
                     <Text
                       numberOfLines={1}
-                      style={[styles.childName, selected && styles.childNameActive]}
+                      style={[
+                        styles.childName,
+                        selected && styles.childNameActive,
+                      ]}
                     >
                       {item.name}
                     </Text>
 
-                    <Text style={[styles.childMeta, selected && styles.childMetaActive]}>
+                    <Text
+                      style={[
+                        styles.childMeta,
+                        selected && styles.childMetaActive,
+                      ]}
+                    >
                       Nível {item.level || 1} • {item.totalExp || 0} XP
                     </Text>
                   </View>
@@ -270,7 +310,9 @@ export default function ChildMissionsScreen({ navigation }: any) {
             }}
             ListEmptyComponent={
               <View style={styles.emptyChildrenBox}>
-                <Text style={styles.emptyChildrenText}>Nenhum perfil cadastrado.</Text>
+                <Text style={styles.emptyChildrenText}>
+                  Nenhum herói cadastrado.
+                </Text>
               </View>
             }
           />
@@ -278,9 +320,13 @@ export default function ChildMissionsScreen({ navigation }: any) {
 
         <View style={styles.createMissionBox}>
           <View style={styles.createMissionTextBox}>
-            <Text style={styles.createMissionTitle}>Missões personalizadas</Text>
+            <Text style={styles.createMissionTitle}>
+              Missões personalizadas
+            </Text>
+
             <Text style={styles.createMissionDescription}>
-              As missões criadas pelo responsável aparecem aqui para eu concluir.
+              As missões criadas pelo responsável aparecem aqui para o herói ou
+              heroína concluir.
             </Text>
           </View>
 
@@ -293,15 +339,17 @@ export default function ChildMissionsScreen({ navigation }: any) {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.sectionTitle}>Missões disponíveis</Text>
+        <Text style={styles.sectionTitle}>Desafios disponíveis</Text>
+
         <Text style={styles.sectionDescription}>
-          Quando eu concluir uma missão, ela ficará marcada e só poderá ser recolhida novamente amanhã.
+          Quando uma missão for concluída, ela ficará marcada e só poderá ser
+          recolhida novamente no próximo dia.
         </Text>
 
         {loading ? (
           <View style={styles.loadingBox}>
             <ActivityIndicator size="large" color={colors.primary} />
-            <Text style={styles.loadingText}>Carregando missões...</Text>
+            <Text style={styles.loadingText}>Carregando desafios...</Text>
           </View>
         ) : (
           <View style={styles.missionList}>
@@ -317,46 +365,66 @@ export default function ChildMissionsScreen({ navigation }: any) {
 
                   <View style={styles.info}>
                     <Text style={styles.missionTitle}>{item.title}</Text>
-                    <Text style={styles.missionDescription}>{item.description}</Text>
+
+                    <Text style={styles.missionDescription}>
+                      {item.description}
+                    </Text>
 
                     <View style={styles.badgeRow}>
                       <View style={styles.expBadge}>
-                        <Text style={styles.badgeText}>+{item.expReward} XP</Text>
+                        <Text style={styles.badgeText}>
+                          +{item.expReward} XP
+                        </Text>
                       </View>
 
                       <View style={styles.goldBadge}>
-                        <Text style={styles.badgeText}>🪙 +{item.goldReward}</Text>
+                        <Text style={styles.badgeText}>
+                          🪙 +{item.goldReward}
+                        </Text>
                       </View>
 
                       {item.isCustom ? (
                         <View style={styles.customBadge}>
-                          <Text style={styles.customBadgeText}>Personalizada</Text>
+                          <Text style={styles.customBadgeText}>
+                            Personalizada
+                          </Text>
                         </View>
                       ) : null}
                     </View>
 
                     <View style={styles.criterionBox}>
                       <Sparkles size={14} color={colors.primaryDark} />
-                      <Text style={styles.criterionText}>Critério: {item.criterion}</Text>
+                      <Text style={styles.criterionText}>
+                        Como concluir: {item.criterion}
+                      </Text>
                     </View>
 
                     {item.realLifeReward ? (
-                      <Text style={styles.realReward}>Mensagem: {item.realLifeReward}</Text>
+                      <Text style={styles.realReward}>
+                        Motivação: {item.realLifeReward}
+                      </Text>
                     ) : null}
 
                     <TouchableOpacity
-                      style={[styles.completeButton, completed && styles.completeButtonDone]}
+                      style={[
+                        styles.completeButton,
+                        completed && styles.completeButtonDone,
+                      ]}
                       activeOpacity={0.84}
                       onPress={() => handleCompleteMission(item)}
                     >
                       {completed ? (
                         <>
                           <CheckCircle2 size={18} color={colors.textLight} />
-                          <Text style={styles.completeButtonDoneText}>Missão concluída</Text>
+                          <Text style={styles.completeButtonDoneText}>
+                            Missão concluída
+                          </Text>
                         </>
                       ) : (
                         <>
-                          <Text style={styles.completeButtonText}>Concluir missão</Text>
+                          <Text style={styles.completeButtonText}>
+                            Concluir desafio
+                          </Text>
                           <ChevronRight size={18} color={colors.white} />
                         </>
                       )}
@@ -367,7 +435,10 @@ export default function ChildMissionsScreen({ navigation }: any) {
 
               if (isAnimated) {
                 return (
-                  <Animated.View key={item.id} style={{ transform: [{ scale: scaleAnim }] }}>
+                  <Animated.View
+                    key={item.id}
+                    style={{ transform: [{ scale: scaleAnim }] }}
+                  >
                     {cardContent}
                   </Animated.View>
                 );
@@ -378,7 +449,7 @@ export default function ChildMissionsScreen({ navigation }: any) {
           </View>
         )}
 
-        <Button title="Atualizar missões" variant="secondary" onPress={reload} />
+        <Button title="Atualizar desafios" variant="secondary" onPress={reload} />
       </ScrollView>
     </View>
   );
@@ -406,7 +477,12 @@ const styles = StyleSheet.create({
     marginRight: 14,
   },
   heroTextBox: { flex: 1 },
-  title: { fontSize: 24, fontWeight: '900', color: colors.white, marginBottom: 6 },
+  title: {
+    fontSize: 24,
+    fontWeight: '900',
+    color: colors.white,
+    marginBottom: 6,
+  },
   description: {
     color: 'rgba(255,255,255,0.88)',
     fontWeight: '600',
@@ -570,7 +646,12 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     marginBottom: 8,
   },
-  badgeRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 8 },
+  badgeRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginBottom: 8,
+  },
   expBadge: {
     backgroundColor: colors.blue,
     borderRadius: 999,
