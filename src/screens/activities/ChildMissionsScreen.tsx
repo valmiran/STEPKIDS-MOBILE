@@ -211,8 +211,8 @@ export default function ChildMissionsScreen({ navigation }: any) {
     <View style={styles.container}>
       <AppHeader
         navigation={navigation}
-        title="Missões do Herói"
-        subtitle="Desafios da jornada"
+        title="Missões da Jornada"
+        subtitle="Desafios do herói"
         fallbackRoute="ChildArea"
       />
 
@@ -223,25 +223,29 @@ export default function ChildMissionsScreen({ navigation }: any) {
       >
         <View style={styles.heroCard}>
           <View style={styles.heroIcon}>
-            <Target size={34} color={colors.white} />
+            <Target size={38} color={colors.white} />
           </View>
 
           <View style={styles.heroTextBox}>
-            <Text style={styles.title}>Missões do dia</Text>
+            <Text style={styles.title}>Missões da Jornada</Text>
 
             <Text style={styles.description}>
-              Complete desafios, ganhe XP, receba moedas e avance na jornada do
-              Pé de Herói.
+              Escolha o herói ou heroína, complete desafios, ganhe XP, receba moedas e avance na aventura do Pé de Herói.
             </Text>
           </View>
         </View>
 
-        <Text style={styles.sectionTitle}>Escolha o herói ou heroína</Text>
+        <View style={styles.sectionHeaderCard}>
+          <Text style={styles.sectionEmoji}>🦸</Text>
 
-        <Text style={styles.sectionDescription}>
-          Toque no herói ou heroína que vai concluir as missões. Ao tocar
-          novamente no mesmo perfil, a seleção será removida.
-        </Text>
+          <View style={styles.sectionHeaderTextBox}>
+            <Text style={styles.sectionTitle}>Escolha o herói ou heroína</Text>
+
+            <Text style={styles.sectionDescription}>
+              Toque no perfil que vai concluir as missões. Se tocar novamente no mesmo perfil, a seleção será removida.
+            </Text>
+          </View>
+        </View>
 
         {loadingChildren ? (
           <View style={styles.loadingChildrenBox}>
@@ -300,16 +304,17 @@ export default function ChildMissionsScreen({ navigation }: any) {
                         selected && styles.childMetaActive,
                       ]}
                     >
-                      Nível {item.level || 1} • {item.totalExp || 0} XP
+                      ⭐ Nível {item.level || 1} • {item.totalExp || 0} XP
                     </Text>
                   </View>
 
-                  {selected && <CheckCircle2 size={18} color={colors.white} />}
+                  {selected && <CheckCircle2 size={22} color={colors.white} />}
                 </TouchableOpacity>
               );
             }}
             ListEmptyComponent={
               <View style={styles.emptyChildrenBox}>
+                <Text style={styles.emptyChildrenIcon}>🧒</Text>
                 <Text style={styles.emptyChildrenText}>
                   Nenhum herói cadastrado.
                 </Text>
@@ -319,14 +324,17 @@ export default function ChildMissionsScreen({ navigation }: any) {
         )}
 
         <View style={styles.createMissionBox}>
+          <View style={styles.createMissionEmojiBox}>
+            <Text style={styles.createMissionEmoji}>✨</Text>
+          </View>
+
           <View style={styles.createMissionTextBox}>
             <Text style={styles.createMissionTitle}>
               Missões personalizadas
             </Text>
 
             <Text style={styles.createMissionDescription}>
-              As missões criadas pelo responsável aparecem aqui para o herói ou
-              heroína concluir.
+              As missões criadas pelo responsável aparecem aqui para o herói ou heroína concluir.
             </Text>
           </View>
 
@@ -335,16 +343,21 @@ export default function ChildMissionsScreen({ navigation }: any) {
             activeOpacity={0.86}
             onPress={() => navigation.navigate('CreateActivity')}
           >
-            <Plus size={22} color={colors.white} strokeWidth={3} />
+            <Plus size={24} color={colors.white} strokeWidth={3} />
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.sectionTitle}>Desafios disponíveis</Text>
+        <View style={styles.sectionHeaderCard}>
+          <Text style={styles.sectionEmoji}>🎯</Text>
 
-        <Text style={styles.sectionDescription}>
-          Quando uma missão for concluída, ela ficará marcada e só poderá ser
-          recolhida novamente no próximo dia.
-        </Text>
+          <View style={styles.sectionHeaderTextBox}>
+            <Text style={styles.sectionTitle}>Desafios disponíveis</Text>
+
+            <Text style={styles.sectionDescription}>
+              Cada missão concluída fortalece a jornada, dá XP, moedas e ajuda na evolução.
+            </Text>
+          </View>
+        </View>
 
         {loading ? (
           <View style={styles.loadingBox}>
@@ -373,7 +386,7 @@ export default function ChildMissionsScreen({ navigation }: any) {
                     <View style={styles.badgeRow}>
                       <View style={styles.expBadge}>
                         <Text style={styles.badgeText}>
-                          +{item.expReward} XP
+                          ⚡ +{item.expReward} XP
                         </Text>
                       </View>
 
@@ -386,14 +399,14 @@ export default function ChildMissionsScreen({ navigation }: any) {
                       {item.isCustom ? (
                         <View style={styles.customBadge}>
                           <Text style={styles.customBadgeText}>
-                            Personalizada
+                            Especial
                           </Text>
                         </View>
                       ) : null}
                     </View>
 
                     <View style={styles.criterionBox}>
-                      <Sparkles size={14} color={colors.primaryDark} />
+                      <Sparkles size={16} color={colors.primaryDark} />
                       <Text style={styles.criterionText}>
                         Como concluir: {item.criterion}
                       </Text>
@@ -401,7 +414,7 @@ export default function ChildMissionsScreen({ navigation }: any) {
 
                     {item.realLifeReward ? (
                       <Text style={styles.realReward}>
-                        Motivação: {item.realLifeReward}
+                        💜 Motivação: {item.realLifeReward}
                       </Text>
                     ) : null}
 
@@ -415,7 +428,7 @@ export default function ChildMissionsScreen({ navigation }: any) {
                     >
                       {completed ? (
                         <>
-                          <CheckCircle2 size={18} color={colors.textLight} />
+                          <CheckCircle2 size={20} color={colors.textLight} />
                           <Text style={styles.completeButtonDoneText}>
                             Missão concluída
                           </Text>
@@ -423,9 +436,9 @@ export default function ChildMissionsScreen({ navigation }: any) {
                       ) : (
                         <>
                           <Text style={styles.completeButtonText}>
-                            Concluir desafio
+                            Concluir missão
                           </Text>
-                          <ChevronRight size={18} color={colors.white} />
+                          <ChevronRight size={20} color={colors.white} />
                         </>
                       )}
                     </TouchableOpacity>
@@ -449,226 +462,275 @@ export default function ChildMissionsScreen({ navigation }: any) {
           </View>
         )}
 
-        <Button title="Atualizar desafios" variant="secondary" onPress={reload} />
+        <Button title="Atualizar missões" variant="secondary" onPress={reload} />
       </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
+  container: { flex: 1, backgroundColor: colors.primarySoft },
   scroll: { flex: 1 },
   content: { padding: 18, paddingBottom: 120 },
+
   heroCard: {
     backgroundColor: colors.primary,
-    borderRadius: 26,
-    padding: 18,
+    borderRadius: 32,
+    padding: 22,
     marginBottom: 16,
     flexDirection: 'row',
     alignItems: 'center',
+    borderWidth: 3,
+    borderColor: colors.white,
   },
   heroIcon: {
-    width: 66,
-    height: 66,
-    borderRadius: 24,
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    width: 78,
+    height: 78,
+    borderRadius: 30,
+    backgroundColor: 'rgba(255,255,255,0.22)',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 14,
   },
   heroTextBox: { flex: 1 },
   title: {
-    fontSize: 24,
+    fontSize: 27,
     fontWeight: '900',
     color: colors.white,
-    marginBottom: 6,
+    marginBottom: 7,
   },
   description: {
-    color: 'rgba(255,255,255,0.88)',
-    fontWeight: '600',
-    lineHeight: 20,
+    color: 'rgba(255,255,255,0.92)',
+    fontWeight: '800',
+    lineHeight: 22,
+    fontSize: 14,
+  },
+
+  sectionHeaderCard: {
+    backgroundColor: colors.surface,
+    borderRadius: 22,
+    padding: 14,
+    marginBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: colors.white,
+  },
+  sectionEmoji: {
+    fontSize: 32,
+    marginRight: 12,
+  },
+  sectionHeaderTextBox: {
+    flex: 1,
   },
   sectionTitle: {
-    fontSize: 17,
+    fontSize: 19,
     fontWeight: '900',
     color: colors.text,
-    marginBottom: 6,
+    marginBottom: 4,
   },
   sectionDescription: {
     color: colors.textLight,
-    fontWeight: '600',
-    lineHeight: 19,
-    marginBottom: 12,
+    fontWeight: '700',
+    lineHeight: 20,
+    fontSize: 13,
   },
+
   loadingChildrenBox: {
     backgroundColor: colors.surface,
-    borderRadius: 18,
-    padding: 16,
+    borderRadius: 22,
+    padding: 18,
     alignItems: 'center',
     marginBottom: 16,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderWidth: 2,
+    borderColor: colors.white,
   },
   childrenList: { paddingBottom: 14, gap: 10 },
   childSelectorCard: {
-    width: 260,
-    minHeight: 72,
+    width: 278,
+    minHeight: 82,
     backgroundColor: colors.surface,
-    borderRadius: 20,
-    padding: 12,
+    borderRadius: 24,
+    padding: 13,
     marginRight: 10,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderWidth: 2,
+    borderColor: colors.white,
     flexDirection: 'row',
     alignItems: 'center',
   },
   childSelectorCardActive: {
     backgroundColor: colors.primary,
-    borderColor: colors.primary,
+    borderColor: colors.accent,
   },
   childAvatar: {
-    width: 46,
-    height: 46,
-    borderRadius: 17,
-    backgroundColor: colors.primarySoft,
+    width: 56,
+    height: 56,
+    borderRadius: 22,
+    backgroundColor: colors.yellow,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 10,
+    marginRight: 12,
   },
-  childAvatarActive: { backgroundColor: 'rgba(255,255,255,0.22)' },
+  childAvatarActive: { backgroundColor: 'rgba(255,255,255,0.25)' },
   childAvatarText: {
     color: colors.primaryDark,
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: '900',
   },
   childAvatarTextActive: { color: colors.white },
   childInfo: { flex: 1 },
   childName: {
     color: colors.text,
-    fontSize: 15,
+    fontSize: 17,
     fontWeight: '900',
-    marginBottom: 3,
+    marginBottom: 4,
   },
   childNameActive: { color: colors.white },
   childMeta: {
     color: colors.textLight,
-    fontSize: 12,
-    fontWeight: '700',
+    fontSize: 13,
+    fontWeight: '800',
   },
-  childMetaActive: { color: 'rgba(255,255,255,0.84)' },
+  childMetaActive: { color: 'rgba(255,255,255,0.88)' },
   emptyChildrenBox: {
     backgroundColor: colors.surface,
-    borderRadius: 16,
-    padding: 16,
+    borderRadius: 18,
+    padding: 18,
     width: 260,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderWidth: 2,
+    borderColor: colors.white,
+    alignItems: 'center',
+  },
+  emptyChildrenIcon: {
+    fontSize: 34,
+    marginBottom: 6,
   },
   emptyChildrenText: {
     color: colors.textLight,
-    fontWeight: '700',
+    fontWeight: '800',
     textAlign: 'center',
   },
+
   createMissionBox: {
     backgroundColor: colors.accentSoft,
-    borderRadius: 20,
+    borderRadius: 24,
     padding: 16,
-    marginBottom: 18,
-    borderWidth: 1,
-    borderColor: colors.border,
+    marginBottom: 16,
+    borderWidth: 2,
+    borderColor: colors.white,
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  createMissionEmojiBox: {
+    width: 52,
+    height: 52,
+    borderRadius: 20,
+    backgroundColor: colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  createMissionEmoji: {
+    fontSize: 28,
   },
   createMissionTextBox: { flex: 1, paddingRight: 12 },
   createMissionTitle: {
     color: colors.text,
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '900',
     marginBottom: 4,
   },
   createMissionDescription: {
     color: colors.textLight,
-    fontWeight: '600',
-    lineHeight: 19,
+    fontWeight: '700',
+    lineHeight: 20,
+    fontSize: 13,
   },
   createMissionButton: {
-    width: 48,
-    height: 48,
-    borderRadius: 18,
+    width: 54,
+    height: 54,
+    borderRadius: 22,
     backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   loadingBox: {
+    backgroundColor: colors.surface,
+    borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 30,
+    paddingVertical: 32,
+    borderWidth: 2,
+    borderColor: colors.white,
   },
   loadingText: {
     marginTop: 10,
     color: colors.textLight,
-    fontWeight: '700',
+    fontWeight: '800',
   },
+
   missionList: { marginBottom: 16 },
   card: {
     backgroundColor: colors.surface,
-    borderRadius: 18,
-    padding: 14,
+    borderRadius: 26,
+    padding: 15,
     marginBottom: 14,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderWidth: 2,
+    borderColor: colors.white,
     flexDirection: 'row',
     gap: 12,
   },
   cardCompleted: {
-    backgroundColor: colors.surfaceSoft,
+    backgroundColor: colors.successSoft,
     borderColor: colors.success,
   },
   iconBox: {
-    width: 54,
-    height: 54,
-    borderRadius: 22,
+    width: 64,
+    height: 64,
+    borderRadius: 25,
     backgroundColor: colors.yellow,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  icon: { fontSize: 26 },
+  icon: { fontSize: 32 },
   info: { flex: 1 },
   missionTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '900',
-    marginBottom: 4,
+    marginBottom: 5,
     color: colors.text,
   },
   missionDescription: {
     color: colors.textLight,
-    fontWeight: '600',
-    lineHeight: 19,
-    marginBottom: 8,
+    fontWeight: '700',
+    lineHeight: 20,
+    marginBottom: 10,
+    fontSize: 13,
   },
   badgeRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
-    marginBottom: 8,
+    marginBottom: 10,
   },
   expBadge: {
     backgroundColor: colors.blue,
     borderRadius: 999,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingVertical: 7,
+    paddingHorizontal: 11,
   },
   goldBadge: {
     backgroundColor: colors.yellow,
     borderRadius: 999,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingVertical: 7,
+    paddingHorizontal: 11,
   },
   customBadge: {
     backgroundColor: colors.primarySoft,
     borderRadius: 999,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingVertical: 7,
+    paddingHorizontal: 11,
   },
   customBadgeText: {
     fontWeight: '900',
@@ -678,32 +740,36 @@ const styles = StyleSheet.create({
   badgeText: { fontWeight: '900', fontSize: 12, color: colors.text },
   criterionBox: {
     backgroundColor: colors.background,
-    borderRadius: 12,
-    padding: 9,
+    borderRadius: 16,
+    padding: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    marginBottom: 8,
+    gap: 7,
+    marginBottom: 9,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   criterionText: {
     flex: 1,
     color: colors.textLight,
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: '800',
     lineHeight: 17,
   },
   realReward: {
     color: colors.textLight,
-    fontWeight: '700',
+    fontWeight: '800',
     backgroundColor: colors.background,
-    borderRadius: 10,
-    padding: 8,
-    marginBottom: 10,
+    borderRadius: 14,
+    padding: 10,
+    marginBottom: 11,
+    lineHeight: 18,
+    fontSize: 12,
   },
   completeButton: {
     backgroundColor: colors.primary,
-    borderRadius: 14,
-    paddingVertical: 12,
+    borderRadius: 18,
+    paddingVertical: 14,
     paddingHorizontal: 12,
     flexDirection: 'row',
     alignItems: 'center',
@@ -714,10 +780,12 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontWeight: '900',
     marginRight: 6,
+    fontSize: 15,
   },
   completeButtonDoneText: {
     color: colors.textLight,
     fontWeight: '900',
     marginLeft: 6,
+    fontSize: 14,
   },
 });

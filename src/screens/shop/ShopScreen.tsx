@@ -16,7 +16,6 @@ import {
   Shield,
   ShoppingBag,
   Sparkles,
-  Star,
   Trophy,
   Zap,
 } from 'lucide-react-native';
@@ -48,7 +47,7 @@ const STORE_ITEMS: StoreItem[] = [
     expCost: 0,
     requiredLevel: 1,
     motivationalMessage:
-      'Parabéns! A Capa da Coragem representa sua força para continuar cuidando da órtese todos os dias.',
+      'Parabéns! A Capa da Coragem representa a força do herói ou heroína para continuar cuidando da órtese todos os dias.',
   },
   {
     id: 'shield_care',
@@ -59,18 +58,18 @@ const STORE_ITEMS: StoreItem[] = [
     expCost: 20,
     requiredLevel: 1,
     motivationalMessage:
-      'Você desbloqueou o Escudo do Cuidado! Ele representa sua dedicação em proteger sua jornada de tratamento.',
+      'O Escudo do Cuidado foi desbloqueado! Ele representa dedicação, proteção e compromisso com a jornada.',
   },
   {
     id: 'boots_journey',
     name: 'Botas da Jornada',
-    description: 'Simbolizam os passos firmes que o herói dá em direção à evolução.',
+    description: 'Simbolizam os passos firmes que o herói ou heroína dá em direção à evolução.',
     icon: '🥾',
     coinsCost: 80,
     expCost: 40,
     requiredLevel: 2,
     motivationalMessage:
-      'As Botas da Jornada mostram que cada passo conta. Continue firme na sua rotina com a órtese.',
+      'As Botas da Jornada mostram que cada passo conta. Continue firme na rotina com a órtese.',
   },
   {
     id: 'routine_star',
@@ -81,18 +80,18 @@ const STORE_ITEMS: StoreItem[] = [
     expCost: 60,
     requiredLevel: 3,
     motivationalMessage:
-      'Você conquistou a Estrela da Rotina! A constância é uma das maiores forças do herói.',
+      'A Estrela da Rotina foi conquistada! A constância é uma das maiores forças da jornada.',
   },
   {
     id: 'evolution_crystal',
     name: 'Cristal da Evolução',
-    description: 'Marca o crescimento do herói ao cumprir missões e acompanhar o tratamento.',
+    description: 'Marca o crescimento do herói ou heroína ao cumprir missões e acompanhar o tratamento.',
     icon: '💎',
     coinsCost: 140,
     expCost: 100,
     requiredLevel: 4,
     motivationalMessage:
-      'O Cristal da Evolução mostra que seu esforço está virando progresso real na jornada.',
+      'O Cristal da Evolução mostra que o esforço está virando progresso real na jornada.',
   },
   {
     id: 'persistence_medal',
@@ -103,7 +102,7 @@ const STORE_ITEMS: StoreItem[] = [
     expCost: 140,
     requiredLevel: 5,
     motivationalMessage:
-      'Você desbloqueou a Medalha da Persistência! Persistir também é uma forma de vencer.',
+      'A Medalha da Persistência foi desbloqueada! Persistir também é uma forma de vencer.',
   },
   {
     id: 'hero_bracelet',
@@ -114,7 +113,7 @@ const STORE_ITEMS: StoreItem[] = [
     expCost: 180,
     requiredLevel: 6,
     motivationalMessage:
-      'O Bracelete do Herói representa seu compromisso com a sua saúde e com sua jornada.',
+      'O Bracelete do Herói representa compromisso com a saúde, o cuidado e a evolução da jornada.',
   },
 ];
 
@@ -131,8 +130,8 @@ export default function ShopScreen({ navigation }: any) {
   async function handleBuyItem(item: StoreItem) {
     if (!selectedChildId || !selectedChild) {
       Alert.alert(
-        'Selecione uma criança',
-        'Escolha qual criança vai comprar o item da loja.'
+        'Selecione o herói ou heroína',
+        'Escolha quem vai usar moedas e XP para desbloquear uma conquista da jornada.'
       );
       return;
     }
@@ -140,7 +139,7 @@ export default function ShopScreen({ navigation }: any) {
     if ((selectedChild.level || 1) < item.requiredLevel) {
       Alert.alert(
         'Nível insuficiente',
-        `Esse item precisa do nível ${item.requiredLevel}. Continue cumprindo missões para evoluir.`
+        `Essa conquista precisa do nível ${item.requiredLevel}. Continue cumprindo missões para evoluir.`
       );
       return;
     }
@@ -156,13 +155,13 @@ export default function ShopScreen({ navigation }: any) {
         message: item.motivationalMessage,
       });
 
-      Alert.alert('Item desbloqueado!', item.motivationalMessage);
+      Alert.alert('Conquista desbloqueada!', item.motivationalMessage);
 
       await reload();
     } catch (error: any) {
       Alert.alert(
         'Atenção',
-        error?.message || 'Não foi possível comprar este item.'
+        error?.message || 'Não foi possível desbloquear esta conquista.'
       );
     } finally {
       setBuyingItemId('');
@@ -183,8 +182,8 @@ export default function ShopScreen({ navigation }: any) {
     <View style={styles.container}>
       <AppHeader
         navigation={navigation}
-        title="Loja do Herói"
-        subtitle="Itens da jornada"
+        title="Loja da Jornada"
+        subtitle="Conquistas da Jornada"
         fallbackRoute="ChildArea"
       />
 
@@ -198,24 +197,24 @@ export default function ShopScreen({ navigation }: any) {
           </View>
 
           <View style={styles.heroTextBox}>
-            <Text style={styles.title}>Loja do Herói</Text>
+            <Text style={styles.title}>Loja da Jornada</Text>
 
             <Text style={styles.description}>
-              Escolha uma criança, veja seus recursos em tempo real e desbloqueie itens que representam cuidado, rotina e evolução.
+              Escolha o herói ou heroína, veja seus recursos em tempo real e desbloqueie conquistas que representam cuidado, rotina e evolução.
             </Text>
           </View>
         </View>
 
-        <Text style={styles.sectionTitle}>Escolha a criança</Text>
+        <Text style={styles.sectionTitle}>Escolha o herói ou heroína</Text>
 
         <Text style={styles.sectionDescription}>
-          Role para o lado para selecionar a criança que vai usar moedas e XP na loja.
+          Role para o lado para selecionar quem vai usar moedas e XP na Loja da Jornada.
         </Text>
 
         {loading ? (
           <View style={styles.loadingChildrenBox}>
             <ActivityIndicator color={colors.primary} />
-            <Text style={styles.loadingText}>Carregando crianças...</Text>
+            <Text style={styles.loadingText}>Carregando heróis...</Text>
           </View>
         ) : (
           <FlatList
@@ -248,7 +247,7 @@ export default function ShopScreen({ navigation }: any) {
                         selected && styles.childAvatarTextActive,
                       ]}
                     >
-                      {item.name?.charAt(0)?.toUpperCase() || 'C'}
+                      {item.name?.charAt(0)?.toUpperCase() || 'H'}
                     </Text>
                   </View>
 
@@ -282,7 +281,7 @@ export default function ShopScreen({ navigation }: any) {
             ListEmptyComponent={
               <View style={styles.emptyChildrenBox}>
                 <Text style={styles.emptyChildrenText}>
-                  Nenhuma criança cadastrada.
+                  Nenhum herói cadastrado.
                 </Text>
               </View>
             }
@@ -292,11 +291,11 @@ export default function ShopScreen({ navigation }: any) {
         <View style={styles.walletCard}>
           <View style={styles.walletHeader}>
             <View>
-              <Text style={styles.walletTitle}>Recursos disponíveis</Text>
+              <Text style={styles.walletTitle}>Recursos da Jornada</Text>
               <Text style={styles.walletSubtitle}>
                 {selectedChild
                   ? selectedChild.name
-                  : 'Selecione uma criança para carregar os recursos'}
+                  : 'Selecione o herói ou heroína para carregar os recursos'}
               </Text>
             </View>
 
@@ -326,10 +325,10 @@ export default function ShopScreen({ navigation }: any) {
           </View>
         </View>
 
-        <Text style={styles.sectionTitle}>Itens disponíveis</Text>
+        <Text style={styles.sectionTitle}>Conquistas da Jornada</Text>
 
         <Text style={styles.sectionDescription}>
-          Cada item representa uma parte simbólica da evolução no tratamento. Compre usando XP, moedas e nível.
+          Cada conquista representa uma parte simbólica da evolução no tratamento. Desbloqueie usando XP, moedas e nível.
         </Text>
 
         {STORE_ITEMS.map((item) => {
@@ -408,7 +407,7 @@ export default function ShopScreen({ navigation }: any) {
                   {isBuying ? (
                     <ActivityIndicator color={colors.white} />
                   ) : available ? (
-                    <Text style={styles.buyButtonText}>Comprar item</Text>
+                    <Text style={styles.buyButtonText}>Desbloquear conquista</Text>
                   ) : (
                     <Text style={styles.buyButtonDisabledText}>
                       Recursos insuficientes

@@ -33,19 +33,19 @@ const CORRECT_ORDER: OrthosisPiece[] = [
   {
     id: 'base',
     title: 'Base da órtese',
-    description: 'A base dá apoio para o herói começar a jornada com segurança.',
+    description: 'A base dá apoio para o herói ou heroína começar a jornada com segurança.',
     icon: '🦶',
   },
   {
     id: 'foot_adjustment',
     title: 'Ajuste do pé',
-    description: 'O ajuste correto ajuda o herói a seguir evoluindo todos os dias.',
+    description: 'O ajuste correto ajuda o herói ou heroína a seguir evoluindo todos os dias.',
     icon: '⚙️',
   },
   {
     id: 'side_protection',
     title: 'Proteção lateral',
-    description: 'A proteção lateral representa conforto e estabilidade.',
+    description: 'A proteção lateral representa conforto e estabilidade durante a jornada.',
     icon: '🛡️',
   },
   {
@@ -57,13 +57,13 @@ const CORRECT_ORDER: OrthosisPiece[] = [
   {
     id: 'final_fit',
     title: 'Encaixe final',
-    description: 'O encaixe final mostra que cada detalhe da rotina importa.',
+    description: 'O encaixe final mostra que cada detalhe do cuidado importa.',
     icon: '🧩',
   },
   {
     id: 'hero_glow',
     title: 'Brilho do herói',
-    description: 'O brilho aparece quando o cuidado vira conquista.',
+    description: 'O brilho aparece quando o cuidado vira conquista na jornada.',
     icon: '✨',
   },
 ];
@@ -129,7 +129,7 @@ export default function GamePlaceholderScreen({ navigation }: any) {
 
       setRewardApplied(true);
       setSuccessMessage(
-        `Recompensa salva para ${childName || 'a criança selecionada'}!`
+        `Recompensa salva para ${childName || 'o herói ou heroína selecionado(a)'}.`
       );
     } catch (error: any) {
       Alert.alert(
@@ -206,15 +206,15 @@ export default function GamePlaceholderScreen({ navigation }: any) {
             <UserRound size={46} color={colors.primaryDark} />
 
             <Text style={styles.requiredSelectionTitle}>
-              Selecione uma criança antes de jogar
+              Escolha o herói ou heroína antes de jogar
             </Text>
 
             <Text style={styles.requiredSelectionText}>
-              Para salvar XP, moedas e medalha no perfil correto, é necessário escolher qual criança vai jogar.
+              Para salvar XP, moedas e medalha no perfil correto, é necessário escolher quem vai iniciar a aventura.
             </Text>
 
             <Button
-              title="Escolher criança"
+              title="Escolher herói ou heroína"
               onPress={() => navigation.navigate('SelectChildForGame')}
             />
           </View>
@@ -239,14 +239,14 @@ export default function GamePlaceholderScreen({ navigation }: any) {
         <View style={styles.selectedChildCard}>
           <View style={styles.selectedChildAvatar}>
             <Text style={styles.selectedChildInitial}>
-              {childName?.charAt(0)?.toUpperCase() || 'C'}
+              {childName?.charAt(0)?.toUpperCase() || 'H'}
             </Text>
           </View>
 
           <View style={styles.selectedChildTextBox}>
             <Text style={styles.selectedChildLabel}>Jogando agora</Text>
             <Text style={styles.selectedChildName}>
-              {childName || 'Criança selecionada'}
+              {childName || 'Herói ou heroína selecionado(a)'}
             </Text>
           </View>
 
@@ -264,10 +264,10 @@ export default function GamePlaceholderScreen({ navigation }: any) {
             <ShieldCheck size={36} color={colors.white} />
           </View>
 
-          <Text style={styles.title}>Complete sua armadura de cuidado</Text>
+          <Text style={styles.title}>Monte a Órtese do Herói</Text>
 
           <Text style={styles.description}>
-            Toque nas peças para montar a órtese do herói. Mas atenção: a montagem precisa seguir a ordem correta.
+            Ajude o herói ou heroína a montar a órtese na ordem correta.
           </Text>
 
           <View style={styles.progressBox}>
@@ -289,16 +289,16 @@ export default function GamePlaceholderScreen({ navigation }: any) {
         </View>
 
         <View style={styles.storyCard}>
-          <Text style={styles.storyTitle}>História</Text>
+          <Text style={styles.storyTitle}>História da Jornada</Text>
 
           <Text style={styles.storyText}>
-            O pequeno herói está aprendendo que cuidar da órtese faz parte da sua força.
+            O herói ou heroína está aprendendo que cuidar da órtese faz parte da sua força.
             {'\n\n'}
-            Cada peça representa uma etapa importante da sua evolução.
+            Cada peça representa uma etapa importante da evolução, do cuidado e da rotina.
             {'\n\n'}
-            Para completar sua armadura de cuidado, monte a órtese seguindo a ordem correta.
+            Para completar a missão, monte a órtese seguindo a ordem correta.
             {'\n\n'}
-            Assim, o herói fica mais forte a cada passo da jornada.
+            Assim, a jornada fica mais forte a cada passo.
           </Text>
 
           <View style={styles.orderBox}>
@@ -416,7 +416,7 @@ export default function GamePlaceholderScreen({ navigation }: any) {
             <Text style={styles.finalSuccessTitle}>Parabéns!</Text>
 
             <Text style={styles.finalSuccessText}>
-              Você montou a Órtese do Herói! Seu herói ficou mais forte porque você cuidou da sua jornada.
+              A Órtese do Herói foi montada com sucesso! A jornada ficou mais forte com cuidado, atenção e dedicação.
             </Text>
 
             <View style={styles.rewardRow}>
@@ -430,16 +430,16 @@ export default function GamePlaceholderScreen({ navigation }: any) {
                 <>
                   <ActivityIndicator color={colors.primary} />
                   <Text style={styles.rewardStatusText}>
-                    Salvando recompensa para {childName || 'a criança'}...
+                    Salvando recompensa para {childName || 'o herói ou heroína'}...
                   </Text>
                 </>
               ) : rewardApplied ? (
                 <Text style={styles.rewardAppliedText}>
-                  Recompensa salva para {childName || 'a criança selecionada'}.
+                  Recompensa salva para {childName || 'o herói ou heroína selecionado(a)'}.
                 </Text>
               ) : (
                 <Text style={styles.rewardStatusText}>
-                  A recompensa será enviada para {childName || 'a criança selecionada'}.
+                  A recompensa será enviada para {childName || 'o herói ou heroína selecionado(a)'}.
                 </Text>
               )}
             </View>
@@ -450,10 +450,10 @@ export default function GamePlaceholderScreen({ navigation }: any) {
           <Text style={styles.infoTitle}>Registro da partida</Text>
 
           <Text style={styles.infoText}>
-            Criança selecionada: {childName || 'Criança'}
+            Herói ou heroína selecionado(a): {childName || 'Não informado'}
           </Text>
 
-          <Text style={styles.infoText}>ID da criança: {childId}</Text>
+          <Text style={styles.infoText}>ID do perfil: {childId}</Text>
 
           <Text style={styles.infoText}>
             Ao concluir o jogo, o app salva XP, moedas e medalha no perfil selecionado.

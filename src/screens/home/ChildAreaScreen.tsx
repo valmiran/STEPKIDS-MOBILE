@@ -13,14 +13,11 @@ import {
   ChevronLeft,
   ChevronRight,
   Gift,
-  LogOut,
   Puzzle,
   Rocket,
-  Settings,
   Shield,
   Sparkles,
   Trophy,
-  UserRound,
   Zap,
 } from 'lucide-react-native';
 
@@ -29,6 +26,8 @@ import { useAuth } from '../../hooks/useAuth';
 import { colors } from '../../theme';
 
 const profileLogo = require('../../assets/images/foto dos perfis.png');
+const journeyImage = require('../../assets/images/inicio de jornada.png');
+const evolutionImage = require('../../assets/images/foto minha evolução.png');
 
 type Props = {
   navigation: any;
@@ -139,6 +138,14 @@ export default function ChildAreaScreen({ navigation }: Props) {
 
         <Text style={styles.sectionTitle}>Minha Jornada</Text>
 
+        <View style={styles.imageCard}>
+          <Image
+            source={journeyImage}
+            style={styles.journeyImage}
+            resizeMode="cover"
+          />
+        </View>
+
         <HeroCard
           title="Missões do dia"
           description="Veja os desafios de hoje e ganhe recompensas ao concluir cada um."
@@ -176,6 +183,14 @@ export default function ChildAreaScreen({ navigation }: Props) {
         />
 
         <Text style={styles.sectionTitle}>Minha Evolução</Text>
+
+        <View style={styles.imageCard}>
+          <Image
+            source={evolutionImage}
+            style={styles.journeyImage}
+            resizeMode="cover"
+          />
+        </View>
 
         <HeroCard
           title="Meu progresso"
@@ -409,6 +424,19 @@ const styles = StyleSheet.create({
     color: colors.white,
     marginTop: 8,
     marginBottom: 14,
+  },
+  imageCard: {
+    marginTop: -4,
+    marginBottom: 16,
+    borderRadius: 26,
+    overflow: 'hidden',
+    backgroundColor: colors.white,
+    borderWidth: 2,
+    borderColor: 'rgba(255,255,255,0.85)',
+  },
+  journeyImage: {
+    width: '100%',
+    height: 210,
   },
   actionCard: {
     borderRadius: 26,

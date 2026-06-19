@@ -14,7 +14,6 @@ import {
   CheckCircle2,
   ChevronUp,
   Crown,
-  Medal,
   Sparkles,
   Star,
   Trophy,
@@ -189,8 +188,8 @@ export default function ProgressScreen({ navigation }: any) {
   async function handleLevelUp() {
     if (!selectedChildId || !selectedChild) {
       Alert.alert(
-        'Selecione uma criança',
-        'Escolha uma criança para visualizar e subir de nível.'
+        'Selecione o herói ou heroína',
+        'Escolha quem terá a evolução da jornada acompanhada.'
       );
       return;
     }
@@ -198,7 +197,7 @@ export default function ProgressScreen({ navigation }: any) {
     if (!nextLevelInfo) {
       Alert.alert(
         'Nível máximo',
-        'A criança já alcançou o nível máximo: Herói da Órtese.'
+        'O herói ou heroína já alcançou o nível máximo: Herói da Órtese.'
       );
       return;
     }
@@ -206,7 +205,7 @@ export default function ProgressScreen({ navigation }: any) {
     if (currentExp < nextLevelInfo.requiredExp) {
       Alert.alert(
         'XP insuficiente',
-        `Para subir para o nível ${nextLevelInfo.level}, são necessários ${nextLevelInfo.requiredExp} XP.`
+        `Para avançar para o nível ${nextLevelInfo.level}, são necessários ${nextLevelInfo.requiredExp} XP.`
       );
       return;
     }
@@ -218,14 +217,14 @@ export default function ProgressScreen({ navigation }: any) {
 
       Alert.alert(
         'Parabéns!',
-        `${selectedChild.name} subiu para o nível ${nextLevelInfo.level}: ${nextLevelInfo.title}.`
+        `${selectedChild.name} avançou para o nível ${nextLevelInfo.level}: ${nextLevelInfo.title}.`
       );
 
       await reload();
     } catch (error: any) {
       Alert.alert(
         'Atenção',
-        error?.message || 'Não foi possível subir de nível.'
+        error?.message || 'Não foi possível avançar para o próximo nível.'
       );
     } finally {
       setLevelingUp(false);
@@ -236,7 +235,7 @@ export default function ProgressScreen({ navigation }: any) {
     <View style={styles.container}>
       <AppHeader
         navigation={navigation}
-        title="Meu Progresso"
+        title="Evolução da Jornada"
         subtitle="Nível, XP, moedas e ranking"
         fallbackRoute="ChildArea"
       />
@@ -251,25 +250,24 @@ export default function ProgressScreen({ navigation }: any) {
           </View>
 
           <View style={styles.heroTextBox}>
-            <Text style={styles.title}>Acompanhe seu progresso</Text>
+            <Text style={styles.title}>Evolução da Jornada</Text>
 
             <Text style={styles.description}>
-              Veja seu nível, XP, moedas, ranking e suba de nível quando tiver
-              XP suficiente.
+              Acompanhe o nível, XP, moedas, ranking e a evolução completa da jornada.
             </Text>
           </View>
         </View>
 
-        <Text style={styles.sectionTitle}>Escolha a criança</Text>
+        <Text style={styles.sectionTitle}>Escolha o herói ou heroína</Text>
 
         <Text style={styles.sectionDescription}>
-          Role para o lado para selecionar a criança que deseja acompanhar.
+          Role para o lado para selecionar quem terá a evolução acompanhada.
         </Text>
 
         {loading ? (
           <View style={styles.loadingChildrenBox}>
             <ActivityIndicator color={colors.primary} />
-            <Text style={styles.loadingText}>Carregando crianças...</Text>
+            <Text style={styles.loadingText}>Carregando heróis...</Text>
           </View>
         ) : (
           <FlatList
@@ -302,7 +300,7 @@ export default function ProgressScreen({ navigation }: any) {
                         selected && styles.childAvatarTextActive,
                       ]}
                     >
-                      {item.name?.charAt(0)?.toUpperCase() || 'C'}
+                      {item.name?.charAt(0)?.toUpperCase() || 'H'}
                     </Text>
                   </View>
 
@@ -336,7 +334,7 @@ export default function ProgressScreen({ navigation }: any) {
             ListEmptyComponent={
               <View style={styles.emptyChildrenBox}>
                 <Text style={styles.emptyChildrenText}>
-                  Nenhuma criança cadastrada.
+                  Nenhum herói cadastrado.
                 </Text>
               </View>
             }
@@ -347,7 +345,7 @@ export default function ProgressScreen({ navigation }: any) {
           <View style={styles.progressHeader}>
             <View>
               <Text style={styles.progressTitle}>
-                {selectedChild?.name || 'Selecione uma criança'}
+                {selectedChild?.name || 'Selecione o herói ou heroína'}
               </Text>
 
               <Text style={styles.progressSubtitle}>
@@ -419,8 +417,8 @@ export default function ProgressScreen({ navigation }: any) {
                 ? `Faltam ${Math.max(
                     0,
                     nextLevelInfo.requiredExp - currentExp
-                  )} XP para subir para ${nextLevelInfo.title}.`
-                : 'Você alcançou a patente máxima da jornada.'}
+                  )} XP para avançar para ${nextLevelInfo.title}.`
+                : 'A patente máxima da jornada foi alcançada.'}
             </Text>
           </View>
 
@@ -446,21 +444,22 @@ export default function ProgressScreen({ navigation }: any) {
             ) : (
               <>
                 <ChevronUp size={20} color={colors.white} />
-                <Text style={styles.levelUpButtonText}>Subir de nível</Text>
+                <Text style={styles.levelUpButtonText}>
+                  Avançar para o próximo nível
+                </Text>
               </>
             )}
           </TouchableOpacity>
 
           <Text style={styles.levelRuleText}>
-            Ao subir de nível, o XP necessário será consumido do total atual da
-            criança.
+            Ao avançar de nível, o XP necessário será consumido do total atual da jornada.
           </Text>
         </View>
 
         <Text style={styles.sectionTitle}>Níveis e Patentes</Text>
 
         <Text style={styles.sectionDescription}>
-          A cada conquista, a criança avança na jornada do Pé de Herói.
+          A cada conquista, o herói ou heroína avança na jornada do Pé de Herói.
         </Text>
 
         {LEVELS.map((item) => {

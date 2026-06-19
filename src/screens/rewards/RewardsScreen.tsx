@@ -160,24 +160,29 @@ export default function RewardsScreen({ navigation }: any) {
       >
         <View style={styles.heroCard}>
           <View style={styles.heroIcon}>
-            <Gift size={34} color={colors.white} />
+            <Gift size={40} color={colors.white} />
           </View>
 
           <View style={styles.heroTextBox}>
-            <Text style={styles.title}>Recompensas da Jornada</Text>
+            <Text style={styles.title}>Baú de Recompensas</Text>
 
             <Text style={styles.description}>
-              Escolha o herói ou heroína que vai receber o check-in diário, XP,
-              moedas e recompensas da jornada.
+              Escolha o herói ou heroína, colete prêmios, ganhe XP, receba moedas e fortaleça a jornada.
             </Text>
           </View>
         </View>
 
-        <Text style={styles.sectionTitle}>Escolha o herói ou heroína</Text>
+        <View style={styles.sectionHeaderCard}>
+          <Text style={styles.sectionEmoji}>🦸</Text>
 
-        <Text style={styles.sectionDescription}>
-          Role para o lado para escolher quem vai receber as recompensas. Toque novamente no mesmo perfil para remover a seleção.
-        </Text>
+          <View style={styles.sectionHeaderTextBox}>
+            <Text style={styles.sectionTitle}>Escolha o herói ou heroína</Text>
+
+            <Text style={styles.sectionDescription}>
+              Role para o lado e escolha quem vai receber as recompensas da jornada.
+            </Text>
+          </View>
+        </View>
 
         {loadingChildren ? (
           <View style={styles.loadingChildrenBox}>
@@ -240,18 +245,19 @@ export default function RewardsScreen({ navigation }: any) {
                         selected && styles.childMetaActive,
                       ]}
                     >
-                      {item.totalExp || 0} XP • 🪙 {item.goldCoins || 0}
+                      ⚡ {item.totalExp || 0} XP • 🪙 {item.goldCoins || 0}
                     </Text>
                   </View>
 
                   {selected && (
-                    <CheckCircle2 size={18} color={colors.white} />
+                    <CheckCircle2 size={22} color={colors.white} />
                   )}
                 </TouchableOpacity>
               );
             }}
             ListEmptyComponent={
               <View style={styles.emptyChildrenBox}>
+                <Text style={styles.emptyChildrenIcon}>🧒</Text>
                 <Text style={styles.emptyChildrenText}>
                   Nenhum herói cadastrado.
                 </Text>
@@ -262,9 +268,13 @@ export default function RewardsScreen({ navigation }: any) {
 
         <View style={styles.checkInCard}>
           <View style={styles.checkInHeader}>
-            <View>
-              <Text style={styles.checkInTitle}>Check-in da Jornada</Text>
-              <Text style={styles.checkInSubtitle}>Ciclo de 28 dias</Text>
+            <View style={styles.checkInTitleBox}>
+              <Text style={styles.checkInEmoji}>🎁</Text>
+
+              <View>
+                <Text style={styles.checkInTitle}>Check-in da Jornada</Text>
+                <Text style={styles.checkInSubtitle}>Ciclo mágico de 28 dias</Text>
+              </View>
             </View>
 
             <View style={styles.dayBadge}>
@@ -285,7 +295,7 @@ export default function RewardsScreen({ navigation }: any) {
             </View>
           ) : todayReward ? (
             <View style={styles.todayRewardBox}>
-              <Sparkles size={20} color={colors.primaryDark} />
+              <Sparkles size={24} color={colors.primaryDark} />
 
               <View style={styles.todayRewardTextBox}>
                 <Text style={styles.todayRewardTitle}>
@@ -293,11 +303,11 @@ export default function RewardsScreen({ navigation }: any) {
                 </Text>
 
                 <Text style={styles.todayRewardText}>
-                  +{todayReward.exp} XP
+                  ⚡ +{todayReward.exp} XP
                   {todayReward.coins > 0
-                    ? ` e +${todayReward.coins} moedas`
+                    ? ` • 🪙 +${todayReward.coins} moedas`
                     : ''}
-                  {todayReward.medal ? ` • ${todayReward.medal}` : ''}
+                  {todayReward.medal ? ` • 🏅 ${todayReward.medal}` : ''}
                 </Text>
               </View>
             </View>
@@ -319,14 +329,14 @@ export default function RewardsScreen({ navigation }: any) {
           >
             {alreadyCollectedToday ? (
               <>
-                <CheckCircle2 size={18} color={colors.textLight} />
+                <CheckCircle2 size={20} color={colors.textLight} />
                 <Text style={styles.collectButtonDoneText}>
                   Check-in coletado hoje
                 </Text>
               </>
             ) : (
               <Text style={styles.collectButtonText}>
-                Coletar check-in diário
+                Coletar prêmio diário
               </Text>
             )}
           </TouchableOpacity>
@@ -360,12 +370,17 @@ export default function RewardsScreen({ navigation }: any) {
           </View>
         </View>
 
-        <Text style={styles.sectionTitle}>Recompensas semanais</Text>
+        <View style={styles.sectionHeaderCard}>
+          <Text style={styles.sectionEmoji}>🏆</Text>
 
-        <Text style={styles.sectionDescription}>
-          As recompensas abaixo podem ser coletadas a cada 7 dias, conforme a
-          pontuação do herói ou heroína.
-        </Text>
+          <View style={styles.sectionHeaderTextBox}>
+            <Text style={styles.sectionTitle}>Recompensas semanais</Text>
+
+            <Text style={styles.sectionDescription}>
+              Colete prêmios especiais conforme a pontuação do herói ou heroína.
+            </Text>
+          </View>
+        </View>
 
         {loading ? (
           <View style={styles.loadingBox}>
@@ -412,7 +427,7 @@ export default function RewardsScreen({ navigation }: any) {
                     <View style={styles.badgeRow}>
                       <View style={styles.pointsBadge}>
                         <Text style={styles.badgeText}>
-                          {item.points_required} pts
+                          🏅 {item.points_required} pts
                         </Text>
                       </View>
 
@@ -446,14 +461,14 @@ export default function RewardsScreen({ navigation }: any) {
                         <Text style={styles.redeemText}>Coletar recompensa</Text>
                       ) : isCollectedRecently ? (
                         <View style={styles.buttonRow}>
-                          <CheckCircle2 size={16} color={colors.textLight} />
+                          <CheckCircle2 size={18} color={colors.textLight} />
                           <Text style={styles.disabledText}>
                             Disponível em breve
                           </Text>
                         </View>
                       ) : (
                         <View style={styles.buttonRow}>
-                          <Lock size={16} color={colors.textLight} />
+                          <Lock size={18} color={colors.textLight} />
                           <Text style={styles.disabledText}>Bloqueada</Text>
                         </View>
                       )}
@@ -488,24 +503,27 @@ export default function RewardsScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
+  container: { flex: 1, backgroundColor: colors.primarySoft },
   content: {
     padding: 18,
     paddingBottom: 120,
   },
+
   heroCard: {
     backgroundColor: colors.primary,
-    borderRadius: 26,
-    padding: 18,
+    borderRadius: 32,
+    padding: 22,
     marginBottom: 16,
     flexDirection: 'row',
     alignItems: 'center',
+    borderWidth: 3,
+    borderColor: colors.white,
   },
   heroIcon: {
-    width: 66,
-    height: 66,
-    borderRadius: 24,
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    width: 78,
+    height: 78,
+    borderRadius: 30,
+    backgroundColor: 'rgba(255,255,255,0.22)',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 14,
@@ -514,72 +532,92 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 24,
+    fontSize: 27,
     fontWeight: '900',
     color: colors.white,
-    marginBottom: 6,
+    marginBottom: 7,
   },
   description: {
-    color: 'rgba(255,255,255,0.88)',
-    fontWeight: '600',
-    lineHeight: 20,
+    color: 'rgba(255,255,255,0.92)',
+    fontWeight: '800',
+    lineHeight: 22,
+    fontSize: 14,
+  },
+
+  sectionHeaderCard: {
+    backgroundColor: colors.surface,
+    borderRadius: 22,
+    padding: 14,
+    marginBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: colors.white,
+  },
+  sectionEmoji: {
+    fontSize: 32,
+    marginRight: 12,
+  },
+  sectionHeaderTextBox: {
+    flex: 1,
   },
   sectionTitle: {
-    fontSize: 17,
+    fontSize: 19,
     fontWeight: '900',
     color: colors.text,
-    marginBottom: 6,
+    marginBottom: 4,
   },
   sectionDescription: {
     color: colors.textLight,
-    fontWeight: '600',
-    lineHeight: 19,
-    marginBottom: 12,
+    fontWeight: '700',
+    lineHeight: 20,
+    fontSize: 13,
   },
+
   loadingChildrenBox: {
     backgroundColor: colors.surface,
-    borderRadius: 18,
-    padding: 16,
+    borderRadius: 22,
+    padding: 18,
     alignItems: 'center',
     marginBottom: 16,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderWidth: 2,
+    borderColor: colors.white,
   },
   childrenList: {
     paddingBottom: 14,
     gap: 10,
   },
   childSelectorCard: {
-    width: 260,
-    minHeight: 72,
+    width: 278,
+    minHeight: 82,
     backgroundColor: colors.surface,
-    borderRadius: 20,
-    padding: 12,
+    borderRadius: 24,
+    padding: 13,
     marginRight: 10,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderWidth: 2,
+    borderColor: colors.white,
     flexDirection: 'row',
     alignItems: 'center',
   },
   childSelectorCardActive: {
     backgroundColor: colors.primary,
-    borderColor: colors.primary,
+    borderColor: colors.accent,
   },
   childAvatar: {
-    width: 46,
-    height: 46,
-    borderRadius: 17,
-    backgroundColor: colors.primarySoft,
+    width: 56,
+    height: 56,
+    borderRadius: 22,
+    backgroundColor: colors.yellow,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 10,
+    marginRight: 12,
   },
   childAvatarActive: {
-    backgroundColor: 'rgba(255,255,255,0.22)',
+    backgroundColor: 'rgba(255,255,255,0.25)',
   },
   childAvatarText: {
     color: colors.primaryDark,
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: '900',
   },
   childAvatarTextActive: {
@@ -590,86 +628,108 @@ const styles = StyleSheet.create({
   },
   childName: {
     color: colors.text,
-    fontSize: 15,
+    fontSize: 17,
     fontWeight: '900',
-    marginBottom: 3,
+    marginBottom: 4,
   },
   childNameActive: {
     color: colors.white,
   },
   childMeta: {
     color: colors.textLight,
-    fontSize: 12,
-    fontWeight: '700',
+    fontSize: 13,
+    fontWeight: '800',
   },
   childMetaActive: {
-    color: 'rgba(255,255,255,0.84)',
+    color: 'rgba(255,255,255,0.88)',
   },
   emptyChildrenBox: {
     backgroundColor: colors.surface,
-    borderRadius: 16,
-    padding: 16,
+    borderRadius: 18,
+    padding: 18,
     width: 260,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderWidth: 2,
+    borderColor: colors.white,
+    alignItems: 'center',
+  },
+  emptyChildrenIcon: {
+    fontSize: 34,
+    marginBottom: 6,
   },
   emptyChildrenText: {
     color: colors.textLight,
-    fontWeight: '700',
+    fontWeight: '800',
     textAlign: 'center',
   },
+
   checkInCard: {
     backgroundColor: colors.surface,
-    borderRadius: 24,
+    borderRadius: 28,
     padding: 18,
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: colors.border,
+    marginBottom: 18,
+    borderWidth: 3,
+    borderColor: colors.white,
   },
   checkInHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 12,
+  },
+  checkInTitleBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  checkInEmoji: {
+    fontSize: 34,
+    marginRight: 10,
   },
   checkInTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '900',
     color: colors.text,
   },
   checkInSubtitle: {
     color: colors.textLight,
-    fontWeight: '700',
+    fontWeight: '800',
     marginTop: 2,
+    fontSize: 12,
   },
   dayBadge: {
-    backgroundColor: colors.primarySoft,
+    backgroundColor: colors.yellow,
     borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 7,
+    paddingHorizontal: 13,
+    paddingVertical: 8,
+    borderWidth: 2,
+    borderColor: colors.white,
   },
   dayBadgeText: {
     color: colors.primaryDark,
     fontWeight: '900',
+    fontSize: 13,
   },
   checkInText: {
     color: colors.textLight,
-    fontWeight: '600',
-    lineHeight: 20,
+    fontWeight: '700',
+    lineHeight: 21,
     marginBottom: 14,
+    fontSize: 13,
   },
   checkInLoading: {
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: 12,
   },
   todayRewardBox: {
     backgroundColor: colors.accentSoft,
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 14,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
     marginBottom: 14,
+    borderWidth: 2,
+    borderColor: colors.white,
   },
   todayRewardTextBox: {
     flex: 1,
@@ -677,20 +737,24 @@ const styles = StyleSheet.create({
   todayRewardTitle: {
     color: colors.text,
     fontWeight: '900',
-    marginBottom: 2,
+    marginBottom: 3,
+    fontSize: 16,
   },
   todayRewardText: {
     color: colors.textLight,
-    fontWeight: '700',
-    lineHeight: 18,
+    fontWeight: '800',
+    lineHeight: 19,
+    fontSize: 13,
   },
   collectButton: {
     backgroundColor: colors.primary,
-    borderRadius: 14,
-    paddingVertical: 13,
+    borderRadius: 18,
+    paddingVertical: 15,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 14,
+    marginBottom: 15,
+    borderWidth: 2,
+    borderColor: colors.white,
   },
   collectButtonDone: {
     backgroundColor: '#DADADA',
@@ -700,55 +764,67 @@ const styles = StyleSheet.create({
   collectButtonText: {
     color: colors.white,
     fontWeight: '900',
+    fontSize: 15,
   },
   collectButtonDoneText: {
     color: colors.textLight,
     fontWeight: '900',
+    fontSize: 14,
   },
   daysGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 7,
+    gap: 8,
   },
   dayBox: {
-    width: 34,
-    height: 34,
-    borderRadius: 12,
+    width: 38,
+    height: 38,
+    borderRadius: 14,
     backgroundColor: colors.surfaceSoft,
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   dayBoxCurrent: {
     backgroundColor: colors.primary,
+    borderColor: colors.primary,
   },
   dayBoxCollected: {
     backgroundColor: colors.success,
+    borderColor: colors.success,
   },
   dayBoxText: {
     color: colors.textLight,
     fontWeight: '900',
-    fontSize: 12,
+    fontSize: 13,
   },
   dayBoxTextCurrent: {
     color: colors.white,
   },
+
   loadingBox: {
+    backgroundColor: colors.surface,
+    borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 28,
+    paddingVertical: 32,
+    borderWidth: 2,
+    borderColor: colors.white,
   },
   loadingText: {
-    marginTop: 8,
+    marginTop: 9,
     color: colors.textLight,
-    fontWeight: '700',
+    fontWeight: '800',
   },
+
   rewardCard: {
     backgroundColor: colors.surface,
-    borderRadius: 18,
-    padding: 14,
+    borderRadius: 26,
+    padding: 15,
     marginBottom: 14,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderWidth: 2,
+    borderColor: colors.white,
     flexDirection: 'row',
     gap: 12,
   },
@@ -756,53 +832,74 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfaceSoft,
   },
   rewardIcon: {
-    width: 54,
-    height: 54,
-    borderRadius: 22,
+    width: 64,
+    height: 64,
+    borderRadius: 25,
     backgroundColor: colors.yellow,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  rewardEmoji: { fontSize: 26 },
-  rewardContent: { flex: 1 },
+  rewardEmoji: {
+    fontSize: 32,
+  },
+  rewardContent: {
+    flex: 1,
+  },
   rewardTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '900',
-    marginBottom: 4,
+    marginBottom: 5,
     color: colors.text,
   },
   rewardDescription: {
     color: colors.textLight,
-    fontWeight: '600',
-    lineHeight: 19,
+    fontWeight: '700',
+    lineHeight: 20,
     marginBottom: 10,
+    fontSize: 13,
   },
-  badgeRow: { flexDirection: 'row', gap: 8, marginBottom: 10 },
+  badgeRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 10,
+    flexWrap: 'wrap',
+  },
   pointsBadge: {
     backgroundColor: colors.blue,
     borderRadius: 999,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingVertical: 7,
+    paddingHorizontal: 11,
   },
   statusBadge: {
     borderRadius: 999,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingVertical: 7,
+    paddingHorizontal: 11,
   },
-  availableBadge: { backgroundColor: colors.yellow },
-  lockedBadge: { backgroundColor: '#EFEFEF' },
-  badgeText: { fontSize: 12, fontWeight: '900', color: colors.text },
+  availableBadge: {
+    backgroundColor: colors.yellow,
+  },
+  lockedBadge: {
+    backgroundColor: '#EFEFEF',
+  },
+  badgeText: {
+    fontSize: 12,
+    fontWeight: '900',
+    color: colors.text,
+  },
   nextAvailableText: {
     color: colors.textLight,
-    fontWeight: '700',
+    fontWeight: '800',
     fontSize: 12,
-    marginBottom: 8,
+    marginBottom: 9,
   },
   redeemButton: {
     backgroundColor: colors.primary,
-    borderRadius: 14,
-    padding: 12,
+    borderRadius: 18,
+    paddingVertical: 14,
+    paddingHorizontal: 12,
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: colors.white,
   },
   disabledButton: {
     backgroundColor: '#DADADA',
@@ -811,24 +908,44 @@ const styles = StyleSheet.create({
     color: colors.white,
     textAlign: 'center',
     fontWeight: '900',
+    fontSize: 15,
   },
   disabledText: {
     color: colors.textLight,
     textAlign: 'center',
     fontWeight: '900',
     marginLeft: 6,
+    fontSize: 14,
   },
   buttonRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  emptyBox: { alignItems: 'center', paddingHorizontal: 20, paddingVertical: 24 },
-  emptyIcon: { fontSize: 42, marginBottom: 10 },
-  emptyTitle: { fontSize: 18, fontWeight: '900', marginBottom: 6 },
+
+  emptyBox: {
+    backgroundColor: colors.surface,
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 26,
+    borderRadius: 24,
+    borderWidth: 2,
+    borderColor: colors.white,
+    marginBottom: 16,
+  },
+  emptyIcon: {
+    fontSize: 46,
+    marginBottom: 10,
+  },
+  emptyTitle: {
+    fontSize: 19,
+    fontWeight: '900',
+    marginBottom: 6,
+    color: colors.text,
+  },
   emptyText: {
     color: colors.textLight,
     textAlign: 'center',
-    fontWeight: '600',
+    fontWeight: '700',
     lineHeight: 20,
   },
 });
