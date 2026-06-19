@@ -25,9 +25,9 @@ import BottomNav from '../../components/common/BottomNav';
 import { useAuth } from '../../hooks/useAuth';
 import { colors } from '../../theme';
 
-const profileLogo = require('../../assets/images/foto dos perfis.png');
-const journeyImage = require('../../assets/images/inicio de jornada.png');
-const evolutionImage = require('../../assets/images/foto minha evolução.png');
+const profileLogo = require('../../../assets/images/foto dos perfis.png');
+const journeyImage = require('../../../assets/images/inicio de jornada.png');
+const evolutionImage = require('../../../assets/images/foto minha evolução.png');
 
 type Props = {
   navigation: any;
